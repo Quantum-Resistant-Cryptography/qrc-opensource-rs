@@ -1,13 +1,13 @@
 [package]
 name = "qrc-opensource-rs"
 version = "0.1.1"
-edition = "2021"
 authors = ["Quantum Resistant Cryptography (QRC)"]
+edition = "2021"
 description = "The free opensource version of the QRC library"
-repository = "https://github.com/Quantum-Resistant-Cryptography/qrc-opensource-rs"
 documentation = "https://docs.rs/qrc-opensource-rs"
+repository = "https://github.com/Quantum-Resistant-Cryptography/qrc-opensource-rs"
 readme = "README.md"
-license = "GNU Affero General Public License v3.0"
+license = "LICENSE"
 keywords = ["cryptography", "quantum", "post-quantum", "rust"]
 categories = ["cryptography", "security"]
 
