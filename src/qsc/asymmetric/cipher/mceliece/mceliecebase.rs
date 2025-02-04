@@ -4,16 +4,16 @@
 * This file is part of the QSC Cryptographic library
 *
 * This program is free software : you can redistribute it and / or modify
-* it under the terms of the GNU Affero General Public License as published by
+* it under the terms of the GNU Affero General pub(crate)lic License as pub(crate)lished by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Affero General Public License for more details.
+* See the GNU Affero General pub(crate)lic License for more details.
 *
-* You should have received a copy of the GNU Affero General Public License
+* You should have received a copy of the GNU Affero General pub(crate)lic License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
@@ -1189,7 +1189,7 @@ fn gen_e(secrand_state: &mut QscSecrandState, e: &mut [u8], rng_generate: fn(&mu
 }
 
 fn syndrome(s: &mut [u8], pk: &[u8], e: &[u8]) {
-	/* input: public key pk, error vector e
+	/* input: pub(crate)lic key pk, error vector e
 	   output: syndrome s */
 
 	let row = &mut [0u8; MCELIECE_SYS_N / 8];
@@ -1271,7 +1271,7 @@ fn check_pk_padding(pk: &[u8]) -> i32 {
 /* pk_gen.c */
 
 fn pk_gen(pk: &mut [u8], mut sk: &[u8], perm: &[u32], pi: &mut [i16]) -> i32 {
-	/* input: secret key sk output: public key pk */
+	/* input: secret key sk output: pub(crate)lic key pk */
 	let buf = &mut [0u64; 1 << MCELIECE_GFBITS];
 	let g: &mut [Gf; MCELIECE_SYS_T + 1] = &mut [0; MCELIECE_SYS_T + 1];	/* Goppa polynomial */
 	let l: &mut [Gf; MCELIECE_SYS_N] = &mut [0; MCELIECE_SYS_N];		/* support */
@@ -1490,15 +1490,15 @@ fn genpoly_gen(out: &mut [Gf], f: &[Gf]) -> i32 {
 }
 
 /**
-* \brief Generates cipher-text and encapsulates a shared secret key using a public-key
+* \brief Generates cipher-text and encapsulates a shared secret key using a pub(crate)lic-key
 *
 * \param secret: Pointer to a shared secret, a uint8_t array of QSC_MCELIECE_SHAREDSECRET_SIZE
 * \param ciphertext: Pointer to the cipher-text array
-* \param publickey: [const] Pointer to the public-key array
+* \param pub(crate)lickey: [const] Pointer to the pub(crate)lic-key array
 * \param rng_generate: Pointer to the random generator
 * \return Returns 0 for success
 */
-pub fn qsc_mceliece_ref_encapsulate(secrand_state: &mut QscSecrandState, c: &mut [u8], key: &mut [u8], pk: &[u8], rng_generate: fn(&mut QscSecrandState, &mut [u8], usize) -> bool) -> i32 {
+pub(crate) fn qsc_mceliece_ref_encapsulate(secrand_state: &mut QscSecrandState, c: &mut [u8], key: &mut [u8], pk: &[u8], rng_generate: fn(&mut QscSecrandState, &mut [u8], usize) -> bool) -> i32 {
 	let one_ec = &mut [0u8; 1 + MCELIECE_SYS_N / 8 + (MCELIECE_SYND_BYTES + 32)];
 	let two_e = &mut [0u8; 1 + MCELIECE_SYS_N / 8];
 	let e = &mut two_e.to_owned()[1..];
@@ -1546,7 +1546,7 @@ pub fn qsc_mceliece_ref_encapsulate(secrand_state: &mut QscSecrandState, c: &mut
 * \param sk: [const] Pointer to the secret-key array of QSC_MCELIECE_PRIVATEKEY_SIZE constant size
 * \return Returns 0 for success
 */
-pub fn qsc_mceliece_ref_decapsulate(key: &mut [u8], c: &[u8], sk: &[u8]) -> i32 {
+pub(crate) fn qsc_mceliece_ref_decapsulate(key: &mut [u8], c: &[u8], sk: &[u8]) -> i32 {
 	let conf = &mut [0u8; 32];
 
 	let preimage = &mut [0u8; 1 + MCELIECE_SYS_N / 8 + (MCELIECE_SYND_BYTES + 32)];
@@ -1596,16 +1596,16 @@ pub fn qsc_mceliece_ref_decapsulate(key: &mut [u8], c: &[u8], sk: &[u8]) -> i32 
 }
 
 /**
-* \brief Generates public and private key for the McEliece key encapsulation mechanism
+* \brief Generates pub(crate)lic and private key for the McEliece key encapsulation mechanism
 *
-* \warning Arrays must be sized to QSC_QSC_MCELIECE_PUBLICKEY_SIZE and QSC_QSC_MCELIECE_SECRETKEY_SIZE.
+* \warning Arrays must be sized to QSC_QSC_MCELIECE_pub(crate)LICKEY_SIZE and QSC_QSC_MCELIECE_SECRETKEY_SIZE.
 *
-* \param publickey: Pointer to the output public-key array of QSC_MCELIECE_PUBLICKEY_SIZE constant size
+* \param pub(crate)lickey: Pointer to the output pub(crate)lic-key array of QSC_MCELIECE_pub(crate)LICKEY_SIZE constant size
 * \param privatekey: Pointer to output private-key array of QSC_MCELIECE_PRIVATEKEY_SIZE constant size
 * \param rng_generate: Pointer to the random generator function
 * \return Returns 0 for success
 */
-pub fn qsc_mceliece_ref_generate_keypair(secrand_state: &mut QscSecrandState, pk: &mut [u8], sk: &mut [u8], rng_generate: fn(&mut QscSecrandState, &mut [u8], usize) -> bool) -> i32 {
+pub(crate) fn qsc_mceliece_ref_generate_keypair(secrand_state: &mut QscSecrandState, pk: &mut [u8], sk: &mut [u8], rng_generate: fn(&mut QscSecrandState, &mut [u8], usize) -> bool) -> i32 {
 	let perm = &mut [0u32; 1 << MCELIECE_GFBITS];	/* random permutation as 32-bit integers */
 	let pi = &mut [0i16; 1 << MCELIECE_GFBITS];	/* random permutation */
 	let f: &mut [Gf; MCELIECE_SYS_T] = &mut [0; MCELIECE_SYS_T];		/* element in GF(2 ^ mt) */

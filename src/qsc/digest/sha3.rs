@@ -4,16 +4,16 @@
 * This file is part of the QSC Cryptographic library
 *
 * This program is free software : you can redistribute it and / or modify
-* it under the terms of the GNU Affero General Public License as published by
+* it under the terms of the GNU Affero General pub(crate)lic License as pub(crate)lished by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Affero General Public License for more details.
+* See the GNU Affero General pub(crate)lic License for more details.
 *
-* You should have received a copy of the GNU Affero General Public License
+* You should have received a copy of the GNU Affero General pub(crate)lic License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -25,7 +25,7 @@
 * \c to rust 2024-2025
 *
 * \brief SHA3 header definition \n
-* Contains the public api and documentation for SHA3 digest, SHAKE, cSHAKE, and KMAC implementations.
+* Contains the pub(crate)lic api and documentation for SHA3 digest, SHAKE, cSHAKE, and KMAC implementations.
 *
 * Usage Examples \n
 *
@@ -85,11 +85,11 @@
 * For additional usage examples, see sha3_test.h. \n
 *
 * \par
-* NIST: SHA3 Fips202 http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf \n
-* NIST: SP800-185 http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-185.pdf \n
+* NIST: SHA3 Fips202 http://nvlpub(crate)s.nist.gov/nistpub(crate)s/FIPS/NIST.FIPS.202.pdf \n
+* NIST: SP800-185 http://nvlpub(crate)s.nist.gov/nistpub(crate)s/Specialpub(crate)lications/NIST.SP.800-185.pdf \n
 * NIST: SHA3 Keccak Submission http://keccak.noekeon.org/Keccak-submission-3.pdf \n
 * NIST: SHA3 Keccak Slides http://csrc.nist.gov/groups/ST/hash/sha-3/documents/Keccak-slides-at-NIST.pdf \n
-* NIST: SHA3 Third-Round Report http://nvlpubs.nist.gov/nistpubs/ir/2012/NIST.IR.7896.pdf \n
+* NIST: SHA3 Third-Round Report http://nvlpub(crate)s.nist.gov/nistpub(crate)s/ir/2012/NIST.IR.7896.pdf \n
 * Team Keccak: Specifications summary https://keccak.team/keccak_specs_summary.html
 */
 
@@ -117,25 +117,25 @@ use bytemuck::{cast_slice, cast_slice_mut};
 * \def QSC_SHA3_256_HASH_SIZE
 * \brief The SHA-256 hash size in bytes (32)
 */
-const QSC_SHA3_256_HASH_SIZE: usize = 32;
+pub const QSC_SHA3_256_HASH_SIZE: usize = 32;
 
 /*
 * \def QSC_KECCAK_CSHAKE_DOMAIN_ID
 * \brief The cSHAKE domain id
 */
-const QSC_KECCAK_CSHAKE_DOMAIN_ID: u8 = 0x04;
+pub const QSC_KECCAK_CSHAKE_DOMAIN_ID: u8 = 0x04;
 
 /*
 * \def QSC_KECCAK_KMAC_DOMAIN_ID
 * \brief The KMAC domain id
 */
-const QSC_KECCAK_KMAC_DOMAIN_ID: u8 = 0x04;
+pub const QSC_KECCAK_KMAC_DOMAIN_ID: u8 = 0x04;
 
 /*
 * \def QSC_KECCAK_PERMUTATION_ROUNDS
 * \brief The standard number of permutation rounds
 */
-const QSC_KECCAK_PERMUTATION_ROUNDS: usize = 24;
+pub const QSC_KECCAK_PERMUTATION_ROUNDS: usize = 24;
 
 /*
 * \def QSC_KECCAK_PERMUTATION_MAX_ROUNDS
@@ -148,7 +148,7 @@ const QSC_KECCAK_PERMUTATION_MAX_ROUNDS: usize = 48;
 * \brief The SHA3 domain id
 */
 
-const QSC_KECCAK_SHA3_DOMAIN_ID: u8 = 0x06;
+pub const QSC_KECCAK_SHA3_DOMAIN_ID: u8 = 0x06;
 
 /* 
 * \def QSC_KECCAK_SHAKE_DOMAIN_ID
@@ -161,19 +161,19 @@ pub const QSC_KECCAK_SHAKE_DOMAIN_ID: u8 = 0x1F;
 * \def QSC_KECCAK_128_RATE
 * \brief The KMAC-128 byte absorption rate
 */
-pub const QSC_KECCAK_128_RATE: usize = 168;
+pub(crate) const QSC_KECCAK_128_RATE: usize = 168;
 
 /*
 * \def QSC_KECCAK_256_RATE
 * \brief The KMAC-256 byte absorption rate
 */
-pub const QSC_KECCAK_256_RATE: usize = 136;
+pub(crate) const QSC_KECCAK_256_RATE: usize = 136;
 
 /*
 * \def QSC_KECCAK_512_RATE
 * \brief The KMAC-512 byte absorption rate
 */
-pub const QSC_KECCAK_512_RATE: usize = 72;
+pub(crate) const QSC_KECCAK_512_RATE: usize = 72;
 
 /*
 * \def QSC_KECCAK_STATE_SIZE
@@ -185,13 +185,13 @@ pub const QSC_KECCAK_STATE_SIZE: usize = 25;
 * \def QSC_KECCAK_STATE_BYTE_SIZE
 * \brief The Keccak SHA3 state size in bytes
 */
-const QSC_KECCAK_STATE_BYTE_SIZE: usize = 200;
+pub const QSC_KECCAK_STATE_BYTE_SIZE: usize = 200;
 
 /*
 * \def QSC_SHA3_512_HASH_SIZE
 * \brief The SHA-512 hash size in bytes (64)
 */
-const QSC_SHA3_512_HASH_SIZE: usize = 64;
+pub const QSC_SHA3_512_HASH_SIZE: usize = 64;
 
 
 /* common */
@@ -553,7 +553,7 @@ fn qsc_keccak_finalize(ctx: &mut QscKeccakState, rate: usize, mut output: &mut [
 * \param message: [const] The input message array
 * \param msglen: The number of message bytes
 */
-pub fn qsc_keccak_incremental_absorb(ctx: &mut QscKeccakState, rate: usize, mut message: &[u8], mut msglen: usize) {
+pub(crate) fn qsc_keccak_incremental_absorb(ctx: &mut QscKeccakState, rate: usize, mut message: &[u8], mut msglen: usize) {
 	let t = &mut [0u8; 8];
 	
 	if ctx.position & 7 > 0	{
@@ -621,7 +621,7 @@ pub fn qsc_keccak_incremental_absorb(ctx: &mut QscKeccakState, rate: usize, mut 
 * \param rate: The rate of absorption in bytes
 * \param domain: The function domain id
 */
-pub fn qsc_keccak_incremental_finalize(ctx: &mut QscKeccakState, rate: usize, domain: u8) {
+pub(crate) fn qsc_keccak_incremental_finalize(ctx: &mut QscKeccakState, rate: usize, domain: u8) {
     let i = ctx.position >> 3;
     let j = ctx.position & 7;
     ctx.state[i] ^= (domain as u64) << (8 * j);
@@ -637,7 +637,7 @@ pub fn qsc_keccak_incremental_finalize(ctx: &mut QscKeccakState, rate: usize, do
 * \param outlen: The number of output bytes to generate
 * \param rate: The rate of absorption in bytes
 */
-pub fn qsc_keccak_incremental_squeeze(ctx: &mut QscKeccakState, rate: usize, mut output: &mut [u8], mut outlen: usize) {
+pub(crate) fn qsc_keccak_incremental_squeeze(ctx: &mut QscKeccakState, rate: usize, mut output: &mut [u8], mut outlen: usize) {
 	let mut i: usize;
 	let t = &mut [0u8; 8];
 
@@ -3216,7 +3216,6 @@ fn qsc_keccak_update(ctx: &mut QscKeccakState, rate: usize, mut message: &[u8], 
 * \param message: [const] The message input byte array
 * \param msglen: The number of message bytes to process
 */
-#[allow(dead_code)]
 pub fn qsc_sha3_compute256(output: &mut [u8], message: &[u8], msglen: usize) {
 	let ctx = &mut QscKeccakState::default();
 	let hash = &mut [0u8; QSC_KECCAK_256_RATE];
@@ -3240,7 +3239,6 @@ pub fn qsc_sha3_compute256(output: &mut [u8], message: &[u8], msglen: usize) {
 * \param message: [const] The message input byte array
 * \param msglen: The number of message bytes to process
 */
-#[allow(dead_code)]
 pub fn qsc_sha3_compute512(output: &mut [u8], message: &[u8], msglen: usize) {
 	let ctx = &mut QscKeccakState::default();
 	let hash = &mut [0u8; QSC_KECCAK_512_RATE];
@@ -3268,8 +3266,7 @@ pub fn qsc_sha3_compute512(output: &mut [u8], message: &[u8], msglen: usize) {
 * \param rate: The rate of absorption in bytes
 * \param output: The output byte array; receives the hash code
 */
-#[allow(dead_code)]
-fn qsc_sha3_finalize(ctx: &mut QscKeccakState, rate: usize, mut output: &mut [u8]) {
+pub fn qsc_sha3_finalize(ctx: &mut QscKeccakState, rate: usize, mut output: &mut [u8]) {
 
 	let hlen = ((QSC_KECCAK_STATE_SIZE * size_of::<u64>()) - rate) / 2;
 	qsc_memutils_clear(&mut ctx.buffer[ctx.position..]);
@@ -3299,8 +3296,7 @@ fn qsc_sha3_finalize(ctx: &mut QscKeccakState, rate: usize, mut output: &mut [u8
 *
 * \param ctx: [struct] A reference to the Keccak state
 */
-#[allow(dead_code)]
-fn qsc_sha3_initialize(ctx: &mut QscKeccakState) {
+pub fn qsc_sha3_initialize(ctx: &mut QscKeccakState) {
 	qsc_keccak_initialize_state(ctx);
 }
 
@@ -3316,8 +3312,7 @@ fn qsc_sha3_initialize(ctx: &mut QscKeccakState) {
 * \param message: [const] The input message byte array
 * \param msglen: The number of message bytes to process
 */
-#[allow(dead_code)]
-fn qsc_sha3_update(ctx: &mut QscKeccakState, rate: usize, message: &[u8], msglen: usize) {
+pub fn qsc_sha3_update(ctx: &mut QscKeccakState, rate: usize, message: &[u8], msglen: usize) {
 	qsc_keccak_update(ctx, rate, message, msglen, QSC_KECCAK_PERMUTATION_ROUNDS);
 }
 
@@ -3334,8 +3329,7 @@ fn qsc_sha3_update(ctx: &mut QscKeccakState, rate: usize, message: &[u8], msglen
 * \param key: [const] The input key byte array
 * \param keylen: The number of key bytes to process
 */
-#[allow(dead_code)]
-fn qsc_shake128_compute(mut output: &mut [u8], mut outlen: usize, key: &[u8], keylen: usize) {
+pub fn qsc_shake128_compute(mut output: &mut [u8], mut outlen: usize, key: &[u8], keylen: usize) {
 
 	let nblocks = outlen / QSC_KECCAK_128_RATE;
 	let mut ctx: QscKeccakState = Default::default();
@@ -3366,7 +3360,6 @@ fn qsc_shake128_compute(mut output: &mut [u8], mut outlen: usize, key: &[u8], ke
 * \param key: [const] The input key byte array
 * \param keylen: The number of key bytes to process
 */
-#[allow(dead_code)]
 pub fn qsc_shake256_compute(mut output: &mut [u8], mut outlen: usize, key: &[u8], keylen: usize) {
 
 	let nblocks = outlen / QSC_KECCAK_256_RATE;
@@ -3399,8 +3392,7 @@ pub fn qsc_shake256_compute(mut output: &mut [u8], mut outlen: usize, key: &[u8]
 * \param key: [const] The input key byte array
 * \param keylen: The number of key bytes to process
 */
-#[allow(dead_code)]
-fn qsc_shake512_compute(mut output: &mut [u8], mut outlen: usize, key: &[u8], keylen: usize) {
+pub fn qsc_shake512_compute(mut output: &mut [u8], mut outlen: usize, key: &[u8], keylen: usize) {
 
 	let nblocks: usize = outlen / QSC_KECCAK_512_RATE;
 	let mut ctx: QscKeccakState = Default::default();
@@ -3468,8 +3460,7 @@ pub fn qsc_shake_squeezeblocks(ctx: &mut QscKeccakState, rate: usize, output: &m
 * \param custom: [const] The customization string
 * \param custlen: The byte length of the customization string
 */
-#[allow(dead_code)]
-fn qsc_cshake128_compute(mut output: &mut [u8], mut outlen: usize, key: &[u8], keylen: usize, name: &[u8], namelen: usize, custom: &[u8], custlen: usize) {
+pub fn qsc_cshake128_compute(mut output: &mut [u8], mut outlen: usize, key: &[u8], keylen: usize, name: &[u8], namelen: usize, custom: &[u8], custlen: usize) {
 
 	let nblocks: usize = outlen / QSC_KECCAK_128_RATE;
 	let mut ctx: QscKeccakState = Default::default();
@@ -3508,7 +3499,6 @@ fn qsc_cshake128_compute(mut output: &mut [u8], mut outlen: usize, key: &[u8], k
 * \param custom: [const] The customization string
 * \param custlen: The byte length of the customization string
 */
-#[allow(dead_code)]
 pub fn qsc_cshake256_compute(mut output: &mut [u8], mut outlen: usize, key: &[u8], keylen: usize, name: &[u8], namelen: usize, custom: &[u8], custlen: usize) {
 
 	let nblocks: usize = outlen / QSC_KECCAK_256_RATE;
@@ -3549,7 +3539,6 @@ pub fn qsc_cshake256_compute(mut output: &mut [u8], mut outlen: usize, key: &[u8
 * \param custom: [const] The customization string
 * \param custlen: The byte length of the customization string
 */
-#[allow(dead_code)]
 pub fn qsc_cshake512_compute(mut output: &mut [u8], mut outlen: usize, key: &[u8], keylen: usize, name: &[u8], namelen: usize, custom: &[u8], custlen: usize) {
 
 	let nblocks: usize = outlen / QSC_KECCAK_512_RATE;
@@ -3629,7 +3618,7 @@ pub fn qsc_cshake_squeezeblocks(ctx: &mut QscKeccakState, rate: usize, output: &
 * \param key: [const] The input key byte array
 * \param keylen: The number of key bytes to process
 */
-pub fn qsc_cshake_update(ctx: &mut QscKeccakState, rate: usize, mut key: &mut [u8], mut keylen: usize) {
+pub(crate) fn qsc_cshake_update(ctx: &mut QscKeccakState, rate: usize, mut key: &mut [u8], mut keylen: usize) {
 
 	while keylen >= rate {
 		keccak_fast_absorb(&mut ctx.state, key, keylen);
@@ -3660,8 +3649,7 @@ pub fn qsc_cshake_update(ctx: &mut QscKeccakState, rate: usize, mut key: &mut [u
 * \param custom: [const] The customization string
 * \param custlen: The byte length of the customization string
 */
-#[allow(dead_code)]
-fn qsc_kmac128_compute(mut output: &mut [u8], outlen: usize, mut message: &mut [u8], msglen: usize, mut key: &mut [u8], keylen: usize, mut custom: &mut [u8], custlen: usize) {
+pub fn qsc_kmac128_compute(mut output: &mut [u8], outlen: usize, mut message: &mut [u8], msglen: usize, mut key: &mut [u8], keylen: usize, mut custom: &mut [u8], custlen: usize) {
 
 	let mut ctx: QscKeccakState = Default::default();
 
@@ -3685,8 +3673,7 @@ fn qsc_kmac128_compute(mut output: &mut [u8], outlen: usize, mut message: &mut [
 * \param custom: [const] The customization string
 * \param custlen: The byte length of the customization string
 */
-#[allow(dead_code)]
-fn qsc_kmac256_compute(output: &mut [u8], outlen: usize, message: &[u8], msglen: usize, key: &mut [u8], keylen: usize, custom: &mut [u8], custlen: usize) {
+pub fn qsc_kmac256_compute(output: &mut [u8], outlen: usize, message: &[u8], msglen: usize, key: &mut [u8], keylen: usize, custom: &mut [u8], custlen: usize) {
 	let ctx = &mut QscKeccakState::default();
 
 	let rate = QscKeccakRate::QscKeccakRate256 as usize;
@@ -3709,8 +3696,7 @@ fn qsc_kmac256_compute(output: &mut [u8], outlen: usize, message: &[u8], msglen:
 * \param custom: [const] The customization string
 * \param custlen: The byte length of the customization string
 */
-#[allow(dead_code)]
-fn qsc_kmac512_compute(output: &mut [u8], outlen: usize, message: &[u8], msglen: usize, key: &mut [u8], keylen: usize, custom: &mut [u8], custlen: usize) {
+pub fn qsc_kmac512_compute(output: &mut [u8], outlen: usize, message: &[u8], msglen: usize, key: &mut [u8], keylen: usize, custom: &mut [u8], custlen: usize) {
 	let ctx = &mut QscKeccakState::default();
 
 	let rate = QscKeccakRate::QscKeccakRate512 as usize;

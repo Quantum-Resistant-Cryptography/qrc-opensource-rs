@@ -4,22 +4,22 @@
 * This file is part of the QSC Cryptographic library
 *
 * This program is free software : you can redistribute it and / or modify
-* it under the terms of the GNU Affero General Public License as published by
+* it under the terms of the GNU Affero General pub(crate)lic License as pub(crate)lished by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Affero General Public License for more details.
+* See the GNU Affero General pub(crate)lic License for more details.
 *
-* You should have received a copy of the GNU Affero General Public License
+* You should have received a copy of the GNU Affero General pub(crate)lic License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 /**
 * \file csg.h
-* \brief Contains the public api and documentation for the CSG pseudo-random bytes generator
+* \brief Contains the pub(crate)lic api and documentation for the CSG pseudo-random bytes generator
 *
 * Usage Example \n
 *
@@ -46,11 +46,11 @@
 *
 * For additional usage examples, see csg_test.h. \n
 *
-* NIST: SHA3 Fips202 http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf
-* NIST: SP800-185 http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-185.pd
+* NIST: SHA3 Fips202 http://nvlpub(crate)s.nist.gov/nistpub(crate)s/FIPS/NIST.FIPS.202.pdf
+* NIST: SP800-185 http://nvlpub(crate)s.nist.gov/nistpub(crate)s/Specialpub(crate)lications/NIST.SP.800-185.pd
 * NIST: SHA3 Keccak Submission http://keccak.noekeon.org/Keccak-submission-3.pdf
 * NIST: SHA3 Keccak Slides http://csrc.nist.gov/groups/ST/hash/sha-3/documents/Keccak-slides-at-NIST.pdf
-* NIST: SHA3 Third-Round Report http://nvlpubs.nist.gov/nistpubs/ir/2012/NIST.IR.7896.pdf
+* NIST: SHA3 Third-Round Report http://nvlpub(crate)s.nist.gov/nistpub(crate)s/ir/2012/NIST.IR.7896.pdf
 * Team Keccak: Specifications summary https://keccak.team/keccak_specs_summary.html
 */
 
@@ -92,14 +92,14 @@ const QSC_CSG_RESEED_THRESHHOLD: usize = 1024000;
 * \brief The CSG state structure
 */
 #[derive(PartialEq, Debug)]
-pub struct QscCsgState {
-    pub kstate: QscKeccakState,             /*< The Keccak state  */
-    pub cache: [u8; QSC_KECCAK_256_RATE],   /*< The cache buffer */
-    pub bctr: usize,                        /*< The bytes counter  */
-    pub cpos: usize,                        /*< The cache position  */
-    pub crmd: usize,                        /*< The cache remainder  */
-    pub rate: usize,                        /*< The absorption rate  */
-    pub pres: bool                          /*< The predictive resistance flag  */
+pub(crate) struct QscCsgState {
+    pub(crate) kstate: QscKeccakState,             /*< The Keccak state  */
+    pub(crate) cache: [u8; QSC_KECCAK_256_RATE],   /*< The cache buffer */
+    pub(crate) bctr: usize,                        /*< The bytes counter  */
+    pub(crate) cpos: usize,                        /*< The cache position  */
+    pub(crate) crmd: usize,                        /*< The cache remainder  */
+    pub(crate) rate: usize,                        /*< The absorption rate  */
+    pub(crate) pres: bool                          /*< The predictive resistance flag  */
 }
 
 impl Default for QscCsgState {
@@ -159,7 +159,7 @@ fn csg_auto_reseed(ctx: &mut QscCsgState) {
 *
 * \param ctx: [struct] The DRBG state structure
 */
-pub fn qsc_csg_dispose(ctx: &mut QscCsgState) {
+pub(crate) fn qsc_csg_dispose(ctx: &mut QscCsgState) {
     qsc_keccak_dispose(&mut ctx.kstate);
     qsc_memutils_clear(&mut ctx.cache);
 
@@ -180,7 +180,7 @@ pub fn qsc_csg_dispose(ctx: &mut QscCsgState) {
 * \param infolen: The length of the personalization string
 * \param predres: Enable periodic random injection; enables non deterministic pseudo-random generation
 */
-pub fn qsc_csg_initialize(ctx: &mut QscCsgState, seed: &[u8], seedlen: usize, info: &[u8], infolen: usize, predres: bool) {
+pub(crate) fn qsc_csg_initialize(ctx: &mut QscCsgState, seed: &[u8], seedlen: usize, info: &[u8], infolen: usize, predres: bool) {
 	if seedlen == QSC_CSG_512_SEED_SIZE	{
 		ctx.rate = QSC_KECCAK_512_RATE;
 	} else {
@@ -233,7 +233,7 @@ pub fn qsc_csg_initialize(ctx: &mut QscCsgState, seed: &[u8], seedlen: usize, in
 * \param outlen: The requested number of bytes to generate
 * \return The number of bytes generated
 */
-pub fn qsc_csg_generate(ctx: &mut QscCsgState, output: &mut [u8], mut outlen: usize) {
+pub(crate) fn qsc_csg_generate(ctx: &mut QscCsgState, output: &mut [u8], mut outlen: usize) {
 
 	ctx.bctr += outlen;
 

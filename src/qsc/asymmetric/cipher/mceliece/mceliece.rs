@@ -76,7 +76,7 @@ use crate::qsc::{
 * \def QSC_MCELIECE_SEED_SIZE
 * \brief The byte size of the seed array
 */
-const QSC_MCELIECE_CIPHERTEXT_SIZE: usize = if QSC_MCELIECE_S3N4608T96 {
+pub const QSC_MCELIECE_CIPHERTEXT_SIZE: usize = if QSC_MCELIECE_S3N4608T96 {
     188
 } else if QSC_MCELIECE_S5N6688T128 {
     240
@@ -92,7 +92,7 @@ const QSC_MCELIECE_CIPHERTEXT_SIZE: usize = if QSC_MCELIECE_S3N4608T96 {
 * \def QSC_MCELIECE_PRIVATEKEY_SIZE
 * \brief The byte size of the secret private-key array
 */
-const QSC_MCELIECE_PRIVATEKEY_SIZE: usize = if QSC_MCELIECE_S3N4608T96 {
+pub const QSC_MCELIECE_PRIVATEKEY_SIZE: usize = if QSC_MCELIECE_S3N4608T96 {
     13608
 } else if QSC_MCELIECE_S5N6688T128 {
     13932
@@ -108,7 +108,7 @@ const QSC_MCELIECE_PRIVATEKEY_SIZE: usize = if QSC_MCELIECE_S3N4608T96 {
 * \def QSC_MCELIECE_PUBLICKEY_SIZE
 * \brief The byte size of the public-key array
 */
-const QSC_MCELIECE_PUBLICKEY_SIZE: usize = if QSC_MCELIECE_S3N4608T96 {
+pub const QSC_MCELIECE_PUBLICKEY_SIZE: usize = if QSC_MCELIECE_S3N4608T96 {
     524160
 } else if QSC_MCELIECE_S5N6688T128 {
     1044992
@@ -125,13 +125,13 @@ const QSC_MCELIECE_PUBLICKEY_SIZE: usize = if QSC_MCELIECE_S3N4608T96 {
 * \def QSC_MCELIECE_SEED_SIZE
 * \brief The byte size of the seed array
 */
-const QSC_MCELIECE_SEED_SIZE: usize = 32;
+pub const QSC_MCELIECE_SEED_SIZE: usize = 32;
 
 /*
 * \def QSC_MCELIECE_SHAREDSECRET_SIZE
 * \brief The byte size of the shared secret-key array
 */
-const QSC_MCELIECE_SHAREDSECRET_SIZE: usize = 32;
+pub const QSC_MCELIECE_SHAREDSECRET_SIZE: usize = 32;
 
 /**
 * \brief Decapsulates the shared secret for a given cipher-text using a private-key
@@ -161,8 +161,7 @@ fn qsc_mceliece_decapsulate(secret: &mut [u8], ciphertext: &[u8], privatekey: &[
 * \param privatekey: [const] Pointer to the secret-key array of QSC_KYBER_PRIVATEKEY_SIZE constant size
 * \return Returns true for success
 */
-#[allow(dead_code)]
-fn qsc_mceliece_decrypt(secret: &mut [u8], ciphertext: &[u8], privatekey: &[u8]) -> bool {
+pub fn qsc_mceliece_decrypt(secret: &mut [u8], ciphertext: &[u8], privatekey: &[u8]) -> bool {
 	let mut res = false;
 
 	if secret.len() == QSC_MCELIECE_SHAREDSECRET_SIZE && ciphertext.len() == QSC_MCELIECE_CIPHERTEXT_SIZE && privatekey.len() == QSC_MCELIECE_PRIVATEKEY_SIZE {
@@ -197,8 +196,7 @@ fn qsc_mceliece_encapsulate(secrand_state: &mut QscSecrandState, secret: &mut [u
 * \param publickey: [const] Pointer to the public-key array of QSC_KYBER_PUBLICKEY_SIZE constant size
 * \param seed: [const] A pointer to the random seed array
 */
-#[allow(dead_code)]
-fn qsc_mceliece_encrypt(secret: &mut [u8], ciphertext: &mut [u8], publickey: &[u8], seed: [u8; QSC_MCELIECE_SEED_SIZE]) {
+pub fn qsc_mceliece_encrypt(secret: &mut [u8], ciphertext: &mut [u8], publickey: &[u8], seed: [u8; QSC_MCELIECE_SEED_SIZE]) {
 	let secrand_state = &mut QscSecrandState::default();
 	qsc_secrand_initialize(secrand_state, &seed, QSC_MCELIECE_SEED_SIZE, &[], 0);
 	if secret.len() == QSC_MCELIECE_SHAREDSECRET_SIZE && ciphertext.len() == QSC_MCELIECE_CIPHERTEXT_SIZE && publickey.len() == QSC_MCELIECE_PUBLICKEY_SIZE {
@@ -214,8 +212,7 @@ fn qsc_mceliece_encrypt(secret: &mut [u8], ciphertext: &mut [u8], publickey: &[u
 * \param privatekey: Pointer to output private-key array of QSC_MCELIECE_PRIVATEKEY_SIZE constant size
 * \param rng_generate: Pointer to the random generator function
 */
-#[allow(dead_code)]
-fn qsc_mceliece_generate_keypair(publickey: &mut [u8], privatekey: &mut [u8], seed: [u8; QSC_MCELIECE_SEED_SIZE]) {
+pub fn qsc_mceliece_generate_keypair(publickey: &mut [u8], privatekey: &mut [u8], seed: [u8; QSC_MCELIECE_SEED_SIZE]) {
 	let secrand_state = &mut QscSecrandState::default();
 	qsc_secrand_initialize(secrand_state, &seed, QSC_MCELIECE_SEED_SIZE, &[], 0);
 	if publickey.len() == QSC_MCELIECE_PUBLICKEY_SIZE && privatekey.len() == QSC_MCELIECE_PRIVATEKEY_SIZE {

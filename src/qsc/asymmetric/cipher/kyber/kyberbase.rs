@@ -63,7 +63,7 @@ const QSC_KYBER_MSGBYTES: usize = 32;
 \def QSC_KYBER_SYMBYTES
 * Read Only: The size in bytes of hashes, and seeds
 */
-pub const QSC_KYBER_SYMBYTES: usize = 32;
+pub(crate) const QSC_KYBER_SYMBYTES: usize = 32;
 
 /*
 \def QSC_KYBER_POLYBYTES
@@ -111,19 +111,19 @@ const QSC_KYBER_POLYVEC_BYTES: usize = QSC_KYBER_K * QSC_KYBER_POLYBYTES;
 \def QSC_KYBER_INDCPA_PUBLICKEY_BYTES
 * Read Only: The base INDCPA formatted public key size in bytes
 */
-pub const QSC_KYBER_INDCPA_PUBLICKEY_BYTES: usize = QSC_KYBER_POLYVEC_BYTES + QSC_KYBER_SYMBYTES;
+pub(crate) const QSC_KYBER_INDCPA_PUBLICKEY_BYTES: usize = QSC_KYBER_POLYVEC_BYTES + QSC_KYBER_SYMBYTES;
 
 /*
 \def QSC_KYBER_INDCPA_SECRETKEY_BYTES
 * Read Only: The base INDCPA formatted private key size in bytes
 */
-pub const QSC_KYBER_INDCPA_SECRETKEY_BYTES: usize = QSC_KYBER_POLYVEC_BYTES;
+pub(crate) const QSC_KYBER_INDCPA_SECRETKEY_BYTES: usize = QSC_KYBER_POLYVEC_BYTES;
 
 /*
 \def QSC_KYBER_INDCPA_BYTES
 * Read Only: The size of the INDCPA formatted output cipher-text
 */
-pub const QSC_KYBER_INDCPA_BYTES: usize = QSC_KYBER_POLYVEC_COMPRESSED_BYTES + QSC_KYBER_POLYCOMPRESSED_BYTES;
+pub(crate) const QSC_KYBER_INDCPA_BYTES: usize = QSC_KYBER_POLYVEC_COMPRESSED_BYTES + QSC_KYBER_POLYCOMPRESSED_BYTES;
 
 /*
 \def QSC_KYBER_PUBLICKEY_BYTES
@@ -847,7 +847,7 @@ fn kyber_indcpa_dec(m: &mut [u8], c: &[u8], sk: &[u8]) {
 * \param sk: Pointer to output private key (an already allocated array of KYBER_SECRETKEY_SIZE bytes)
 * \param rng_generate: Pointer to the random generator function
 */
-pub fn qsc_kyber_ref_generate_keypair(secrand_state: &mut QscSecrandState, pk: &mut [u8], sk: &mut [u8], rng_generate: fn(&mut QscSecrandState, &mut [u8], usize) -> bool) {
+pub(crate) fn qsc_kyber_ref_generate_keypair(secrand_state: &mut QscSecrandState, pk: &mut [u8], sk: &mut [u8], rng_generate: fn(&mut QscSecrandState, &mut [u8], usize) -> bool) {
     kyber_indcpa_keypair(secrand_state, pk, sk, rng_generate);
     qsc_memutils_copy(&mut sk[QSC_KYBER_INDCPA_SECRETKEY_BYTES..], pk, QSC_KYBER_INDCPA_PUBLICKEY_BYTES);
 
@@ -864,7 +864,7 @@ pub fn qsc_kyber_ref_generate_keypair(secrand_state: &mut QscSecrandState, pk: &
 * \param pk: [const] Pointer to input public key (an already allocated array of KYBER_PUBLICKEY_SIZE bytes)
 * \param rng_generate: Pointer to the random generator function
 */
-pub fn qsc_kyber_ref_encapsulate(secrand_state: &mut QscSecrandState, ct: &mut [u8], ss: &mut [u8], pk: &[u8], rng_generate: fn(&mut QscSecrandState, &mut [u8], usize) -> bool) {
+pub(crate) fn qsc_kyber_ref_encapsulate(secrand_state: &mut QscSecrandState, ct: &mut [u8], ss: &mut [u8], pk: &[u8], rng_generate: fn(&mut QscSecrandState, &mut [u8], usize) -> bool) {
     let buf = &mut [0u8; 2 * QSC_KYBER_SYMBYTES];
     let kr = &mut [0u8; 2 * QSC_KYBER_SYMBYTES];
 
@@ -894,7 +894,7 @@ pub fn qsc_kyber_ref_encapsulate(secrand_state: &mut QscSecrandState, ct: &mut [
 * \param sk: [const] Pointer to input private key (an already allocated array of KYBER_SECRETKEY_SIZE bytes)
 * \return Returns true for success
 */
-pub fn qsc_kyber_ref_decapsulate(ss: &mut [u8], ct: &[u8], sk: &[u8]) -> bool {
+pub(crate) fn qsc_kyber_ref_decapsulate(ss: &mut [u8], ct: &[u8], sk: &[u8]) -> bool {
     let buf = &mut [0u8; 2 * QSC_KYBER_SYMBYTES];
     let cmp = &mut [0u8; QSC_KYBER_CIPHERTEXT_BYTES];
     let kr = &mut [0u8; 2 * QSC_KYBER_SYMBYTES];

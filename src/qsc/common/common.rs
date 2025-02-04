@@ -4,16 +4,16 @@
 * This file is part of the QSC Cryptographic library
 *
 * This program is free software : you can redistribute it and / or modify
-* it under the terms of the GNU Affero General Public License as published by
+* it under the terms of the GNU Affero General pub(crate)lic License as pub(crate)lished by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Affero General Public License for more details.
+* See the GNU Affero General pub(crate)lic License for more details.
 *
-* You should have received a copy of the GNU Affero General Public License
+* You should have received a copy of the GNU Affero General pub(crate)lic License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -24,7 +24,7 @@
 \def QSC_SYSTEM_IS_LITTLE_ENDIAN
 * \brief The system is little endian
 */
-pub const QSC_SYSTEM_IS_LITTLE_ENDIAN: bool = cfg!(target_endian = "little");
+pub(crate) const QSC_SYSTEM_IS_LITTLE_ENDIAN: bool = cfg!(target_endian = "little");
 
 /*
 * AVX512 Capabilities Check
@@ -61,7 +61,7 @@ const QSC_SYSTEM_HAS_AVX: bool = cfg!(target_feature = "avx");
 \def QSC_SYSTEM_HAS_AVX2
 * \brief The system supports AVX2 instructions
 */
-pub const QSC_SYSTEM_HAS_AVX2: bool = cfg!(target_feature = "avx2");
+pub(crate) const QSC_SYSTEM_HAS_AVX2: bool = cfg!(target_feature = "avx2");
 
 /*
 \def QSC_SYSTEM_HAS_AVX512
@@ -90,7 +90,7 @@ const QSC_SYSTEM_AVX_INTRINSICS: bool = QSC_SYSTEM_HAS_AVX || QSC_SYSTEM_HAS_AVX
 * Just for testing, add the QSC_SYSTEM_AESNI_ENABLED preprocessor definition and enable SIMD and AES-NI.
 */
 
-pub const QSC_SYSTEM_AESNI_ENABLED: bool = QSC_SYSTEM_AVX_INTRINSICS;
+pub(crate) const QSC_SYSTEM_AESNI_ENABLED: bool = QSC_SYSTEM_AVX_INTRINSICS;
 
 /*** Kyber ***/
 
@@ -98,20 +98,20 @@ pub const QSC_SYSTEM_AESNI_ENABLED: bool = QSC_SYSTEM_AVX_INTRINSICS;
 \def QSC_KYBER_S3Q3329N256K3
 * Implement the Kyber S3Q3329N256K3 parameter set
 */
-pub const QSC_KYBER_S3Q3329N256K3: bool = false;
+pub(crate) const QSC_KYBER_S3Q3329N256K3: bool = false;
 
 /*
 \def QSC_KYBER_S5Q3329N256K4
 * Implement the Kyber S5Q3329N256K4 parameter set
 */
-pub const QSC_KYBER_S5Q3329N256K4: bool = true;
+pub(crate) const QSC_KYBER_S5Q3329N256K4: bool = true;
 
 /*
 \def QSC_KYBER_S6Q3329N256K5
 * Implement the Kyber S6Q3329N256K5 parameter set.
 * /warning Experimental, not an official parameter.
 */
-pub const QSC_KYBER_S6Q3329N256K5: bool = false;
+pub(crate) const QSC_KYBER_S6Q3329N256K5: bool = false;
 
 /*** McEliece ***/
 
@@ -119,25 +119,25 @@ pub const QSC_KYBER_S6Q3329N256K5: bool = false;
 \def QSC_MCELIECE_S3N4608T96
 * Implement the McEliece S3-N4608T96 parameter set
 */
-pub const QSC_MCELIECE_S3N4608T96: bool = false;
+pub(crate) const QSC_MCELIECE_S3N4608T96: bool = false;
 
 /*
 \def QSC_MCELIECE_S5N6688T128
 * Implement the McEliece S5-N6688T128 parameter set
 */
-pub const QSC_MCELIECE_S5N6688T128: bool = true;
+pub(crate) const QSC_MCELIECE_S5N6688T128: bool = true;
 
 /*
 \def QSC_MCELIECE_S5N6960T119
 * Implement the McEliece S5-N6960T119 parameter set
 */
-pub const QSC_MCELIECE_S5N6960T119: bool = false;
+pub(crate) const QSC_MCELIECE_S5N6960T119: bool = false;
 
 /*
 \def QSC_MCELIECE_S5N8192T128
 * Implement the McEliece S5-N8192T128 parameter set
 */
-pub const QSC_MCELIECE_S5N8192T128: bool = false;
+pub(crate) const QSC_MCELIECE_S5N8192T128: bool = false;
 
 /*** SphincsPlus ***/
 
@@ -145,22 +145,22 @@ pub const QSC_MCELIECE_S5N8192T128: bool = false;
 \def QSC_SPHINCSPLUS_S3S192SHAKERS
 * Implement the SphincsPlus S3S192SHAKERS robust small parameter set
 */
-pub const QSC_SPHINCSPLUS_S3S192SHAKERS: bool = false;
+pub(crate) const QSC_SPHINCSPLUS_S3S192SHAKERS: bool = false;
 
 /*
 \def QSC_SPHINCSPLUS_S3S192SHAKERF
 * Implement the SphincsPlus S3S192SHAKERF robust fast parameter set
 */
-pub const QSC_SPHINCSPLUS_S3S192SHAKERF: bool = false;
+pub(crate) const QSC_SPHINCSPLUS_S3S192SHAKERF: bool = false;
 
 /*
 \def QSC_SPHINCSPLUS_S5S256SHAKERS
 * Implement the SphincsPlus S5S256SHAKERS robust small parameter set
 */
-pub const QSC_SPHINCSPLUS_S5S256SHAKERS: bool = false;
+pub(crate) const QSC_SPHINCSPLUS_S5S256SHAKERS: bool = false;
 
 /*
 \def QSC_SPHINCSPLUS_S5S256SHAKERF
 * Implement the SphincsPlus S5S256SHAKERF robust fast parameter set
 */
-pub const QSC_SPHINCSPLUS_S5S256SHAKERF: bool = true;
+pub(crate) const QSC_SPHINCSPLUS_S5S256SHAKERF: bool = true;

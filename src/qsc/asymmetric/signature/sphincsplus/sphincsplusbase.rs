@@ -837,7 +837,7 @@ fn sphincsplus_ref_generate_seed_keypair(pk: &mut [u8], sk: &mut [u8], seed: &[u
 * \param sk: The private signature key
 * \param rng_generate: A pointer to the random generator function
 */
-pub fn sphincsplus_ref_generate_keypair(pk: &mut [u8], sk: &mut [u8], rng_generate: fn(&mut [u8], usize) -> bool) {
+pub(crate) fn sphincsplus_ref_generate_keypair(pk: &mut [u8], sk: &mut [u8], rng_generate: fn(&mut [u8], usize) -> bool) {
     /* Generates an SPX key pair.
        Format sk [SK_SEED || SK_PRF || PUB_SEED || root]
        Format pk [PUB_SEED || root] */
@@ -1010,7 +1010,7 @@ fn sphincsplus_ref_sign_verify(mut sig: &[u8], siglen: usize, m: &[u8], mlen: us
 * \param sk: The private signature key
 * \param rng_generate: A pointer to the random generator function
 */
-pub fn sphincsplus_ref_sign(sm: &mut [u8], smlen: &mut usize, m: &[u8], mlen: usize, sk: &[u8], rng_generate: fn(&mut [u8], usize) -> bool) {
+pub(crate) fn sphincsplus_ref_sign(sm: &mut [u8], smlen: &mut usize, m: &[u8], mlen: usize, sk: &[u8], rng_generate: fn(&mut [u8], usize) -> bool) {
     /* Returns an array containing the signature followed by the message */
 
     let mut siglen = 0;
@@ -1030,7 +1030,7 @@ pub fn sphincsplus_ref_sign(sm: &mut [u8], smlen: &mut usize, m: &[u8], mlen: us
 * \param pk: The public verification key
 * \return Returns true for success
 */
-pub fn sphincsplus_ref_sign_open(m: &mut [u8], mlen: &mut usize, sm: &[u8], smlen: usize, pk: &[u8]) -> bool {
+pub(crate) fn sphincsplus_ref_sign_open(m: &mut [u8], mlen: &mut usize, sm: &[u8], smlen: usize, pk: &[u8]) -> bool {
     /* Verifies a given signature-message pair under a given public key */
 
     let mut res = false;

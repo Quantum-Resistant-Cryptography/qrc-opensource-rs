@@ -76,31 +76,31 @@ use crate::qsc::{
 * \def QSC_KYBER_CIPHERTEXT_SIZE
 * \brief The byte size of the cipher-text array
 */
-const QSC_KYBER_CIPHERTEXT_SIZE: usize = QSC_KYBER_INDCPA_BYTES;
+pub const QSC_KYBER_CIPHERTEXT_SIZE: usize = QSC_KYBER_INDCPA_BYTES;
 
 /*
 * \def QSC_KYBER_PRIVATEKEY_SIZE
 * \brief The byte size of the secret private-key array
 */
-const QSC_KYBER_PRIVATEKEY_SIZE: usize = QSC_KYBER_INDCPA_SECRETKEY_BYTES +  QSC_KYBER_INDCPA_PUBLICKEY_BYTES + (2 * QSC_KYBER_SYMBYTES);
+pub const QSC_KYBER_PRIVATEKEY_SIZE: usize = QSC_KYBER_INDCPA_SECRETKEY_BYTES +  QSC_KYBER_INDCPA_PUBLICKEY_BYTES + (2 * QSC_KYBER_SYMBYTES);
 
 /*
 * \def QSC_KYBER_PUBLICKEY_SIZE
 * \brief The byte size of the public-key array
 */
-const QSC_KYBER_PUBLICKEY_SIZE: usize = QSC_KYBER_INDCPA_PUBLICKEY_BYTES;
+pub const QSC_KYBER_PUBLICKEY_SIZE: usize = QSC_KYBER_INDCPA_PUBLICKEY_BYTES;
 
 /*
 * \def QSC_KYBER_SEED_SIZE
 * \brief The byte size of the seed array
 */
-const QSC_KYBER_SEED_SIZE: usize = 32;
+pub const QSC_KYBER_SEED_SIZE: usize = 32;
 
 /*
 * \def QSC_KYBER_SHAREDSECRET_SIZE
 * \brief The byte size of the shared secret-key array
 */
-const QSC_KYBER_SHAREDSECRET_SIZE: usize = 32;
+pub const QSC_KYBER_SHAREDSECRET_SIZE: usize = 32;
 
 
 /**
@@ -136,8 +136,7 @@ fn qsc_kyber_decapsulate(secret: &mut [u8], ciphertext: &[u8], privatekey: &[u8]
 * \param privatekey: [const] Pointer to the secret-key array of QSC_KYBER_PRIVATEKEY_SIZE constant size
 * \return Returns true for success
 */
-#[allow(dead_code)]
-fn qsc_kyber_decrypt(secret: &mut [u8], ciphertext: &[u8], privatekey: &[u8]) -> bool {
+pub fn qsc_kyber_decrypt(secret: &mut [u8], ciphertext: &[u8], privatekey: &[u8]) -> bool {
 	let mut res = false;
 
 	if secret.len() == QSC_KYBER_SHAREDSECRET_SIZE && ciphertext.len() == QSC_KYBER_CIPHERTEXT_SIZE && privatekey.len() == QSC_KYBER_PRIVATEKEY_SIZE {
@@ -181,8 +180,7 @@ fn qsc_kyber_encapsulate(secrand_state: &mut QscSecrandState, secret: &mut [u8],
 * \param publickey: [const] Pointer to the public-key array of QSC_KYBER_PUBLICKEY_SIZE constant size
 * \param seed: [const] A pointer to the random seed array
 */
-#[allow(dead_code)]
-fn qsc_kyber_encrypt(secret: &mut [u8], ciphertext: &mut [u8], publickey: &[u8], seed: [u8; QSC_KYBER_SEED_SIZE]) {
+pub fn qsc_kyber_encrypt(secret: &mut [u8], ciphertext: &mut [u8], publickey: &[u8], seed: [u8; QSC_KYBER_SEED_SIZE]) {
 	let secrand_state = &mut QscSecrandState::default();
     qsc_secrand_initialize(secrand_state, &seed, QSC_KYBER_SEED_SIZE, &[], 0);
 	if secret.len() == QSC_KYBER_SHAREDSECRET_SIZE && ciphertext.len() == QSC_KYBER_CIPHERTEXT_SIZE && publickey.len() == QSC_KYBER_PUBLICKEY_SIZE {
@@ -201,8 +199,7 @@ fn qsc_kyber_encrypt(secret: &mut [u8], ciphertext: &mut [u8], publickey: &[u8],
 * \param privatekey: Pointer to output private-key array of QSC_KYBER_PRIVATEKEY_SIZE constant size
 * \param rng_generate: A pointer to the random generator function
 */
-#[allow(dead_code)]
-fn qsc_kyber_generate_keypair(publickey: &mut [u8], privatekey: &mut [u8], seed: [u8; QSC_KYBER_SEED_SIZE]) {
+pub fn qsc_kyber_generate_keypair(publickey: &mut [u8], privatekey: &mut [u8], seed: [u8; QSC_KYBER_SEED_SIZE]) {
 	let secrand_state = &mut QscSecrandState::default();
     qsc_secrand_initialize(secrand_state, &seed, QSC_KYBER_SEED_SIZE, &[], 0);
 	if publickey.len() == QSC_KYBER_PUBLICKEY_SIZE && privatekey.len() == QSC_KYBER_PRIVATEKEY_SIZE {

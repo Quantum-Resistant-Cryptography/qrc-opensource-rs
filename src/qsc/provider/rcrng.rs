@@ -4,16 +4,16 @@
 * This file is part of the QSC Cryptographic library
 *
 * This program is free software : you can redistribute it and / or modify
-* it under the terms of the GNU Affero General Public License as published by
+* it under the terms of the GNU Affero General pub(crate)lic License as pub(crate)lished by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Affero General Public License for more details.
+* See the GNU Affero General pub(crate)lic License for more details.
 *
-* You should have received a copy of the GNU Affero General Public License
+* You should have received a copy of the GNU Affero General pub(crate)lic License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -117,7 +117,7 @@ fn rcrng_collect_statistics(seed: &mut [u8]) {
 * \param length: The number of bytes to copy
 * \return Returns true for success
 */
-pub fn qsc_rcrng_generate(output: &mut [u8], length: usize) -> bool {
+pub(crate) fn qsc_rcrng_generate(output: &mut [u8], length: usize) -> bool {
 	let len = 64;
 	let cust = &mut [0u8; 64];
 	let key = &mut [0u8; 64];

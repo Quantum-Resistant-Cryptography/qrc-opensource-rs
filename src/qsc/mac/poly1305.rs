@@ -4,23 +4,23 @@
 * This file is part of the QSC Cryptographic library
 *
 * This program is free software : you can redistribute it and / or modify
-* it under the terms of the GNU Affero General Public License as published by
+* it under the terms of the GNU Affero General pub(crate)lic License as pub(crate)lished by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Affero General Public License for more details.
+* See the GNU Affero General pub(crate)lic License for more details.
 *
-* You should have received a copy of the GNU Affero General Public License
+* You should have received a copy of the GNU Affero General pub(crate)lic License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 /**
 * \file poly1305.h
 * \brief Poly1305 function definitions \n
-* Contains the public api and documentation for the Poly1305 implementation.
+* Contains the pub(crate)lic api and documentation for the Poly1305 implementation.
 *
 * Poly1305 Examples \n
 * \code
@@ -57,20 +57,20 @@ use crate::qsc::tools::intutils::{
 * \def QSC_POLY1305_BLOCK_SIZE
 * \brief The natural block size of the message input in bytes
 */
-const QSC_POLY1305_BLOCK_SIZE: usize = 16;
+pub const QSC_POLY1305_BLOCK_SIZE: usize = 16;
 
 /* 
 * \struct qsc_poly1305_state
 * \brief Contains the Poly1305 internal state
 */
-struct QscPoly1305State {
-	pub h: [u32; 5],							/*< The h parameter */
-	pub k: [u32; 4],							/*< The k parameter */
-	pub r: [u32; 5],							/*< The r parameter */
-	pub s: [u32; 4],							/*< The s parameter */
-	pub buf: [u8; QSC_POLY1305_BLOCK_SIZE],	    /*< The buffer parameter */
-	pub fnl: usize,								/*< The fnl size */
-	pub rmd: usize,								/*< The rmd size */
+pub struct QscPoly1305State {
+	pub(crate) h: [u32; 5],							/*< The h parameter */
+	pub(crate) k: [u32; 4],							/*< The k parameter */
+	pub(crate) r: [u32; 5],							/*< The r parameter */
+	pub(crate) s: [u32; 4],							/*< The s parameter */
+	pub(crate) buf: [u8; QSC_POLY1305_BLOCK_SIZE],	    /*< The buffer parameter */
+	pub(crate) fnl: usize,								/*< The fnl size */
+	pub(crate) rmd: usize,								/*< The rmd size */
 }
 impl Default for QscPoly1305State {
     fn default() -> Self {
@@ -142,8 +142,7 @@ fn qsc_poly1305_blockupdate(ctx: &mut QscPoly1305State, message: &[u8]) {
 * \param msglen: The number of message bytes to process
 * \param key: [const] The 32 byte key array
 */
-#[allow(dead_code)]
-fn qsc_poly1305_compute(output: &mut [u8], message: &[u8], msglen: usize, key: &[u8]) {
+pub fn qsc_poly1305_compute(output: &mut [u8], message: &[u8], msglen: usize, key: &[u8]) {
 	let ctx = &mut QscPoly1305State::default();
 
 	qsc_poly1305_initialize(ctx, key);
@@ -158,7 +157,7 @@ fn qsc_poly1305_compute(output: &mut [u8], message: &[u8], msglen: usize, key: &
 * \param ctx: [struct] The function state; must be initialized
 * \param mac: The MAC byte array; receives the MAC code
 */
-fn qsc_poly1305_finalize(ctx: &mut QscPoly1305State, output: &mut [u8]) {
+pub fn qsc_poly1305_finalize(ctx: &mut QscPoly1305State, output: &mut [u8]) {
 	if ctx.rmd != 0	{
 		ctx.buf[ctx.rmd] = 1;
 
@@ -235,7 +234,7 @@ fn qsc_poly1305_finalize(ctx: &mut QscPoly1305State, output: &mut [u8]) {
 * \param ctx: [struct] The function state
 * \param key: [const] The secret key byte array
 */
-fn qsc_poly1305_initialize(ctx: &mut QscPoly1305State, key: &[u8]) {
+pub fn qsc_poly1305_initialize(ctx: &mut QscPoly1305State, key: &[u8]) {
 	ctx.r[0] = (qsc_intutils_le8to32(&key[0..])) & 0x3FFFFFF;
 	ctx.r[1] = (qsc_intutils_le8to32(&key[3..]) >> 2) & 0x3FFFF03;
 	ctx.r[2] = (qsc_intutils_le8to32(&key[6..]) >> 4) & 0x3FFC0FF;
@@ -281,7 +280,7 @@ fn qsc_poly1305_reset(ctx: &mut QscPoly1305State) {
 * \param message: [const] The input message byte array
 * \param msglen: The number of input message bytes to process
 */
-fn qsc_poly1305_update(ctx: &mut QscPoly1305State, mut message: &[u8], mut msglen: usize) {
+pub fn qsc_poly1305_update(ctx: &mut QscPoly1305State, mut message: &[u8], mut msglen: usize) {
 	if ctx.rmd != 0	{
 		let mut rmd = QSC_POLY1305_BLOCK_SIZE - ctx.rmd;
 
