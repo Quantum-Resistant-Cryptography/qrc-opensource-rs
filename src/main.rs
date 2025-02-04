@@ -1,5 +1,5 @@
 mod qsc {
-    pub mod asymmetric {
+    mod asymmetric {
         mod cipher {
             mod ecdh {
                 mod ec25519;
@@ -38,11 +38,11 @@ mod qsc {
             }
         }
     }
-    pub mod cipher {
-        pub mod aes;
-        pub mod chacha;
+    mod cipher {
+        mod aes;
+        mod chacha;
     }
-    mod common {
+    pub mod common {
         pub mod common;
     }
     pub mod digest {
@@ -52,11 +52,11 @@ mod qsc {
     pub mod drbg {
         pub mod csg;
     }
-    pub mod mac {
-        pub mod poly1305;
+    mod mac {
+        mod poly1305;
     }
-    pub mod numerics {
-        pub mod donna128;
+    mod numerics {
+        mod donna128;
     }
     pub mod prng {
         pub mod secrand;
