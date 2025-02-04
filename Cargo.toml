@@ -7,7 +7,7 @@ description = "The free opensource version of the QRC library"
 documentation = "https://docs.rs/qrc-opensource-rs"
 repository = "https://github.com/Quantum-Resistant-Cryptography/qrc-opensource-rs"
 readme = "README.md"
-license = "LICENSE"
+license-file = "LICENSE"
 keywords = ["cryptography", "quantum", "post-quantum", "rust"]
 categories = ["cryptography", "security"]
 
