@@ -9,7 +9,7 @@ repository = "https://github.com/Quantum-Resistant-Cryptography/qrc-opensource-r
 readme = "README.md"
 license-file = "LICENSE"
 keywords = ["cryptography", "quantum", "post-quantum", "rust"]
-categories = ["cryptography", "security"]
+categories = ["cryptography"]
 
 [lib]
 name = "qrc_opensource_rs"
