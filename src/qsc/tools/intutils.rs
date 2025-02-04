@@ -152,24 +152,6 @@ pub fn qsc_intutils_clear64(a: &mut [u64], count: usize) {
 }
 
 /**
-* \brief Convert an array to a hex string
-*
-* \param input: [const] The array input
-* \param hexstr: The hexadecimal string output; must be 2x the size of input array
-* \param length: The length of the input array
-*/
-pub fn qsc_intutils_bin_to_hex(input: &[u8], hexstr: &mut String) {
-	const ENCODING_TABLE: [u8; 16] = [
-        0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66,
-    ];
-
-    for &byte in input {
-        hexstr.push(ENCODING_TABLE[(byte >> 4) as usize] as char);
-        hexstr.push(ENCODING_TABLE[(byte & 0x0F) as usize] as char);
-    }
-}
-
-/**
 * \brief Increment an 8-bit integer array as a segmented little-endian integer
 *
 * \param output: The source integer 8-bit array
@@ -190,16 +172,6 @@ pub fn qsc_intutils_le8increment(output: &mut [u8], outlen: usize) {
 }
 
 /**
-* \brief Convert an 8-bit integer array to a 16-bit little-endian integer
-*
-* \param input: [const] The source integer 8-bit array
-* \return Returns the 16-bit little endian integer
-*/
-pub fn qsc_intutils_le8to16(input: &[u8]) -> u16 {
-	return (input[0] as u16 | ((input[1] as u16) << 8)) as u16;
-}
-
-/**
 * \brief Convert an 8-bit integer array to a 32-bit little-endian integer
 *
 * \param input: [const] The source integer 8-bit array
@@ -217,17 +189,6 @@ pub fn qsc_intutils_le8to32(input: &[u8]) -> u32 {
 */
 pub fn qsc_intutils_le8to64(input: &[u8]) -> u64 {
 	return ((input[0] as u64) | ((input[1] as u64) << 8) | ((input[2] as u64) << 16) | ((input[3] as u64) << 24) | ((input[4] as u64) << 32) | ((input[5] as u64) << 40) | ((input[6] as u64) << 48) | ((input[7] as u64) << 56)) as u64;
-}
-
-/**
-* \brief Convert a 16-bit integer to a little-endian 8-bit integer array
-*
-* \param output: The 8-bit integer array
-* \param value: The 16-bit integer
-*/
-pub fn qsc_intutils_le16to8(output: &mut [u8], value: u16) {
-	output[0] = value as u8 & 0xFF;
-	output[1] = (value >> 8) as u8 & 0xFF;
 }
 
 /**
@@ -258,26 +219,6 @@ pub fn qsc_intutils_le64to8(output: &mut [u8], value: u64) {
 	output[5] = (value >> 40) as u8 & 0xFF;
 	output[6] = (value >> 48) as u8 & 0xFF;
 	output[7] = (value >> 56) as u8 & 0xFF;
-}
-
-/**
-* \brief Compares two byte 8-bit integers for equality
-*
-* \param a: [const] The first array to compare
-* \param b: [const] The second array to compare
-* \param length: The number of bytes to compare
-* \return Returns true for equal values
-*/
-pub fn qsc_intutils_are_equal8(a: &[u8], b: &[u8], length: usize) ->  bool {
-    let mut status: bool = true;
-	for i in 0..length {
-		if a[i] != b[i]	{
-			status = false;
-			break;
-		}
-	}
-
-	return status;
 }
 
 /**

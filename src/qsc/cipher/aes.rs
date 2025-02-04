@@ -115,12 +115,6 @@ pub enum QscAesCipherType {
 pub const QSC_AES_BLOCK_SIZE: usize = 16;
 
 /*
-\def QSC_AES128_KEY_SIZE
-* The size in bytes of the AES-128 input cipher-key.
-*/
-pub const QSC_AES128_KEY_SIZE: usize = 16;
-
-/*
 \def QSC_AES256_KEY_SIZE
 * The size in bytes of the AES-256 input cipher-key.
 */
@@ -328,7 +322,7 @@ pub const RCON: [u32; 30] = [
 	0xD4000000, 0xB3000000, 0x7D000000, 0xFA000000, 0xEF000000, 0xC5000000
 ];
 
-pub fn aes_add_roundkey(state: &mut [u8], skeys: &[u32]) {
+fn aes_add_roundkey(state: &mut [u8], skeys: &[u32]) {
     let mut k: u32;
     for i in (0..QSC_AES_BLOCK_SIZE).step_by(size_of::<u32>()) {
 		k = skeys[i/size_of::<u32>()];
@@ -339,13 +333,13 @@ pub fn aes_add_roundkey(state: &mut [u8], skeys: &[u32]) {
     }
 }
 
-pub fn aes_gf256_reduce(x: u32) -> u8 {
+fn aes_gf256_reduce(x: u32) -> u8 {
 	let y = x >> 8;
 
 	return (x ^ y ^ (y << 1) ^ (y << 3) ^ (y << 4)) as u8 & 0xFF;
 }
 
-pub fn aes_invmix_columns(state: &mut [u8]) {
+fn aes_invmix_columns(state: &mut [u8]) {
 	for i in (0..QSC_AES_BLOCK_SIZE).step_by(size_of::<u32>()) {
 		let s0 = state[i] as u32;
 		let s1 = state[i + 1] as u32;
@@ -371,7 +365,7 @@ pub fn aes_invmix_columns(state: &mut [u8]) {
 	}
 }
 
-pub fn aes_invshift_rows(state: &mut [u8]) {
+fn aes_invshift_rows(state: &mut [u8]) {
 	let mut tmp = state[13];
 	state[13] = state[9];
 	state[9] = state[5];
@@ -392,13 +386,13 @@ pub fn aes_invshift_rows(state: &mut [u8]) {
 	state[15] = tmp;
 }
 
-pub fn aes_invsub_bytes(state: &mut [u8]) {
+fn aes_invsub_bytes(state: &mut [u8]) {
 	for i in 0..QSC_AES_BLOCK_SIZE {
 		state[i] = AES_ISBOX[state[i] as usize];
 	}
 }
 
-pub fn aes_mix_columns(state: &mut [u8]) {
+fn aes_mix_columns(state: &mut [u8]) {
 	for i in (0..QSC_AES_BLOCK_SIZE).step_by(size_of::<u32>()) {
 		let s0 = state[i + 0] as u32;
 		let s1 = state[i + 1] as u32;
@@ -417,7 +411,7 @@ pub fn aes_mix_columns(state: &mut [u8]) {
 	}
 }
 
-pub fn aes_shift_rows(state: &mut [u8]) {
+fn aes_shift_rows(state: &mut [u8]) {
 	let mut tmp = state[1];
 	state[1] = state[5];
 	state[5] = state[9];
@@ -438,13 +432,13 @@ pub fn aes_shift_rows(state: &mut [u8]) {
 	state[3] = tmp;
 }
 
-pub fn aes_sub_bytes(state: &mut [u8], sbox: &[u8]) {
+fn aes_sub_bytes(state: &mut [u8], sbox: &[u8]) {
 	for i in 0..QSC_AES_BLOCK_SIZE {
 		state[i] = sbox[state[i] as usize];
 	}
 }
 
-pub fn aes_substitution(rot: u32) -> u32 {
+fn aes_substitution(rot: u32) -> u32 {
 	let mut val = rot & 0xFF;
 	let mut res = AES_SBOX[val as usize] as u32;
 	val = (rot >> 8) & 0xFF;
@@ -456,7 +450,7 @@ pub fn aes_substitution(rot: u32) -> u32 {
 	return res as u32 | (((AES_SBOX[val as usize]) as u32) << 24) as u32;
 }
 
-pub fn aes_decrypt_block(state: QscAesState, output: &mut [u8], input: &[u8]) {
+fn aes_decrypt_block(state: QscAesState, output: &mut [u8], input: &[u8]) {
 	let s = &mut [0u8; 16];
 
 	let buf = input;
@@ -477,7 +471,7 @@ pub fn aes_decrypt_block(state: QscAesState, output: &mut [u8], input: &[u8]) {
 	qsc_memutils_copy(output, s, QSC_AES_BLOCK_SIZE);
 }
 
-pub fn aes_encrypt_block(state: QscAesState, output: &mut [u8], input: &[u8]) {
+fn aes_encrypt_block(state: QscAesState, output: &mut [u8], input: &[u8]) {
 	let buf = &mut [0u8; QSC_AES_BLOCK_SIZE];
 
 	qsc_memutils_copy(buf, input, QSC_AES_BLOCK_SIZE);
@@ -498,7 +492,7 @@ pub fn aes_encrypt_block(state: QscAesState, output: &mut [u8], input: &[u8]) {
 	qsc_memutils_copy(output, buf, QSC_AES_BLOCK_SIZE);
 }
 
-pub fn aes_expand_rot(key: &mut [u32], mut keyindex: u32, keyoffset: u32, rconindex: u32) {
+fn aes_expand_rot(key: &mut [u32], mut keyindex: u32, keyoffset: u32, rconindex: u32) {
 	let mut subkey = keyindex - keyoffset;
 	key[keyindex as usize] = key[subkey as usize] ^ aes_substitution((key[keyindex as usize - 1] << 8) | ((key[keyindex as usize - 1] >> 24) & 0xFF)) ^ RCON[rconindex as usize];
 	keyindex += 1;
@@ -512,7 +506,7 @@ pub fn aes_expand_rot(key: &mut [u32], mut keyindex: u32, keyoffset: u32, rconin
 	key[keyindex as usize] = key[subkey as usize] ^ key[keyindex as usize - 1];
 }
 
-pub fn aes_expand_sub(key: &mut [u32], mut keyindex: u32, keyoffset: u32) {
+fn aes_expand_sub(key: &mut [u32], mut keyindex: u32, keyoffset: u32) {
 	let mut subkey = keyindex - keyoffset;
 	key[keyindex as usize] = aes_substitution(key[keyindex as usize - 1]) ^ key[subkey as usize];
 	keyindex += 1;
@@ -526,7 +520,7 @@ pub fn aes_expand_sub(key: &mut [u32], mut keyindex: u32, keyoffset: u32) {
 	key[keyindex as usize] = key[subkey as usize] ^ key[keyindex as usize - 1];
 }
 
-pub fn aes_standard_expand(state: &mut QscAesState, keyparams: QscAesKeyparams) {
+fn aes_standard_expand(state: &mut QscAesState, keyparams: QscAesKeyparams) {
 	/* key in 32 bit words */
 	let kwords = keyparams.keylen / size_of::<u32>();
 
@@ -584,7 +578,7 @@ pub fn aes_standard_expand(state: &mut QscAesState, keyparams: QscAesKeyparams) 
 *
 * \warning When using a CTR mode, the cipher is always initialized for encryption.
 */
-pub fn qsc_aes_initialize(state: &mut QscAesState, keyparams: QscAesKeyparams, ctype: QscAesCipherType) {
+fn qsc_aes_initialize(state: &mut QscAesState, keyparams: QscAesKeyparams, ctype: QscAesCipherType) {
 	state.nonce = keyparams.nonce.clone();
 
     let byte_slice = cast_slice_mut::<u32, u8>(&mut state.roundkeys);
@@ -616,7 +610,8 @@ pub fn qsc_aes_initialize(state: &mut QscAesState, keyparams: QscAesKeyparams, c
 * \param output: The output byte array; receives the decrypted plain-text
 * \param input: [const] The input cipher-text block of bytes
 */
-pub fn qsc_aes_cbc_decrypt_block(state: &mut QscAesState, output: &mut [u8], input: &[u8]) {
+#[allow(dead_code)]
+fn qsc_aes_cbc_decrypt_block(state: &mut QscAesState, output: &mut [u8], input: &[u8]) {
 	let tmpv = &mut [0u8; QSC_AES_BLOCK_SIZE];
 
 	qsc_memutils_copy(tmpv, input, QSC_AES_BLOCK_SIZE);
@@ -638,7 +633,8 @@ pub fn qsc_aes_cbc_decrypt_block(state: &mut QscAesState, output: &mut [u8], inp
 * \param output: The output byte array; receives the encrypted cipher-text
 * \param input: [const] The input plain-text block of bytes
 */
-pub fn qsc_aes_cbc_encrypt_block(state: &mut QscAesState, output: &mut [u8], input: &[u8]) {
+#[allow(dead_code)]
+fn qsc_aes_cbc_encrypt_block(state: &mut QscAesState, output: &mut [u8], input: &[u8]) {
 	for i in 0..QSC_AES_BLOCK_SIZE {
 		state.nonce[i] ^= input[i];
 	}
@@ -660,7 +656,8 @@ pub fn qsc_aes_cbc_encrypt_block(state: &mut QscAesState, output: &mut [u8], inp
 * \param input: [const] The input data byte array
 * \param length: The number of input bytes to transform
 */
-pub fn qsc_aes_ctrbe_transform(state: &mut QscAesState, output: &mut [u8], input: &[u8], mut length: usize) {
+#[allow(dead_code)]
+fn qsc_aes_ctrbe_transform(state: &mut QscAesState, output: &mut [u8], input: &[u8], mut length: usize) {
     let mut oft = 0;
 
 	while length >= QSC_AES_BLOCK_SIZE {
@@ -700,7 +697,7 @@ pub fn qsc_aes_ctrbe_transform(state: &mut QscAesState, output: &mut [u8], input
 * \param input: [const] The input data byte array
 * \param length: The number of input bytes to transform
 */
-pub fn qsc_aes_ctrle_transform(state: &mut QscAesState, output: &mut [u8], input: &[u8], mut length: usize) {
+fn qsc_aes_ctrle_transform(state: &mut QscAesState, output: &mut [u8], input: &[u8], mut length: usize) {
 	let mut oft = 0;
 
 	while length >= QSC_AES_BLOCK_SIZE {
@@ -739,7 +736,8 @@ pub fn qsc_aes_ctrle_transform(state: &mut QscAesState, output: &mut [u8], input
 * \param output: The output byte array; receives the decrypted plain-text
 * \param input: [const] The input cipher-text block of bytes
 */
-pub fn qsc_aes_ecb_decrypt_block(state: QscAesState, output: &mut [u8], input: &[u8]) {
+#[allow(dead_code)]
+fn qsc_aes_ecb_decrypt_block(state: QscAesState, output: &mut [u8], input: &[u8]) {
 	aes_decrypt_block(state, output, input);
 }
 
@@ -751,14 +749,16 @@ pub fn qsc_aes_ecb_decrypt_block(state: QscAesState, output: &mut [u8], input: &
 * \param output: The output byte array; receives the encrypted cipher-text
 * \param input: [const] The input plain-text block of bytes
 */
-pub fn qsc_aes_ecb_encrypt_block(state: QscAesState, output: &mut [u8], input: &[u8]) {
+#[allow(dead_code)]
+fn qsc_aes_ecb_encrypt_block(state: QscAesState, output: &mut [u8], input: &[u8]) {
 	aes_encrypt_block(state, output, input);
 }
 
 /**
 * \brief Erase the round-key array and size
 */
-pub fn qsc_aes_dispose(state: &mut QscAesState) {
+#[allow(dead_code)]
+fn qsc_aes_dispose(state: &mut QscAesState) {
 	/* erase the state members */
     let byte_slice = cast_slice_mut::<u32, u8>(&mut state.roundkeys);
     qsc_memutils_clear(byte_slice);
@@ -790,13 +790,13 @@ pub const AES_HBA256_NAME: [u8; HBA_NAME_LENGTH] = {
     o
 };
 
-pub fn aes_hba256_update(state: &mut QscAesHba256State, input: &[u8], length: usize) {
+fn aes_hba256_update(state: &mut QscAesHba256State, input: &[u8], length: usize) {
     if QSC_HBA_KMAC_EXTENSION {
 	    qsc_kmac_update(&mut state.kstate, QSC_KECCAK_256_RATE, input, length);
     }
 }
 
-pub fn aes_hba256_finalize(state: &mut QscAesHba256State, output: &mut [u8]) {
+fn aes_hba256_finalize(state: &mut QscAesHba256State, output: &mut [u8]) {
 	let mkey = &mut [0u8; HBA256_MKEY_LENGTH];
 	let pctr = &mut [0u8; size_of::<u64>()];
 	let tmpn = &mut [0u8; HBA_NAME_LENGTH];
@@ -826,7 +826,7 @@ pub fn aes_hba256_finalize(state: &mut QscAesHba256State, output: &mut [u8]) {
     }
 }
 
-pub fn aes_hba256_genkeys(keyparams: QscAesKeyparams, cprk: &mut [u8], mack: &mut [u8]) {
+fn aes_hba256_genkeys(keyparams: QscAesKeyparams, cprk: &mut [u8], mack: &mut [u8]) {
     if QSC_HBA_KMAC_EXTENSION {
 
         let kstate = &mut QscKeccakState::default();
@@ -860,7 +860,8 @@ pub fn aes_hba256_genkeys(keyparams: QscAesKeyparams, cprk: &mut [u8], mack: &mu
 * \param keyparams: [const][struct] The HBA key parameters, includes the key, and optional AAD and user info arrays
 * \param encrypt: The cipher encryption mode; true for encryption, false for decryption
 */
-pub fn qsc_aes_hba256_initialize(state: &mut QscAesHba256State, keyparams: QscAesKeyparams, encrypt: bool) {
+#[allow(dead_code)]
+fn qsc_aes_hba256_initialize(state: &mut QscAesHba256State, keyparams: QscAesKeyparams, encrypt: bool) {
 	let cprk = &mut [0u8; QSC_AES256_KEY_SIZE];
 
 	state.custlen = qsc_intutils_min(keyparams.infolen, QSC_HBA_MAXINFO_SIZE);
@@ -907,7 +908,8 @@ pub fn qsc_aes_hba256_initialize(state: &mut QscAesHba256State, keyparams: QscAe
 * \param data: [const] The associated data array
 * \param datalen: The associated data array length
 */
-pub fn qsc_aes_hba256_set_associated(state: &mut QscAesHba256State, data: &[u8], datalen: usize) {
+#[allow(dead_code)]
+fn qsc_aes_hba256_set_associated(state: &mut QscAesHba256State, data: &[u8], datalen: usize) {
 	/* process the additional data */
 	if datalen != 0 {
 		let actr = &mut [0u8; size_of::<u32>()];
@@ -935,7 +937,8 @@ pub fn qsc_aes_hba256_set_associated(state: &mut QscAesHba256State, data: &[u8],
 *
 * \return: Returns true if the cipher has been initialized successfully, false on failure
 */
-pub fn qsc_aes_hba256_transform(state: &mut QscAesHba256State, output: &mut [u8], input: &[u8], length: usize) -> bool {
+#[allow(dead_code)]
+fn qsc_aes_hba256_transform(state: &mut QscAesHba256State, output: &mut [u8], input: &[u8], length: usize) -> bool {
 	let mut res = false;
 
 	/* update the processed bytes counter */

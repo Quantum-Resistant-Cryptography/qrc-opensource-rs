@@ -24,7 +24,7 @@ use rand::{RngCore, rngs::OsRng};
 * \def QSC_OSRNG_SEED_MAX
 * \brief The maximum seed size that can be extracted from a single generate call
 */
-pub const QSC_OSRNG_SEED_MAX: usize = 1024000;
+const QSC_OSRNG_SEED_MAX: usize = 1024000;
 
 /**
 * \brief Get an array of random bytes from the RDRAND entropy provider.

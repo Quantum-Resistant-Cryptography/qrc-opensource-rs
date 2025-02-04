@@ -81,44 +81,44 @@ use std::mem::size_of;
 \def HMAC_256_MAC
 * The HMAC-256 mac-code size in bytes
 */
-pub const QSC_HMAC_256_MAC: usize = 32;
+const QSC_HMAC_256_MAC: usize = 32;
 
 /*
 \def HMAC_512_MAC
 * The HMAC-512 mac-code size in bytes
 */
-pub const QSC_HMAC_512_MAC: usize = 64;
+const QSC_HMAC_512_MAC: usize = 64;
 
 /*
 \def SHA2_256_HASH
 * The SHA2-256 hash size in bytes
 */
-pub const QSC_SHA2_256_HASH: usize = 32;
+const QSC_SHA2_256_HASH: usize = 32;
 
 /*
 \def SHA2_512_HASH
 * The SHA2-512 hash size in bytes
 */
-pub const QSC_SHA2_512_HASH: usize = 64;
+const QSC_SHA2_512_HASH: usize = 64;
 
 /*
 \def SHA2_256_RATE
 * The SHA-256 byte absorption rate
 */
-pub const QSC_SHA2_256_RATE: usize = 64;
+const QSC_SHA2_256_RATE: usize = 64;
 
 
 /*
 \def SHA2_512_RATE
 * The SHA2-512 byte absorption rate
 */
-pub const QSC_SHA2_512_RATE: usize = 128;
+const QSC_SHA2_512_RATE: usize = 128;
 
 /*
 \def SHA2_256_STATESIZE
 * The SHA2-256 state array size
 */
-pub const QSC_SHA2_STATE_SIZE: usize = 8;
+const QSC_SHA2_STATE_SIZE: usize = 8;
 
 /* sha2-256 */
 
@@ -190,7 +190,7 @@ impl Default for QscHmac512State {
     }
 }
 
-pub const SHA256_IV: [u32; 8] = [
+const SHA256_IV: [u32; 8] = [
 	0x6A09E667,
 	0xBB67AE85,
 	0x3C6EF372,
@@ -200,7 +200,7 @@ pub const SHA256_IV: [u32; 8] = [
 	0x1F83D9AB,
 	0x5BE0CD19
 ];
-pub const SHA512_IV: [u64; 8] = [
+const SHA512_IV: [u64; 8] = [
 	0x6A09E667F3BCC908,
 	0xBB67AE8584CAA73B,
 	0x3C6EF372FE94F82B,
@@ -212,10 +212,10 @@ pub const SHA512_IV: [u64; 8] = [
 ];
 
 
-pub fn qsc_sha256_increase(state: &mut QscSha256State, msglen: usize) {
+fn qsc_sha256_increase(state: &mut QscSha256State, msglen: usize) {
 	state.t += msglen as u64;
 }
-pub fn qsc_sha512_increase(state: &mut QscSha512State, length: usize) {
+fn qsc_sha512_increase(state: &mut QscSha512State, length: usize) {
 	state.t[0] += length as u64;
 
 	if state.t[0] > 0x1FFFFFFFFFFFFFFF {
@@ -225,13 +225,13 @@ pub fn qsc_sha512_increase(state: &mut QscSha512State, length: usize) {
 }
 
 
-pub fn qsc_sha256_blockupdate(state: &mut QscSha256State, message: &[u8], nblocks: usize) {
+fn qsc_sha256_blockupdate(state: &mut QscSha256State, message: &[u8], nblocks: usize) {
     for i in 0..nblocks {
 		qsc_sha256_permute(&mut state.state, &message[(i * QSC_SHA2_256_RATE)..]);
 		qsc_sha256_increase(state, QSC_SHA2_256_RATE);
 	}
 }
-pub fn qsc_sha512_blockupdate(state: &mut QscSha512State, message: &[u8], nblocks: usize) {
+fn qsc_sha512_blockupdate(state: &mut QscSha512State, message: &[u8], nblocks: usize) {
 	for i in 0..nblocks {
 		qsc_sha512_permute(&mut state.state, &message[(i * QSC_SHA2_512_RATE)..]);
 		qsc_sha512_increase(state, QSC_SHA2_512_RATE);
@@ -250,7 +250,7 @@ pub fn qsc_sha512_blockupdate(state: &mut QscSha512State, message: &[u8], nblock
 * \param ctx: [struct] The function state; must be initialized
 * \param output: The output byte array; receives the hash code
 */
-pub fn qsc_sha256_finalize(state: &mut QscSha256State, output: &mut [u8], message: &[u8], mut msglen: usize) {
+fn qsc_sha256_finalize(state: &mut QscSha256State, output: &mut [u8], message: &[u8], mut msglen: usize) {
 	let pad = &mut [0u8; QSC_SHA2_256_RATE];
 
 	for i in 0..msglen {
@@ -300,7 +300,7 @@ pub fn qsc_sha256_finalize(state: &mut QscSha256State, output: &mut [u8], messag
 * \param ctx: [struct] The function state; must be initialized
 * \param output: The output byte array; receives the hash code
 */
-pub fn qsc_sha512_finalize(state: &mut QscSha512State, output: &mut [u8], message: &[u8], mut msglen: usize) {
+fn qsc_sha512_finalize(state: &mut QscSha512State, output: &mut [u8], message: &[u8], mut msglen: usize) {
     let pad = &mut [0u8; QSC_SHA2_512_RATE];
 
 	qsc_sha512_increase(state, msglen);
@@ -344,7 +344,7 @@ pub fn qsc_sha512_finalize(state: &mut QscSha512State, output: &mut [u8], messag
 *
 * \param ctx: [struct] The function state
 */
-pub fn qsc_sha256_initialize(state: &mut QscSha256State) {
+fn qsc_sha256_initialize(state: &mut QscSha256State) {
 	for i in 0..QSC_SHA2_STATE_SIZE {
 		state.state[i] = SHA256_IV[i];
 	}
@@ -357,7 +357,7 @@ pub fn qsc_sha256_initialize(state: &mut QscSha256State) {
 *
 * \param ctx: [struct] The function state
 */
-pub fn qsc_sha512_initialize(state: &mut QscSha512State) {
+fn qsc_sha512_initialize(state: &mut QscSha512State) {
     for i in 0..QSC_SHA2_STATE_SIZE {
 		state.state[i] = SHA512_IV[i];
 	}
@@ -373,7 +373,7 @@ pub fn qsc_sha512_initialize(state: &mut QscSha512State) {
 * \param output: The function output; must be initialized
 * \param input: [const] The input message byte array
 */
-pub fn qsc_sha256_permute(output: &mut [u32], message: &[u8]) {
+fn qsc_sha256_permute(output: &mut [u32], message: &[u8]) {
 	let mut a = output[0];
     let mut b = output[1];
     let mut c = output[2];
@@ -450,7 +450,7 @@ pub fn qsc_sha256_permute(output: &mut [u32], message: &[u8]) {
 * \param output: The function output; must be initialized
 * \param input: [const] The input message byte array
 */
-pub fn qsc_sha512_permute(output: &mut [u64], message: &[u8]) {
+fn qsc_sha512_permute(output: &mut [u64], message: &[u8]) {
 	let mut a = output[0];
     let mut b = output[1];
     let mut c = output[2];
@@ -535,7 +535,8 @@ pub fn qsc_sha512_permute(output: &mut [u64], message: &[u8]) {
 * \param key: [const] The secret key array
 * \param keylen: The key array length
 */
-pub fn qsc_hmac256_compute(output: &mut [u8], mut message: &[u8], mut msglen: usize, key: &[u8], mut keylen: usize) {
+#[allow(dead_code)]
+fn qsc_hmac256_compute(output: &mut [u8], mut message: &[u8], mut msglen: usize, key: &[u8], mut keylen: usize) {
 	let bipad = 0x36 as u8;
 	let bopad = 0x5C as u8;
 	let ipad = &mut [0u8; QSC_SHA2_256_RATE];
@@ -591,7 +592,8 @@ pub fn qsc_hmac256_compute(output: &mut [u8], mut message: &[u8], mut msglen: us
 * \param key: [const] The secret key array
 * \param keylen: The key array length
 */
-pub fn qsc_hmac512_compute(output: &mut [u8], mut message: &[u8], mut msglen: usize, key: &[u8], mut keylen: usize) {
+#[allow(dead_code)]
+fn qsc_hmac512_compute(output: &mut [u8], mut message: &[u8], mut msglen: usize, key: &[u8], mut keylen: usize) {
     let bipad = 0x36 as u8;
 	let bopad = 0x5C as u8;
 	let ipad = &mut [0u8; QSC_SHA2_512_RATE];
@@ -636,10 +638,10 @@ pub fn qsc_hmac512_compute(output: &mut [u8], mut message: &[u8], mut msglen: us
 }
 
 
-pub fn qsc_hmac256_blockupdate(state: &mut QscHmac256State, message: &[u8], nblocks: usize) {
+fn qsc_hmac256_blockupdate(state: &mut QscHmac256State, message: &[u8], nblocks: usize) {
 	qsc_sha256_blockupdate(&mut state.pstate, message, nblocks);
 }
-pub fn qsc_hmac512_blockupdate(state: &mut QscHmac512State, message: &[u8], nblocks: usize) {
+fn qsc_hmac512_blockupdate(state: &mut QscHmac512State, message: &[u8], nblocks: usize) {
 	qsc_sha512_blockupdate(&mut state.pstate, message, nblocks);
 }
 
@@ -655,7 +657,8 @@ pub fn qsc_hmac512_blockupdate(state: &mut QscHmac512State, message: &[u8], nblo
 * \param ctx: [struct] The function state; must be initialized
 * \param output: The output byte array; receives the hash code
 */
-pub fn qsc_hmac256_finalize(state: &mut QscHmac256State, output: &mut [u8], message: &[u8], mut msglen: usize) {
+
+fn qsc_hmac256_finalize(state: &mut QscHmac256State, output: &mut [u8], message: &[u8], mut msglen: usize) {
 	let tmpv = &mut [0u8; QSC_SHA2_256_HASH];
 	let mut oft = 0;
 
@@ -683,7 +686,8 @@ pub fn qsc_hmac256_finalize(state: &mut QscHmac256State, output: &mut [u8], mess
 * \param ctx: [struct] The function state; must be initialized
 * \param output: The output byte array; receives the hash code
 */
-pub fn qsc_hmac512_finalize(state: &mut QscHmac512State, output: &mut [u8], message: &[u8], mut msglen: usize) {
+
+fn qsc_hmac512_finalize(state: &mut QscHmac512State, output: &mut [u8], message: &[u8], mut msglen: usize) {
 	let tmpv = &mut [0u8; QSC_SHA2_512_HASH];
 	let mut oft = 0;
 
@@ -707,7 +711,7 @@ pub fn qsc_hmac512_finalize(state: &mut QscHmac512State, output: &mut [u8], mess
 * \param key: [const] The secret key array
 * \param keylen: The key array length
 */
-pub fn qsc_hmac256_initialize(state: &mut QscHmac256State, key: &[u8], mut keylen: usize) {
+fn qsc_hmac256_initialize(state: &mut QscHmac256State, key: &[u8], mut keylen: usize) {
 	let bipad = 0x36;
 	let bopad = 0x5C;
 
@@ -748,7 +752,8 @@ pub fn qsc_hmac256_initialize(state: &mut QscHmac256State, key: &[u8], mut keyle
 * \param key: [const] The secret key array
 * \param keylen: The key array length
 */
-pub fn qsc_hmac512_initialize(state: &mut QscHmac512State, key: &[u8], mut keylen: usize) {
+
+fn qsc_hmac512_initialize(state: &mut QscHmac512State, key: &[u8], mut keylen: usize) {
 	let bipad = 0x36;
 	let bopad = 0x5C;
 
@@ -792,7 +797,8 @@ pub fn qsc_hmac512_initialize(state: &mut QscHmac512State, key: &[u8], mut keyle
 * \param info: [const] The info array
 * \param infolen: The info array length
 */
-pub fn qsc_hkdf256_expand(mut output: &mut [u8], mut outlen: usize, key: &[u8], keylen: usize, info: &[u8], infolen: usize) {
+#[allow(dead_code)]
+fn qsc_hkdf256_expand(mut output: &mut [u8], mut outlen: usize, key: &[u8], keylen: usize, info: &[u8], infolen: usize) {
 	let state = &mut QscHmac256State::default();
 	let msg = &mut [0u8; QSC_SHA2_256_RATE];
     let otp = &mut [0u8; QSC_SHA2_256_HASH];
@@ -877,7 +883,8 @@ pub fn qsc_hkdf256_expand(mut output: &mut [u8], mut outlen: usize, key: &[u8], 
 * \param info: [const] The info array
 * \param infolen: The info array length
 */
-pub fn qsc_hkdf512_expand(mut output: &mut [u8], mut outlen: usize, key: &[u8], keylen: usize, info: &[u8], infolen: usize) {
+#[allow(dead_code)]
+fn qsc_hkdf512_expand(mut output: &mut [u8], mut outlen: usize, key: &[u8], keylen: usize, info: &[u8], infolen: usize) {
     let state = &mut QscHmac512State::default();
 	let msg = &mut [0u8; QSC_SHA2_512_RATE];
     let otp = &mut [0u8; QSC_SHA2_512_HASH];
@@ -961,7 +968,8 @@ pub fn qsc_hkdf512_expand(mut output: &mut [u8], mut outlen: usize, key: &[u8], 
 * \param salt: [const] The salt array
 * \param saltlen: The salt array length
 */
-pub fn qsc_hkdf256_extract(output: &mut [u8], key: &[u8], keylen: usize, salt: &[u8], saltlen: usize) {
+#[allow(dead_code)]
+fn qsc_hkdf256_extract(output: &mut [u8], key: &[u8], keylen: usize, salt: &[u8], saltlen: usize) {
     let state = &mut QscHmac256State::default();
 
 	if saltlen != 0 {
@@ -984,7 +992,8 @@ pub fn qsc_hkdf256_extract(output: &mut [u8], key: &[u8], keylen: usize, salt: &
 * \param salt: [const] The salt array
 * \param saltlen: The salt array length
 */
-pub fn qsc_hkdf512_extract(output: &mut [u8], key: &[u8], keylen: usize, salt: &[u8], saltlen: usize) {
+#[allow(dead_code)]
+fn qsc_hkdf512_extract(output: &mut [u8], key: &[u8], keylen: usize, salt: &[u8], saltlen: usize) {
 	let state = &mut QscHmac512State::default();
 
 	if saltlen != 0	{

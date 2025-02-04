@@ -69,7 +69,7 @@ use crate::qsc::{
 * \def QSC_SPHINCSPLUS_SIGNATURE_SIZE
 * \brief The byte size of the signature array
 */
-pub const QSC_SPHINCSPLUS_SIGNATURE_SIZE: usize = if QSC_SPHINCSPLUS_S3S192SHAKERS {
+const QSC_SPHINCSPLUS_SIGNATURE_SIZE: usize = if QSC_SPHINCSPLUS_S3S192SHAKERS {
     16224
 } else if QSC_SPHINCSPLUS_S3S192SHAKERF {
     35664
@@ -85,7 +85,7 @@ pub const QSC_SPHINCSPLUS_SIGNATURE_SIZE: usize = if QSC_SPHINCSPLUS_S3S192SHAKE
 * \def QSC_SPHINCSPLUS_PRIVATEKEY_SIZE
 * \brief The byte size of the secret private-key array
 */
-pub const QSC_SPHINCSPLUS_PRIVATEKEY_SIZE: usize = if QSC_SPHINCSPLUS_S3S192SHAKERS {
+const QSC_SPHINCSPLUS_PRIVATEKEY_SIZE: usize = if QSC_SPHINCSPLUS_S3S192SHAKERS {
     96
 } else if QSC_SPHINCSPLUS_S3S192SHAKERF {
     96
@@ -101,7 +101,7 @@ pub const QSC_SPHINCSPLUS_PRIVATEKEY_SIZE: usize = if QSC_SPHINCSPLUS_S3S192SHAK
 * \def QSC_SPHINCSPLUS_PUBLICKEY_SIZE
 * \brief The byte size of the public-key array
 */
-pub const QSC_SPHINCSPLUS_PUBLICKEY_SIZE: usize = if QSC_SPHINCSPLUS_S3S192SHAKERS {
+const QSC_SPHINCSPLUS_PUBLICKEY_SIZE: usize = if QSC_SPHINCSPLUS_S3S192SHAKERS {
     48
 } else if QSC_SPHINCSPLUS_S3S192SHAKERF {
     48
@@ -112,13 +112,7 @@ pub const QSC_SPHINCSPLUS_PUBLICKEY_SIZE: usize = if QSC_SPHINCSPLUS_S3S192SHAKE
 } else {
     0
 };
-pub const QRCS_CRYPTO_HASH_SIZE: usize = 64;
-
-/*
-* \def QSC_SPHINCSPLUS_ALGNAME
-* \brief The formal algorithm name
-*/
-pub const QSC_SPHINCSPLUS_ALGNAME: &str = "SPHINCSPLUS";
+const QRCS_CRYPTO_HASH_SIZE: usize = 64;
 
 /**
 * \brief Generates a Sphincs+ public/private key-pair.
@@ -129,7 +123,8 @@ pub const QSC_SPHINCSPLUS_ALGNAME: &str = "SPHINCSPLUS";
 * \param privatekey: Pointer to the private signature-key array
 * \param rng_generate: Pointer to the random generator
 */
-pub fn qsc_sphincsplus_generate_keypair(publickey: &mut [u8], privatekey: &mut [u8], rng_generate: fn(&mut [u8], usize) -> bool) {
+#[allow(dead_code)]
+fn qsc_sphincsplus_generate_keypair(publickey: &mut [u8], privatekey: &mut [u8], rng_generate: fn(&mut [u8], usize) -> bool) {
 	if publickey.len() == QSC_SPHINCSPLUS_PUBLICKEY_SIZE && privatekey.len() == QSC_SPHINCSPLUS_PRIVATEKEY_SIZE {
 		sphincsplus_ref_generate_keypair(publickey, privatekey, rng_generate);
 	}
@@ -147,7 +142,8 @@ pub fn qsc_sphincsplus_generate_keypair(publickey: &mut [u8], privatekey: &mut [
 * \param privatekey: [const] Pointer to the private signature-key array
 * \param rng_generate: Pointer to the random generator
 */
-pub fn qsc_sphincsplus_sign(signedmsg: &mut [u8], smsglen: &mut usize, message: &[u8], msglen: usize, privatekey: &[u8], rng_generate: fn(&mut [u8], usize) -> bool) {
+#[allow(dead_code)]
+fn qsc_sphincsplus_sign(signedmsg: &mut [u8], smsglen: &mut usize, message: &[u8], msglen: usize, privatekey: &[u8], rng_generate: fn(&mut [u8], usize) -> bool) {
 
 	if signedmsg.len() == QSC_SPHINCSPLUS_SIGNATURE_SIZE + QRCS_CRYPTO_HASH_SIZE && smsglen == &mut 0 && message.len() == QRCS_CRYPTO_HASH_SIZE && privatekey.len() == QSC_SPHINCSPLUS_PRIVATEKEY_SIZE {
 		sphincsplus_ref_sign(signedmsg, smsglen, message, msglen, privatekey, rng_generate);
@@ -164,7 +160,8 @@ pub fn qsc_sphincsplus_sign(signedmsg: &mut [u8], smsglen: &mut usize, message: 
 * \param publickey: [const] Pointer to the public verification-key array
 * \return Returns true for success
 */
-pub fn qsc_sphincsplus_verify(message: &mut [u8], msglen: &mut usize, signedmsg: &[u8], smsglen: usize, publickey: &[u8]) -> bool {
+#[allow(dead_code)]
+fn qsc_sphincsplus_verify(message: &mut [u8], msglen: &mut usize, signedmsg: &[u8], smsglen: usize, publickey: &[u8]) -> bool {
 	let mut res = false;
 
 	if message.len() == QRCS_CRYPTO_HASH_SIZE && msglen == &mut 0 && signedmsg.len() == QSC_SPHINCSPLUS_SIGNATURE_SIZE + QRCS_CRYPTO_HASH_SIZE && publickey.len() == QSC_SPHINCSPLUS_PUBLICKEY_SIZE {

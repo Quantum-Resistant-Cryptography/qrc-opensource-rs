@@ -57,13 +57,13 @@ use crate::qsc::tools::intutils::{
 * \def QSC_POLY1305_BLOCK_SIZE
 * \brief The natural block size of the message input in bytes
 */
-pub const QSC_POLY1305_BLOCK_SIZE: usize = 16;
+const QSC_POLY1305_BLOCK_SIZE: usize = 16;
 
 /* 
 * \struct qsc_poly1305_state
 * \brief Contains the Poly1305 internal state
 */
-pub struct QscPoly1305State {
+struct QscPoly1305State {
 	pub h: [u32; 5],							/*< The h parameter */
 	pub k: [u32; 4],							/*< The k parameter */
 	pub r: [u32; 5],							/*< The r parameter */
@@ -95,7 +95,7 @@ impl Default for QscPoly1305State {
 * \param ctx: [struct] The function state; must be initialized
 * \param message: [const] The input message byte array
 */
-pub fn qsc_poly1305_blockupdate(ctx: &mut QscPoly1305State, message: &[u8]) {
+fn qsc_poly1305_blockupdate(ctx: &mut QscPoly1305State, message: &[u8]) {
 	let hibit = if ctx.fnl != 0 { 0 } else { 1 << 24 };
 
 	let t0 = qsc_intutils_le8to32(message) as u64;
@@ -142,7 +142,8 @@ pub fn qsc_poly1305_blockupdate(ctx: &mut QscPoly1305State, message: &[u8]) {
 * \param msglen: The number of message bytes to process
 * \param key: [const] The 32 byte key array
 */
-pub fn qsc_poly1305_compute(output: &mut [u8], message: &[u8], msglen: usize, key: &[u8]) {
+#[allow(dead_code)]
+fn qsc_poly1305_compute(output: &mut [u8], message: &[u8], msglen: usize, key: &[u8]) {
 	let ctx = &mut QscPoly1305State::default();
 
 	qsc_poly1305_initialize(ctx, key);
@@ -157,7 +158,7 @@ pub fn qsc_poly1305_compute(output: &mut [u8], message: &[u8], msglen: usize, ke
 * \param ctx: [struct] The function state; must be initialized
 * \param mac: The MAC byte array; receives the MAC code
 */
-pub fn qsc_poly1305_finalize(ctx: &mut QscPoly1305State, output: &mut [u8]) {
+fn qsc_poly1305_finalize(ctx: &mut QscPoly1305State, output: &mut [u8]) {
 	if ctx.rmd != 0	{
 		ctx.buf[ctx.rmd] = 1;
 
@@ -234,7 +235,7 @@ pub fn qsc_poly1305_finalize(ctx: &mut QscPoly1305State, output: &mut [u8]) {
 * \param ctx: [struct] The function state
 * \param key: [const] The secret key byte array
 */
-pub fn qsc_poly1305_initialize(ctx: &mut QscPoly1305State, key: &[u8]) {
+fn qsc_poly1305_initialize(ctx: &mut QscPoly1305State, key: &[u8]) {
 	ctx.r[0] = (qsc_intutils_le8to32(&key[0..])) & 0x3FFFFFF;
 	ctx.r[1] = (qsc_intutils_le8to32(&key[3..]) >> 2) & 0x3FFFF03;
 	ctx.r[2] = (qsc_intutils_le8to32(&key[6..]) >> 4) & 0x3FFC0FF;
@@ -262,7 +263,7 @@ pub fn qsc_poly1305_initialize(ctx: &mut QscPoly1305State, key: &[u8]) {
 *
 * \param ctx The function state
 */
-pub fn qsc_poly1305_reset(ctx: &mut QscPoly1305State) {
+fn qsc_poly1305_reset(ctx: &mut QscPoly1305State) {
 	qsc_intutils_clear32(&mut ctx.h, 5);
 	qsc_intutils_clear32(&mut ctx.k, 4);
 	qsc_intutils_clear32(&mut ctx.r, 5);
@@ -280,7 +281,7 @@ pub fn qsc_poly1305_reset(ctx: &mut QscPoly1305State) {
 * \param message: [const] The input message byte array
 * \param msglen: The number of input message bytes to process
 */
-pub fn qsc_poly1305_update(ctx: &mut QscPoly1305State, mut message: &[u8], mut msglen: usize) {
+fn qsc_poly1305_update(ctx: &mut QscPoly1305State, mut message: &[u8], mut msglen: usize) {
 	if ctx.rmd != 0	{
 		let mut rmd = QSC_POLY1305_BLOCK_SIZE - ctx.rmd;
 

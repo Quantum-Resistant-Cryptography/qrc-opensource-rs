@@ -39,7 +39,7 @@ use bytemuck::cast_slice_mut;
 * \def QSC_SECRAND_CACHE_SIZE
 * \brief The internal cache size of the generator
 */
-pub const QSC_SECRAND_CACHE_SIZE: usize = 0x400;
+const QSC_SECRAND_CACHE_SIZE: usize = 0x400;
 
 /*
 * \struct qsc_secrand_state

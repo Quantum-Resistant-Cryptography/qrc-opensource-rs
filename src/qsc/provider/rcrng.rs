@@ -50,7 +50,7 @@ use std::mem::size_of;
 * \def QSC_RCRNG_SEED_MAX
 * \brief The maximum seed size that can be extracted from a single generate call
 */
-pub const QSC_RCRNG_SEED_MAX: usize = 10240000;
+const QSC_RCRNG_SEED_MAX: usize = 10240000;
 
 fn vec_u64_to_slice_u8(vec_u64: &Vec<u64>) -> Vec<u8> {
     let mut vec_u8: Vec<u8> = Vec::new();
@@ -62,7 +62,7 @@ fn vec_u64_to_slice_u8(vec_u64: &Vec<u64>) -> Vec<u8> {
     vec_u8
 }
 
-pub fn rcrng_collect_statistics(seed: &mut [u8]) {
+fn rcrng_collect_statistics(seed: &mut [u8]) {
     let dstate = &mut QscSysutilsDriveSpaceState::default();
     let mstate = &mut QscSysutilsMemoryStatisticsState::default();
     let buffer= &mut [0u8; 1024];

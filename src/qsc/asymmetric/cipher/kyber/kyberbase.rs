@@ -25,7 +25,7 @@ use crate::qsc::{
 \def QSC_KYBER_K
 * Read Only: The k level
 */
-pub const QSC_KYBER_K: usize = if QSC_KYBER_S3Q3329N256K3 {
+const QSC_KYBER_K: usize = if QSC_KYBER_S3Q3329N256K3 {
     3
 } else if QSC_KYBER_S5Q3329N256K4 {
     4
@@ -39,25 +39,25 @@ pub const QSC_KYBER_K: usize = if QSC_KYBER_S3Q3329N256K3 {
 \def QSC_KYBER_N
 * Read Only: The polynomial dimension N
 */
-pub const QSC_KYBER_N: usize = 256;
+const QSC_KYBER_N: usize = 256;
 
 /*
 \def QSC_KYBER_Q
 * Read Only: The modulus prime factor Q
 */
-pub const QSC_KYBER_Q: usize = 3329;
+const QSC_KYBER_Q: usize = 3329;
 
 /*
 \def QSC_KYBER_ETA
 * Read Only: The binomial distribution factor
 */
-pub const QSC_KYBER_ETA: usize = 2;
+const QSC_KYBER_ETA: usize = 2;
 
 /*
 \def QSC_KYBER_MSGBYTES
 * Read Only: The size in bytes of the shared secret
 */
-pub const QSC_KYBER_MSGBYTES: usize = 32;
+const QSC_KYBER_MSGBYTES: usize = 32;
 
 /*
 \def QSC_KYBER_SYMBYTES
@@ -69,13 +69,13 @@ pub const QSC_KYBER_SYMBYTES: usize = 32;
 \def QSC_KYBER_POLYBYTES
 * Read Only: The secret key base multiplier
 */
-pub const QSC_KYBER_POLYBYTES: usize = 384;
+const QSC_KYBER_POLYBYTES: usize = 384;
 
 /*
 \def QSC_KYBER_POLYVEC_BYTES
 * Read Only: The base size of the compressed public key polynolial
 */
-pub const QSC_KYBER_POLYVECBASE_BYTES: usize = if QSC_KYBER_K == 3 {
+const QSC_KYBER_POLYVECBASE_BYTES: usize = if QSC_KYBER_K == 3 {
     320
 } else if QSC_KYBER_K == 4 || QSC_KYBER_K == 5 {
     352
@@ -87,7 +87,7 @@ pub const QSC_KYBER_POLYVECBASE_BYTES: usize = if QSC_KYBER_K == 3 {
 \def QSC_KYBER_POLYCOMPRESSED_BYTES
 * Read Only: The cipher-text compressed byte size
 */
-pub const QSC_KYBER_POLYCOMPRESSED_BYTES: usize = if QSC_KYBER_K == 3 {
+const QSC_KYBER_POLYCOMPRESSED_BYTES: usize = if QSC_KYBER_K == 3 {
     128
 } else if QSC_KYBER_K == 4 || QSC_KYBER_K == 5 {
     160
@@ -99,13 +99,13 @@ pub const QSC_KYBER_POLYCOMPRESSED_BYTES: usize = if QSC_KYBER_K == 3 {
 \def QSC_KYBER_POLYVEC_COMPRESSED_BYTES
 * Read Only: The base size of the public key
 */
-pub const QSC_KYBER_POLYVEC_COMPRESSED_BYTES: usize = QSC_KYBER_K * QSC_KYBER_POLYVECBASE_BYTES;
+const QSC_KYBER_POLYVEC_COMPRESSED_BYTES: usize = QSC_KYBER_K * QSC_KYBER_POLYVECBASE_BYTES;
 
 /*
 \def QSC_KYBER_POLYVEC_BYTES
 * Read Only: The base size of the secret key
 */
-pub const QSC_KYBER_POLYVEC_BYTES: usize = QSC_KYBER_K * QSC_KYBER_POLYBYTES;
+const QSC_KYBER_POLYVEC_BYTES: usize = QSC_KYBER_K * QSC_KYBER_POLYBYTES;
 
 /*
 \def QSC_KYBER_INDCPA_PUBLICKEY_BYTES
@@ -129,24 +129,23 @@ pub const QSC_KYBER_INDCPA_BYTES: usize = QSC_KYBER_POLYVEC_COMPRESSED_BYTES + Q
 \def QSC_KYBER_PUBLICKEY_BYTES
 * Read Only: The byte size of the public-key array
 */
-pub const QSC_KYBER_PUBLICKEY_BYTES: usize = QSC_KYBER_INDCPA_PUBLICKEY_BYTES;
+const QSC_KYBER_PUBLICKEY_BYTES: usize = QSC_KYBER_INDCPA_PUBLICKEY_BYTES;
 
 /*
 \def QSC_KYBER_SECRETKEY_BYTES
 * Read Only: The byte size of the secret private-key array
 */
-pub const QSC_KYBER_SECRETKEY_BYTES: usize = QSC_KYBER_INDCPA_SECRETKEY_BYTES + QSC_KYBER_INDCPA_PUBLICKEY_BYTES + (2 * QSC_KYBER_SYMBYTES);
+const QSC_KYBER_SECRETKEY_BYTES: usize = QSC_KYBER_INDCPA_SECRETKEY_BYTES + QSC_KYBER_INDCPA_PUBLICKEY_BYTES + (2 * QSC_KYBER_SYMBYTES);
 
 /*
 \def QSC_KYBER_CIPHERTEXT_BYTES
 * Read Only: The byte size of the cipher-text array
 */
-pub const QSC_KYBER_CIPHERTEXT_BYTES: usize = QSC_KYBER_INDCPA_BYTES;
+const QSC_KYBER_CIPHERTEXT_BYTES: usize = QSC_KYBER_INDCPA_BYTES;
 
-pub const KYBER_ZETA_SIZE: usize = 128;
-pub const KYBER_MONT: usize = 2285; /* 2^16 mod q */
-pub const KYBER_QINV: usize = 62209; /* q^-1 mod 2^16 */
-pub const KYBER_GEN_MATRIX_NBLOCKS: usize = (12 * QSC_KYBER_N / 8 * (1 << 12) / QSC_KYBER_Q + QSC_KECCAK_128_RATE) / QSC_KECCAK_128_RATE;
+const KYBER_ZETA_SIZE: usize = 128;
+const KYBER_QINV: usize = 62209; /* q^-1 mod 2^16 */
+const KYBER_GEN_MATRIX_NBLOCKS: usize = (12 * QSC_KYBER_N / 8 * (1 << 12) / QSC_KYBER_Q + QSC_KECCAK_128_RATE) / QSC_KECCAK_128_RATE;
 
 const KYBER_ZETAS: [u16; KYBER_ZETA_SIZE] =
 [

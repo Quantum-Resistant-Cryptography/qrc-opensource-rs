@@ -39,9 +39,9 @@ use std::mem::size_of;
 
 use bytemuck::{cast_slice_mut, cast_slice};
 
-pub const MCELIECE_SHAREDSECRET_SIZE: usize = 32;
+const MCELIECE_SHAREDSECRET_SIZE: usize = 32;
 
-pub const MCELIECE_GFBITS: usize = if QSC_MCELIECE_S3N4608T96 {
+const MCELIECE_GFBITS: usize = if QSC_MCELIECE_S3N4608T96 {
     13
 } else if QSC_MCELIECE_S5N6688T128 {
     13
@@ -52,7 +52,7 @@ pub const MCELIECE_GFBITS: usize = if QSC_MCELIECE_S3N4608T96 {
 } else {
     0
 };
-pub const MCELIECE_SYS_N: usize = if QSC_MCELIECE_S3N4608T96 {
+const MCELIECE_SYS_N: usize = if QSC_MCELIECE_S3N4608T96 {
     4608
 } else if QSC_MCELIECE_S5N6688T128 {
     6688
@@ -63,7 +63,7 @@ pub const MCELIECE_SYS_N: usize = if QSC_MCELIECE_S3N4608T96 {
 } else {
     0
 };
-pub const MCELIECE_SYS_T: usize = if QSC_MCELIECE_S3N4608T96 {
+const MCELIECE_SYS_T: usize = if QSC_MCELIECE_S3N4608T96 {
     96
 } else if QSC_MCELIECE_S5N6688T128 {
     128
@@ -74,19 +74,19 @@ pub const MCELIECE_SYS_T: usize = if QSC_MCELIECE_S3N4608T96 {
 } else {
     0
 };
-pub const MCELIECE_COND_BYTES: usize = (1 << (MCELIECE_GFBITS - 4)) * (2 * MCELIECE_GFBITS - 1);
-pub const MCELIECE_IRR_BYTES: usize = MCELIECE_SYS_T * 2;
-pub const MCELIECE_PK_NROWS: usize = MCELIECE_SYS_T * MCELIECE_GFBITS;
-pub const MCELIECE_PK_NCOLS: usize = MCELIECE_SYS_N - MCELIECE_PK_NROWS;
-pub const MCELIECE_PK_ROW_BYTES: usize = (MCELIECE_PK_NCOLS + 7) / 8;
-pub const MCELIECE_SYND_BYTES: usize = (MCELIECE_PK_NROWS + 7) / 8;
+const MCELIECE_COND_BYTES: usize = (1 << (MCELIECE_GFBITS - 4)) * (2 * MCELIECE_GFBITS - 1);
+const MCELIECE_IRR_BYTES: usize = MCELIECE_SYS_T * 2;
+const MCELIECE_PK_NROWS: usize = MCELIECE_SYS_T * MCELIECE_GFBITS;
+const MCELIECE_PK_NCOLS: usize = MCELIECE_SYS_N - MCELIECE_PK_NROWS;
+const MCELIECE_PK_ROW_BYTES: usize = (MCELIECE_PK_NCOLS + 7) / 8;
+const MCELIECE_SYND_BYTES: usize = (MCELIECE_PK_NROWS + 7) / 8;
 
 type Gf = u16;
-pub const MCELIECE_GFMASK: Gf = (1 << MCELIECE_GFBITS) - 1;
+const MCELIECE_GFMASK: Gf = (1 << MCELIECE_GFBITS) - 1;
 
 /* gf.c */
 
-pub fn gf_is_zero(a: Gf) -> Gf {
+fn gf_is_zero(a: Gf) -> Gf {
 	let mut t = a as u32;
 	t = t.wrapping_sub(1);
 	t >>= 19;
@@ -94,11 +94,11 @@ pub fn gf_is_zero(a: Gf) -> Gf {
 	return t as Gf;
 }
 
-pub fn gf_add(in0: Gf, in1: Gf) -> Gf {
+fn gf_add(in0: Gf, in1: Gf) -> Gf {
 	return in0 ^ in1;
 }
 
-pub fn gf_mul(in0: Gf, in1: Gf) -> Gf {
+fn gf_mul(in0: Gf, in1: Gf) -> Gf {
 	let t0 = in0 as u64;
 	let t1 = in1 as u64;
 	let mut tmp = t0 * (t1 & 1);
@@ -115,7 +115,7 @@ pub fn gf_mul(in0: Gf, in1: Gf) -> Gf {
 	return tmp as Gf & MCELIECE_GFMASK;
 }
 
-pub fn gf_sq2(int: Gf) -> Gf {
+fn gf_sq2(int: Gf) -> Gf {
 
 	/* input: field element in
 	   return: (in^2)^2 */
@@ -137,7 +137,7 @@ pub fn gf_sq2(int: Gf) -> Gf {
 	return x as Gf & MCELIECE_GFMASK;
 }
 
-pub fn gf_sqmul(int: Gf, m: Gf) -> Gf {
+fn gf_sqmul(int: Gf, m: Gf) -> Gf {
 	/* input: field element in, m
 	   return: (in^2)*m */
 
@@ -163,7 +163,7 @@ pub fn gf_sqmul(int: Gf, m: Gf) -> Gf {
 	return x as Gf & MCELIECE_GFMASK;
 }
 
-pub fn gf_sq2mul(int: Gf, m: Gf) -> Gf {
+fn gf_sq2mul(int: Gf, m: Gf) -> Gf {
 	/* input: field element in, m
 	   return: ((in^2)^2)*m */
 	let bm: [u64; 6] = [ 0x1FF0000000000000, 0x000FF80000000000, 0x000007FC00000000, 0x00000003FE000000, 0x0000000001FE0000, 0x000000000001E000 ];
@@ -188,7 +188,7 @@ pub fn gf_sq2mul(int: Gf, m: Gf) -> Gf {
 	return x as Gf & MCELIECE_GFMASK;
 }
 
-pub fn gf_frac(den: Gf, num: Gf) -> Gf {
+fn gf_frac(den: Gf, num: Gf) -> Gf {
 	/* input: field element den, num */
 	/* return: (num/den) */
 
@@ -202,11 +202,11 @@ pub fn gf_frac(den: Gf, num: Gf) -> Gf {
 	return gf_sqmul(out, num);							/* ^ 1111111111110 = ^ -1 */
 }
 
-pub fn gf_inv(den: Gf) -> Gf {
+fn gf_inv(den: Gf) -> Gf {
 	return gf_frac(den, 1);
 }
 
-pub fn bgf_mul(out: &mut [Gf], in0: &[Gf], in1: &[Gf]) {
+fn bgf_mul(out: &mut [Gf], in0: &[Gf], in1: &[Gf]) {
 	/* input: in0, in1 in GF((2^m)^t)
 	   output: out = in0*in1 */
 
@@ -242,12 +242,12 @@ pub fn bgf_mul(out: &mut [Gf], in0: &[Gf], in1: &[Gf]) {
 
 /* util.c */
 
-pub fn store_gf(dest: &mut [u8], a: Gf) {
+fn store_gf(dest: &mut [u8], a: Gf) {
 	dest[0] = a as u8 & 0x00FF;
 	dest[1] = (a >> 8) as u8;
 }
 
-pub fn load_gf(src: &[u8]) -> u16 {
+fn load_gf(src: &[u8]) -> u16 {
 	let mut a = src[1] as u16;
 	a <<= 8;
 	a |= src[0] as u16;
@@ -255,7 +255,7 @@ pub fn load_gf(src: &[u8]) -> u16 {
 	return a & MCELIECE_GFMASK;
 }
 
-pub fn load4(int: &[u8]) -> u32 {
+fn load4(int: &[u8]) -> u32 {
 	let mut ret = int[3] as u32;
 
 	for i in (0..=2).rev() {
@@ -266,7 +266,7 @@ pub fn load4(int: &[u8]) -> u32 {
 	return ret;
 }
 
-pub fn store8(out: &mut [u8], int: u64) {
+fn store8(out: &mut [u8], int: u64) {
 	out[0] = (int & 0xFF) as u8;
 	out[1] = (int >> 0x08) as u8 & 0xFF;
 	out[2] = (int >> 0x10) as u8 & 0xFF;
@@ -277,7 +277,7 @@ pub fn store8(out: &mut [u8], int: u64) {
 	out[7] = (int >> 0x38) as u8 & 0xFF;
 }
 
-pub fn load8(int: &[u8]) -> u64 {
+fn load8(int: &[u8]) -> u64 {
 	let mut ret = int[7] as u64;
 
 	for i in (0..=6).rev()	{
@@ -288,7 +288,7 @@ pub fn load8(int: &[u8]) -> u64 {
 	return ret;
 }
 
-pub fn bitrev(mut a: Gf) -> Gf {
+fn bitrev(mut a: Gf) -> Gf {
 	a = ((a & 0x00FF) << 8) | ((a & 0xFF00) >> 8);
 	a = ((a & 0x0F0F) << 4) | ((a & 0xF0F0) >> 4);
 	a = ((a & 0x3333) << 2) | ((a & 0xCCCC) >> 2);
@@ -299,7 +299,7 @@ pub fn bitrev(mut a: Gf) -> Gf {
 
 /* sort */
 
-pub fn int32_minmax(a: &mut i32, b: &mut i32) {
+fn int32_minmax(a: &mut i32, b: &mut i32) {
 	let ab = *b ^ *a;
 	let mut c = *b - *a;
 	c ^= ab & (c ^ *b);
@@ -309,7 +309,7 @@ pub fn int32_minmax(a: &mut i32, b: &mut i32) {
 	*b ^= c;
 }
 
-pub fn int32_sort(x: &mut [i32], n: i64) {
+fn int32_sort(x: &mut [i32], n: i64) {
 	if n >= 2 {
 		let mut top = 1;
 
@@ -366,7 +366,7 @@ pub fn int32_sort(x: &mut [i32], n: i64) {
 	}
 }
 
-pub fn int64_minmax(a: &mut u64, b: &mut u64) {
+fn int64_minmax(a: &mut u64, b: &mut u64) {
 	let mut c = b.wrapping_sub(*a);
 	c >>= 63;
 	c = (!c).wrapping_add(1);
@@ -375,7 +375,7 @@ pub fn int64_minmax(a: &mut u64, b: &mut u64) {
 	*b ^= c;
 }
 
-pub fn uint64_sort(x: &mut [u64], n: i64) {
+fn uint64_sort(x: &mut [u64], n: i64) {
 	if n >= 2 {
 		let mut top = 1;
 
@@ -436,7 +436,7 @@ pub fn uint64_sort(x: &mut [u64], n: i64) {
 
 /* root.c */
 
-pub fn eval(f: &[Gf], a: Gf) -> Gf {
+fn eval(f: &[Gf], a: Gf) -> Gf {
 	/* input: polynomial f and field element a
 	   return f(a) */
 	let mut r = f[MCELIECE_SYS_T];
@@ -455,7 +455,7 @@ pub fn eval(f: &[Gf], a: Gf) -> Gf {
 	return r;
 }
 
-pub fn root(out: &mut [Gf], f: &[Gf], l: &[Gf]) {
+fn root(out: &mut [Gf], f: &[Gf], l: &[Gf]) {
 	/* input: polynomial f and list of field elements L
 	   output: out = [ f(a) for a in L ] */
 
@@ -466,7 +466,7 @@ pub fn root(out: &mut [Gf], f: &[Gf], l: &[Gf]) {
 
 /* synd.c */
 
-pub fn synd(out: &mut [Gf], f: &[Gf], l: &[Gf], r: &[u8]) {
+fn synd(out: &mut [Gf], f: &[Gf], l: &[Gf], r: &[u8]) {
 	/* input: Goppa polynomial f, support L, received word r
 	   output: out, the syndrome of length 2t */
 	
@@ -487,7 +487,7 @@ pub fn synd(out: &mut [Gf], f: &[Gf], l: &[Gf], r: &[u8]) {
 
 /* transpose.c */
 
-pub fn transpose_64x64(out: &mut [u64], int: &[u64]) {
+fn transpose_64x64(out: &mut [u64], int: &[u64]) {
 	/* input: in, a 64x64 matrix over GF(2) */
 	/* output: out, transpose of in */
 
@@ -521,7 +521,7 @@ pub fn transpose_64x64(out: &mut [u64], int: &[u64]) {
 
 /* benes.c */
 
-pub fn layer_in(data: &mut [[u64; 64]; 2], mut bits: &[u64], lgs: i32) {
+fn layer_in(data: &mut [[u64; 64]; 2], mut bits: &[u64], lgs: i32) {
 	/* middle layers of the benes network */
 	let s = 1 << lgs;
 
@@ -542,7 +542,7 @@ pub fn layer_in(data: &mut [[u64; 64]; 2], mut bits: &[u64], lgs: i32) {
 	}
 }
 
-pub fn layer_ex(data: &mut [[u64; 64]; 2], mut bits: &[u64], lgs: i32) {
+fn layer_ex(data: &mut [[u64; 64]; 2], mut bits: &[u64], lgs: i32) {
 	let data_merge = &mut [0u64; 128];
 
 	for i in 0..128 {
@@ -575,7 +575,7 @@ pub fn layer_ex(data: &mut [[u64; 64]; 2], mut bits: &[u64], lgs: i32) {
 	}
 }
 
-pub fn apply_benes(r: &mut [u8], bits: &[u8], rev: i32) {
+fn apply_benes(r: &mut [u8], bits: &[u8], rev: i32) {
 	/* input: r, sequence of bits to be permuted bits, condition bits of the Benes network rev,
 	0 for normal application, !0 for inverse output: r, permuted bits */
 
@@ -661,7 +661,7 @@ pub fn apply_benes(r: &mut [u8], bits: &[u8], rev: i32) {
 	}
 }
 
-pub fn support_gen(s: &mut [Gf], c: &[u8]) {
+fn support_gen(s: &mut [Gf], c: &[u8]) {
 	/* input: condition bits c output: support s */
 
 	let l = &mut [[0u8; (1 << MCELIECE_GFBITS) / 8]; MCELIECE_GFBITS];
@@ -695,7 +695,7 @@ pub fn support_gen(s: &mut [Gf], c: &[u8]) {
 
 /* bm.c */
 
-pub fn bm(out: &mut [Gf], s: &[Gf]) {
+fn bm(out: &mut [Gf], s: &[Gf]) {
 	/* the Berlekamp-Massey algorithm. 
 	input: s, sequence of field elements
 	output: out, minimal polynomial of s */
@@ -761,7 +761,7 @@ pub fn bm(out: &mut [Gf], s: &[Gf]) {
 
 /* controlbits.c */
 
-pub fn cbrecursion(out: &mut [u8], mut pos: i64, step: i64, pi: &[u16], w: i64, n: i64, temp: &mut [i32]) {
+fn cbrecursion(out: &mut [u8], mut pos: i64, step: i64, pi: &[u16], w: i64, n: i64, temp: &mut [i32]) {
 	/* parameters: 1 <= w <= 14; n = 2^w.
 	input: permutation pi of {0,1,...,n-1}
 	output: (2m-1)n/2 control bits at positions pos,pos+step,...
@@ -950,7 +950,7 @@ pub fn cbrecursion(out: &mut [u8], mut pos: i64, step: i64, pi: &[u16], w: i64, 
 }
 
 
-pub fn layer(p: &mut [i16], cb: &[u8], s: i32, n: i32) {
+fn layer(p: &mut [i16], cb: &[u8], s: i32, n: i32) {
 	/* input: p, an array of int16_t
 	   input: n, length of p
 	   input: s, meaning that stride-2^s cswaps are performed
@@ -975,7 +975,7 @@ pub fn layer(p: &mut [i16], cb: &[u8], s: i32, n: i32) {
 	}
 }
 
-pub fn controlbits_from_permutation(out: &mut [u8], pi: &[i16], w: i64, n: i64) {
+fn controlbits_from_permutation(out: &mut [u8], pi: &[i16], w: i64, n: i64) {
 	/* parameters: 1 <= w <= 14; n = 2^w
 	   input: permutation pi of {0,1,...,n-1}
 	   output: (2m-1)n/2 control bits at positions 0,1,...
@@ -1025,7 +1025,7 @@ pub fn controlbits_from_permutation(out: &mut [u8], pi: &[i16], w: i64, n: i64) 
 
 /* decrypt.c */
 
-pub fn decrypt(e: &mut [u8], mut sk: &[u8], c: &[u8]) -> i32 {
+fn decrypt(e: &mut [u8], mut sk: &[u8], c: &[u8]) -> i32 {
 	/* Niederreiter decryption with the Berlekamp decoder.
 	   input: sk, secret key c, ciphertext
 	   output: e, error vector
@@ -1084,7 +1084,7 @@ pub fn decrypt(e: &mut [u8], mut sk: &[u8], c: &[u8]) -> i32 {
 
 /* encrypt.c */
 
-pub fn same_mask(x: u16, y: u16) -> u8 {
+fn same_mask(x: u16, y: u16) -> u8 {
 	let mut mask = (x ^ y) as u32;
 	mask = mask.wrapping_sub(1);
 	mask >>= 31;
@@ -1093,7 +1093,7 @@ pub fn same_mask(x: u16, y: u16) -> u8 {
 	return mask as u8 & 0x000000FF;
 }
 
-pub fn gen_e(secrand_state: &mut QscSecrandState, e: &mut [u8], rng_generate: fn(&mut QscSecrandState, &mut [u8], usize) -> bool) {
+fn gen_e(secrand_state: &mut QscSecrandState, e: &mut [u8], rng_generate: fn(&mut QscSecrandState, &mut [u8], usize) -> bool) {
 	/* output: e, an error vector of weight t */
 	let ind = &mut [0u16; MCELIECE_SYS_T];
 	let val = &mut [0u8; MCELIECE_SYS_T];
@@ -1188,7 +1188,7 @@ pub fn gen_e(secrand_state: &mut QscSecrandState, e: &mut [u8], rng_generate: fn
 	}
 }
 
-pub fn syndrome(s: &mut [u8], pk: &[u8], e: &[u8]) {
+fn syndrome(s: &mut [u8], pk: &[u8], e: &[u8]) {
 	/* input: public key pk, error vector e
 	   output: syndrome s */
 
@@ -1232,14 +1232,14 @@ pub fn syndrome(s: &mut [u8], pk: &[u8], e: &[u8]) {
 	}
 }
 
-pub fn encrypt(secrand_state: &mut QscSecrandState, s: &mut [u8], pk: &[u8], e: &mut [u8], rng_generate: fn(&mut QscSecrandState, &mut [u8], usize) -> bool) {
+fn encrypt(secrand_state: &mut QscSecrandState, s: &mut [u8], pk: &[u8], e: &mut [u8], rng_generate: fn(&mut QscSecrandState, &mut [u8], usize) -> bool) {
 	gen_e(secrand_state, e, rng_generate);
 	syndrome(s, pk, e);
 }
 
 /* operations.c */
 
-pub fn check_c_padding(c: &[u8]) -> i32 {
+fn check_c_padding(c: &[u8]) -> i32 {
 	/* Note artifact, no longer used */
 	/* check if the padding bits of c are all zero */
 
@@ -1251,7 +1251,7 @@ pub fn check_c_padding(c: &[u8]) -> i32 {
 	return ret - 1;
 }
 
-pub fn check_pk_padding(pk: &[u8]) -> i32 {
+fn check_pk_padding(pk: &[u8]) -> i32 {
 	/* Note artifact, no longer used */
 
 	let mut b: u8 = 0;
@@ -1270,7 +1270,7 @@ pub fn check_pk_padding(pk: &[u8]) -> i32 {
 
 /* pk_gen.c */
 
-pub fn pk_gen(pk: &mut [u8], mut sk: &[u8], perm: &[u32], pi: &mut [i16]) -> i32 {
+fn pk_gen(pk: &mut [u8], mut sk: &[u8], perm: &[u32], pi: &mut [i16]) -> i32 {
 	/* input: secret key sk output: public key pk */
 	let buf = &mut [0u64; 1 << MCELIECE_GFBITS];
 	let g: &mut [Gf; MCELIECE_SYS_T + 1] = &mut [0; MCELIECE_SYS_T + 1];	/* Goppa polynomial */
@@ -1427,7 +1427,7 @@ pub fn pk_gen(pk: &mut [u8], mut sk: &[u8], perm: &[u32], pi: &mut [i16]) -> i32
 
 /* sk_gen.c */
 
-pub fn genpoly_gen(out: &mut [Gf], f: &[Gf]) -> i32 {
+fn genpoly_gen(out: &mut [Gf], f: &[Gf]) -> i32 {
 	/* input: f, element in GF((2^m)^t)
 	   output: out, minimal polynomial of f
 	   return: 0 for success and -1 for failure */

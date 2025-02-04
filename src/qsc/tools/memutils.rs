@@ -50,14 +50,6 @@ pub fn qsc_memutils_copy(output: &mut [u8], input: &[u8], length: usize) {
 	}
 }
 
-pub fn qsc_memutils_setvalue(output: &mut [u8], value: u8, length: usize) {
-	if length != 0 {
-		for i in 0..length {
-			output[i] = value;
-		}
-	}	
-}
-
 pub fn qsc_memutils_xor(output: &mut [u8], input: &[u8], length: usize) {
 	if length != 0 {
 		for i in 0..qsc_intutils_min(qsc_intutils_min(output.len(), input.len()), length) {

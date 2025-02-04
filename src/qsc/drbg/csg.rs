@@ -73,19 +73,19 @@ use std::mem::size_of;
 * \def QSC_CSG_256_SEED_SIZE
 * \brief The CSG-256 seed size
 */
-pub const QSC_CSG_256_SEED_SIZE: usize = 32;
+const QSC_CSG_256_SEED_SIZE: usize = 32;
 
 /*
 * \def QSC_CSG_512_SEED_SIZE
 * \brief The CSG-512 seed size
 */
-pub const QSC_CSG_512_SEED_SIZE: usize = 64;
+const QSC_CSG_512_SEED_SIZE: usize = 64;
 
 /*
 * \def QSC_CSG_RESEED_THRESHHOLD
 * \brief The CSG re-seed threshold interval
 */
-pub const QSC_CSG_RESEED_THRESHHOLD: usize = 1024000;
+const QSC_CSG_RESEED_THRESHHOLD: usize = 1024000;
 
 /*
 * \struct qsc_csg_state
@@ -116,7 +116,7 @@ impl Default for QscCsgState {
     }
 }
 
-pub fn csg_fill_buffer(ctx: &mut QscCsgState) {
+fn csg_fill_buffer(ctx: &mut QscCsgState) {
 	/* cache the block */
 	if ctx.rate == QSC_KECCAK_512_RATE {
 		qsc_cshake_squeezeblocks(&mut ctx.kstate, QscKeccakRate::QscKeccakRate512 as usize, &mut ctx.cache, 1);
@@ -129,7 +129,7 @@ pub fn csg_fill_buffer(ctx: &mut QscCsgState) {
 	ctx.cpos = 0;
 }
 
-pub fn csg_auto_reseed(ctx: &mut QscCsgState) {
+fn csg_auto_reseed(ctx: &mut QscCsgState) {
 	if ctx.pres && ctx.bctr >= QSC_CSG_RESEED_THRESHHOLD {
 		if ctx.rate == QSC_KECCAK_512_RATE {
 			/* add a random seed to input seed and info */
