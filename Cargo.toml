@@ -1,6 +1,6 @@
 [package]
 name = "qrc-opensource-rs"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Quantum Resistant Cryptography (QRC)"]
 description = "The free opensource version of the QRC library"
