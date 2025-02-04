@@ -12,8 +12,6 @@ keywords = ["cryptography", "quantum", "post-quantum", "rust"]
 categories = ["cryptography", "security"]
 
 [lib]
-#name = "qrc_kyber"
-#path = "src/qsc/asymmetric/cipher/kyber/kyber.rs"
 name = "qrc_opensource_rs"
 path = "src/lib.rs"
 
