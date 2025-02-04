@@ -1,4 +1,4 @@
-mod qsc {
+pub mod qsc {
     pub mod asymmetric {
         pub mod cipher {
             pub mod ecdh {
