@@ -17,43 +17,46 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
-* \file mceliece.h
-* \brief Contains the primary public api for the Niederreiter dual form of the McEliece asymmetric cipher implementation.
-*
-* \par Example
-* \code
-	fn mceliece() -> bool {
-		let seed = [0u8; QSC_MCELIECE_SEED_SIZE];
+/*
+##### McEliece
+Classic McEliece is a KEM designed for IND-CCA2 security at a very high security level, even against quantum computers.
+The KEM is built conservatively from a PKE designed for OW-CPA security, namely Niederreiter's dual version of McEliece's PKE using binary Goppa codes.
+Every level of the construction is designed so that future cryptographic auditors can be confident in the long-term security of post-quantum public-key encryption.
 
-		let publickey = &mut vec![0u8; QSC_MCELIECE_PUBLICKEY_SIZE];
-		let privatekey = &mut vec![0u8; QSC_MCELIECE_PRIVATEKEY_SIZE];
+Based entirely on the C reference branch of Dilithium taken from the NIST Post Quantum Competition Round 3 submission.
+The NIST Post Quantum Competition [Round 3](https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions) Finalists.
+The [McEliece](https://classic.mceliece.org/) website.
+The McEliece [Algorithm](https://classic.mceliece.org/nist/mceliece-20201010.pdf) Specification.
 
-		let secret1 = &mut [0u8; QSC_MCELIECE_SHAREDSECRET_SIZE];
-		let secret2 = &mut [0u8; QSC_MCELIECE_SHAREDSECRET_SIZE];
+Authors: Daniel J. Bernstein, Tung Chou, Tanja Lange, and Peter Schwabe.
+Updated: John Underhill - June 28 2021
+Rust Translation: 2024
 
-		let ciphertext = &mut [0u8; QSC_MCELIECE_CIPHERTEXT_SIZE];
+The primary public api for the Niederreiter dual form of the McEliece asymmetric cipher implementation:
+```rust
+use qrc_opensource_rs::{
+  asymmetric::cipher::mceliece::{
+    qsc_mceliece_generate_keypair, qsc_mceliece_encrypt, qsc_mceliece_decrypt,
+    QSC_MCELIECE_CIPHERTEXT_SIZE, QSC_MCELIECE_PRIVATEKEY_SIZE, QSC_MCELIECE_PUBLICKEY_SIZE, QSC_MCELIECE_SHAREDSECRET_SIZE, QSC_MCELIECE_SEED_SIZE,
+  },
+  provider::rcrng::qsc_rcrng_generate,
+};
 
-		qsc_mceliece_generate_keypair(publickey, privatekey, seed);	
-		qsc_mceliece_encrypt(secret1, ciphertext, publickey, seed);
-		qsc_mceliece_decrypt(secret2, ciphertext, privatekey);
+let mut seed = [0u8; QSC_MCELIECE_SEED_SIZE];
+qsc_rcrng_generate(&mut seed, QSC_MCELIECE_SEED_SIZE);
 
-		return secret1 == secret2;
-	}
-* \endcode
-*
-* \remarks
-* Classic McEliece is a KEM designed for IND-CCA2 security at a very high security level, even against quantum computers. \n
-* The KEM is built conservatively from a PKE designed for OW-CPA security, namely Niederreiter's dual version of McEliece's PKE using binary Goppa codes. \n
-* Every level of the construction is designed so that future cryptographic auditors can be confident in the long-term security of post-quantum public-key encryption. \n
-*
-* Based entirely on the C reference branch of Dilithium taken from the NIST Post Quantum Competition Round 3 submission. \n
-* The NIST Post Quantum Competition <a href="https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions">Round 3</a> Finalists. \n
-* The <a href="https://classic.mceliece.org/">McEliece</a> website. \n
-* The McEliece <a href="https://classic.mceliece.org/nist/mceliece-20201010.pdf">Algorithm</a> Specification. \n
-* Authors: Daniel J. Bernstein, Tung Chou, Tanja Lange, and Peter Schwabe. \n
-* Updated by Stiepan A. Kovac on February 7, 2024.
-* c to rust 2024-2025
+let publickey = &mut vec![0u8; QSC_MCELIECE_PUBLICKEY_SIZE];
+let privatekey = &mut vec![0u8; QSC_MCELIECE_PRIVATEKEY_SIZE];
+
+let secret1 = &mut [0u8; QSC_MCELIECE_SHAREDSECRET_SIZE];
+let secret2 = &mut [0u8; QSC_MCELIECE_SHAREDSECRET_SIZE];
+
+let ciphertext = &mut [0u8; QSC_MCELIECE_CIPHERTEXT_SIZE];
+
+qsc_mceliece_generate_keypair(publickey, privatekey, seed);	
+qsc_mceliece_encrypt(secret1, ciphertext, publickey, seed);
+qsc_mceliece_decrypt(secret2, ciphertext, privatekey);
+```
 */
 
 use crate::qsc::{

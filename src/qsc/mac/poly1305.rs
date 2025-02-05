@@ -4,46 +4,48 @@
 * This file is part of the QSC Cryptographic library
 *
 * This program is free software : you can redistribute it and / or modify
-* it under the terms of the GNU Affero General pub(crate)lic License as pub(crate)lished by
+* it under the terms of the GNU Affero General public License as pub(crate)lished by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Affero General pub(crate)lic License for more details.
+* See the GNU Affero General public License for more details.
 *
-* You should have received a copy of the GNU Affero General pub(crate)lic License
+* You should have received a copy of the GNU Affero General public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
-* \file poly1305.h
-* \brief Poly1305 function definitions \n
-* Contains the pub(crate)lic api and documentation for the Poly1305 implementation.
-*
-* Poly1305 Examples \n
-* \code
-	fn poly1305() {
-		let key = &mut [0u8; 32];
-		let mac = &mut [0u8; 16];
-		let msg = &mut [0u8; 34];
+/*
+#### Poly1305
+Rust Translation: 2024
 
-		/* compact api */
-		qsc_poly1305_compute(mac, msg, 34, key); 
+The primary public api for the Poly1305 implementation:
+```rust
+use qrc_opensource_rs::{
+  mac::poly1305::{
+    qsc_poly1305_compute, qsc_poly1305_initialize, qsc_poly1305_update, qsc_poly1305_finalize, 
+    QscPoly1305State,
+  },
+  provider::rcrng::qsc_rcrng_generate,
+};
 
-		/* long-form api */
-		let ctx = &mut QscPoly1305State::default();
-		qsc_poly1305_initialize(ctx, key);
-		for i in (0..32).step_by(QSC_POLY1305_BLOCK_SIZE) {
-			qsc_poly1305_blockupdate(ctx, msg[i..]);
-		}
-		qsc_poly1305_update(ctx, msg[32..], 2);
-		qsc_poly1305_finalize(ctx, mac);
-	}
-* \endcode
-* \remarks
-* For usage examples, see poly1305_test.h
+let key = &mut [0u8; 32];
+qsc_rcrng_generate(key, 32);
+let mac = &mut [0u8; 16];
+let msg = &mut [0u8; 64];
+qsc_rcrng_generate(msg, 64);
+
+/* compact api */
+qsc_poly1305_compute(mac, msg, 64, key); 
+
+/* long-form api */
+let ctx = &mut QscPoly1305State::default();
+qsc_poly1305_initialize(ctx, key);
+qsc_poly1305_update(ctx, msg, 64);
+qsc_poly1305_finalize(ctx, mac);
+```
 */
 
 use crate::qsc::tools::intutils::{
@@ -95,7 +97,7 @@ impl Default for QscPoly1305State {
 * \param ctx: [struct] The function state; must be initialized
 * \param message: [const] The input message byte array
 */
-fn qsc_poly1305_blockupdate(ctx: &mut QscPoly1305State, message: &[u8]) {
+pub fn qsc_poly1305_blockupdate(ctx: &mut QscPoly1305State, message: &[u8]) {
 	let hibit = if ctx.fnl != 0 { 0 } else { 1 << 24 };
 
 	let t0 = qsc_intutils_le8to32(message) as u64;

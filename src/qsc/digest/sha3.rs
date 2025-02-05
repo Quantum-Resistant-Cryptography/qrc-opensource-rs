@@ -4,93 +4,138 @@
 * This file is part of the QSC Cryptographic library
 *
 * This program is free software : you can redistribute it and / or modify
-* it under the terms of the GNU Affero General pub(crate)lic License as pub(crate)lished by
+* it under the terms of the GNU Affero General public License as pub(crate)lished by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Affero General pub(crate)lic License for more details.
+* See the GNU Affero General public License for more details.
 *
-* You should have received a copy of the GNU Affero General pub(crate)lic License
+* You should have received a copy of the GNU Affero General public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
-* \file sha3.h
-* \author John Underhill
-* \date October 27, 2019
-* \updated February 7, 2024
-* \c to rust 2024-2025
-*
-* \brief SHA3 header definition \n
-* Contains the pub(crate)lic api and documentation for SHA3 digest, SHAKE, cSHAKE, and KMAC implementations.
-*
-* Usage Examples \n
-*
-* SHA3-512 hash computation using long-form api \n
-* \code
-	fn Sha3_512() {
-		let ctx = &mut QscKeccakState::default();
-		let hash = &mut [0u8; QSC_SHA3_512_HASH_SIZE];
-		let msg = &mut [0u8; 200];
+/*
+#### Sha3
+The SHA3, SHAKE, cSHAKE, and KMAC implementations all share two forms of api: short-form and long-form.
+The short-form api, which initializes the state, processes a message, and finalizes by producing output, all in a single function call, for example; qsc_sha3_compute512(), the entire message array is processed and the hash code is written to the output array.
+The long-form api uses an initialization call to prepare the state, a blockupdate call if the message is longer than a single message block, and the finalize call, which finalizes the state and generates a hash, mac-code, or an array of pseudo-random.
+Each of the function families (SHA3, SHAKE, KMAC), have a corresponding set of reference constants associated with that member, example; SHAKE_256_KEY is the minimum expected SHAKE-256 key size in bytes, QSC_KMAC_512_MAC_SIZE is the minimum size of the KMAC-512 output mac-code output array, and QSC_KECCAK_512_RATE is the SHA3-512 message absorption rate.
 
-		qsc_sha3_initialize(ctx);
-		qsc_sha3_update(ctx, QscKeccakRate::QscKeccakRate512 as usize, msg, 200);
-		qsc_sha3_finalize(ctx, QscKeccakRate::QscKeccakRate512 as usize, hash);
-	}
-* \endcode
-*
-* KMAC-256 MAC code generation using long-form api \n
-* \code
-	fn kmac_512() {
-		let ctx = &mut QscKeccakState::default();
-		let hash = &mut [0u8; 64];
-		let msg = &mut [0u8; 200];
-		let key = &mut [0u8; 50];
-		let cust = &mut [0u8; 100];
+NIST: [SHA3 Fips202](http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf)
+NIST: [SP800-185](http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-185.pdf)
+NIST: [SHA3 Keccak Submission](http://keccak.noekeon.org/Keccak-submission-3.pdf)
+NIST: [SHA3 Keccak Slides](http://csrc.nist.gov/groups/ST/hash/sha-3/documents/Keccak-slides-at-NIST.pdf)
+NIST: [SHA3 Third-Round Report](http://nvlpubs.nist.gov/nistpubs/ir/2012/NIST.IR.7896.pdf)
+Team Keccak: [Specifications summary](https://keccak.team/keccak_specs_summary.html)
 
-		qsc_kmac_initialize(ctx, QscKeccakRate::QscKeccakRate512 as usize, key, 50, cust, 100);
-		qsc_kmac_update(ctx, QscKeccakRate::QscKeccakRate512 as usize, msg, 200);
-		qsc_kmac_finalize(ctx, QscKeccakRate::QscKeccakRate512 as usize, hash, 64);
-	}
-* \endcode
-*
-* cSHAKE-512 pseudo-random generation using long-form api \n
-* \code
-	fn cshake_512() {
-		let ctx = &mut QscKeccakState::default();
-		let hash = &mut [0u8; 64];
-		let msg = &mut [0u8; 200];
-		let cust = &mut [0u8; 15];
+Author: John Underhill - October 27, 2019
+Updated: 19, 2021
+Rust Translation: 2024
 
-		qsc_cshake_initialize(ctx, QscKeccakRate::QscKeccakRate512 as usize, msg, 200, &[], 0, cust, 15);
-		qsc_cshake_squeezeblocks(ctx, QscKeccakRate::QscKeccakRate512 as usize, hash, 1);
-	}
-* \endcode
-*
-* \remarks
-* \par
-* The SHA3, SHAKE, cSHAKE, and KMAC implementations all share two forms of api: short-form and long-form. \n
-* The short-form api, which initializes the state, processes a message, and finalizes by producing output, all in a single function call,
-* for example; qsc_sha3_compute512(uint8_t* output, const uint8_t* message, size_t msglen),
-* the entire message array is processed and the hash code is written to the output array. \n
-* The long-form api uses an initialization call to prepare the state, a blockupdate call if the message is longer than a single message block,
-* and the finalize call, which finalizes the state and generates a hash, mac-code, or an array of pseudo-random. \n
-* Each of the function families (SHA3, SHAKE, KMAC), have a corresponding set of reference constants associated with that member, example;
-* SHAKE_256_KEY is the minimum expected SHAKE-256 key size in bytes, QSC_KMAC_512_MAC_SIZE is the minimum size of the KMAC-512 output mac-code output array,
-* and QSC_KECCAK_512_RATE is the SHA3-512 message absorption rate.
-*
-* For additional usage examples, see sha3_test.h. \n
-*
-* \par
-* NIST: SHA3 Fips202 http://nvlpub(crate)s.nist.gov/nistpub(crate)s/FIPS/NIST.FIPS.202.pdf \n
-* NIST: SP800-185 http://nvlpub(crate)s.nist.gov/nistpub(crate)s/Specialpub(crate)lications/NIST.SP.800-185.pdf \n
-* NIST: SHA3 Keccak Submission http://keccak.noekeon.org/Keccak-submission-3.pdf \n
-* NIST: SHA3 Keccak Slides http://csrc.nist.gov/groups/ST/hash/sha-3/documents/Keccak-slides-at-NIST.pdf \n
-* NIST: SHA3 Third-Round Report http://nvlpub(crate)s.nist.gov/nistpub(crate)s/ir/2012/NIST.IR.7896.pdf \n
-* Team Keccak: Specifications summary https://keccak.team/keccak_specs_summary.html
+The primary public api for SHA3 digest, SHAKE, cSHAKE, and KMAC implementation:
+```rust
+use qrc_opensource_rs::{
+  digest::sha3::{
+    qsc_sha3_compute512, qsc_sha3_initialize, qsc_sha3_update, qsc_sha3_finalize, qsc_keccak_dispose,
+    QSC_SHA3_512_HASH_SIZE,
+    QscKeccakState, QscKeccakRate,
+  },
+  provider::rcrng::qsc_rcrng_generate,
+};
+
+let hash = &mut [0u8; QSC_SHA3_512_HASH_SIZE];
+let msg = &mut [0u8; 200];
+qsc_rcrng_generate(msg, 200);
+
+/* compact api */
+qsc_sha3_compute512(hash, msg, 200);
+
+/* long-form api */
+let ctx = &mut QscKeccakState::default();
+qsc_sha3_initialize(ctx);
+qsc_sha3_update(ctx, QscKeccakRate::QscKeccakRate512 as usize, msg, 200);
+qsc_sha3_finalize(ctx, QscKeccakRate::QscKeccakRate512 as usize, hash);
+qsc_keccak_dispose(ctx);
+```
+```rust
+use qrc_opensource_rs::{
+  digest::sha3::{
+    qsc_kmac512_compute, qsc_kmac_initialize, qsc_kmac_update, qsc_kmac_finalize,
+    qsc_keccak_dispose, 
+    QSC_SHA3_512_HASH_SIZE,
+    QscKeccakState, QscKeccakRate,
+  },
+  provider::rcrng::qsc_rcrng_generate,
+};
+
+let hash = &mut [0u8; QSC_SHA3_512_HASH_SIZE];
+let msg = &mut [0u8; 200];
+qsc_rcrng_generate(msg, 200);
+let key = &mut [0u8; 50];
+qsc_rcrng_generate(key, 50);
+let cust = &mut [0u8; 100];
+qsc_rcrng_generate(cust, 100);
+
+/* compact api */
+qsc_kmac512_compute(hash, QSC_SHA3_512_HASH_SIZE, msg, 200, key, 50, cust, 100);
+
+/* long-form api */
+let ctx = &mut QscKeccakState::default();
+qsc_kmac_initialize(ctx, QscKeccakRate::QscKeccakRate512 as usize, key, 50, cust, 100);
+qsc_kmac_update(ctx, QscKeccakRate::QscKeccakRate512 as usize, msg, 200);
+qsc_kmac_finalize(ctx, QscKeccakRate::QscKeccakRate512 as usize, hash, QSC_SHA3_512_HASH_SIZE);
+qsc_keccak_dispose(ctx);
+```
+```rust
+use qrc_opensource_rs::{
+  digest::sha3::{
+    qsc_cshake512_compute, qsc_cshake_initialize, qsc_cshake_squeezeblocks, qsc_keccak_dispose, 
+    QSC_KECCAK_512_RATE,
+    QscKeccakState, QscKeccakRate,
+  },
+  provider::rcrng::qsc_rcrng_generate,
+};
+
+let hash = &mut [0u8; QSC_KECCAK_512_RATE];
+let msg = &mut [0u8; 200];
+qsc_rcrng_generate(msg, 200);
+let cust = &mut [0u8; 15];
+qsc_rcrng_generate(cust, 15);
+
+/* compact api */
+qsc_cshake512_compute(hash, QSC_KECCAK_512_RATE, msg, 200, &[], 0, cust, 15);
+
+/* long-form api */
+let ctx = &mut QscKeccakState::default();
+qsc_cshake_initialize(ctx, QscKeccakRate::QscKeccakRate512 as usize, msg, 200, &[], 0, cust, 15);
+qsc_cshake_squeezeblocks(ctx, QscKeccakRate::QscKeccakRate512 as usize, hash, 1);
+qsc_keccak_dispose(ctx);
+```
+```rust
+use qrc_opensource_rs::{
+  digest::sha3::{
+    qsc_shake512_compute, qsc_shake_initialize, qsc_shake_squeezeblocks, qsc_keccak_dispose, 
+    QscKeccakState, QscKeccakRate,
+  },
+  provider::rcrng::qsc_rcrng_generate,
+};
+
+let hash = &mut [0u8; 512];
+let msg = &mut [0u8; 200];
+qsc_rcrng_generate(msg, 200);
+
+/* compact api */
+qsc_shake512_compute(hash, 512, msg, 200);
+
+/* long-form api */
+let ctx = &mut QscKeccakState::default();
+qsc_shake_initialize(ctx, QscKeccakRate::QscKeccakRate512 as usize, msg, 200);
+qsc_shake_squeezeblocks(ctx, QscKeccakRate::QscKeccakRate512 as usize, hash, 1);
+qsc_keccak_dispose(ctx);
+```
 */
 
 use crate::qsc::{
@@ -167,13 +212,13 @@ pub(crate) const QSC_KECCAK_128_RATE: usize = 168;
 * \def QSC_KECCAK_256_RATE
 * \brief The KMAC-256 byte absorption rate
 */
-pub(crate) const QSC_KECCAK_256_RATE: usize = 136;
+pub const QSC_KECCAK_256_RATE: usize = 136;
 
 /*
 * \def QSC_KECCAK_512_RATE
 * \brief The KMAC-512 byte absorption rate
 */
-pub(crate) const QSC_KECCAK_512_RATE: usize = 72;
+pub const QSC_KECCAK_512_RATE: usize = 72;
 
 /*
 * \def QSC_KECCAK_STATE_SIZE

@@ -4,16 +4,16 @@
 * This file is part of the QSC Cryptographic library
 *
 * This program is free software : you can redistribute it and / or modify
-* it under the terms of the GNU Affero General pub(crate)lic License as pub(crate)lished by
+* it under the terms of the GNU Affero General public License as pub(crate)lished by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Affero General pub(crate)lic License for more details.
+* See the GNU Affero General public License for more details.
 *
-* You should have received a copy of the GNU Affero General pub(crate)lic License
+* You should have received a copy of the GNU Affero General public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 

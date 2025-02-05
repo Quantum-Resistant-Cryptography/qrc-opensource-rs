@@ -17,44 +17,46 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
-* \file kyber.h
-* \brief Contains the primary public api for the Kyber CCA-secure Key Encapsulation Mechanism implementation
-* \date January 10, 2018
-* \updated February 7, 2024
-* \c to rust 2024-2025
-*
-*
-* \par Example
-* \code
-	fn kyber() -> bool {
-		let seed = [0u8; QSC_KYBER_SEED_SIZE];
+/*
+##### Kyber
+Based on the C reference branch of PQ-Crystals Kyber; including base code, comments, and api.
+Removed the K=2 parameter, and added a K=5. The NIST '512' parameter has fallen below the threshold
+required by NIST PQ S1 minimum.
+The new K5 parameter may have a better chance of long-term security, with only a small increase in cost.
 
-		let publickey = &mut vec![0u8; QSC_KYBER_PUBLICKEY_SIZE];
-		let privatekey = &mut vec![0u8; QSC_KYBER_PRIVATEKEY_SIZE];
+The NIST Post Quantum Competition [Round 3](https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions) Finalists.
+The [Kyber](https://pq-crystals.org/kyber/index.shtml) website.
+The Kyber [Algorithm](https://pq-crystals.org/kyber/data/kyber-specification-round3-20210131.pdf) Specification.
 
-		let secret1 = &mut [0u8; QSC_KYBER_SHAREDSECRET_SIZE];
-		let secret2 = &mut [0u8; QSC_KYBER_SHAREDSECRET_SIZE];
+Date: January 10, 2018
+Updated: July 2, 2021
+Rust Translation: 2024
 
-		let ciphertext = &mut [0u8; QSC_KYBER_CIPHERTEXT_SIZE];
+The primary public api for the Kyber CCA-secure Key Encapsulation Mechanism implementation:
+```rust
+use qrc_opensource_rs::{
+  asymmetric::cipher::kyber::{
+    qsc_kyber_generate_keypair, qsc_kyber_encrypt, qsc_kyber_decrypt,
+    QSC_KYBER_SEED_SIZE, QSC_KYBER_PUBLICKEY_SIZE, QSC_KYBER_PRIVATEKEY_SIZE, QSC_KYBER_SHAREDSECRET_SIZE, QSC_KYBER_CIPHERTEXT_SIZE
+  },
+  provider::rcrng::qsc_rcrng_generate,
+};
 
-		qsc_kyber_generate_keypair(publickey, privatekey, seed);
-		qsc_kyber_encrypt(secret1, ciphertext, publickey, seed);
-		qsc_kyber_decrypt(secret2, ciphertext, privatekey);
+let mut seed = [0u8; QSC_KYBER_SEED_SIZE];
+qsc_rcrng_generate(&mut seed, QSC_KYBER_SEED_SIZE);
 
-		return secret1 == secret2;
-	}
-* \endcode
-*
-* \remarks
-* Based on the C reference branch of PQ-Crystals Kyber; including base code, comments, and api. \n
-* Removed the K=2 parameter, and added a K=5. The NIST '512' parameter has fallen below the threshold
-* required by NIST PQ S1 minimum. \n
-* The new K5 parameter may have a better chance of long-term security, with only a small increase in cost. \n
-*
-* The NIST Post Quantum Competition <a href="https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions">Round 3</a> Finalists. \n
-* The <a href="https://pq-crystals.org/kyber/index.shtml">Kyber</a> website. \n
-* The Kyber <a href="https://pq-crystals.org/kyber/data/kyber-specification-round3-20210131.pdf">Algorithm</a> Specification. \n
+let publickey = &mut vec![0u8; QSC_KYBER_PUBLICKEY_SIZE];
+let privatekey = &mut vec![0u8; QSC_KYBER_PRIVATEKEY_SIZE];
+
+let secret1 = &mut [0u8; QSC_KYBER_SHAREDSECRET_SIZE];
+let secret2 = &mut [0u8; QSC_KYBER_SHAREDSECRET_SIZE];
+
+let ciphertext = &mut [0u8; QSC_KYBER_CIPHERTEXT_SIZE];
+
+qsc_kyber_generate_keypair(publickey, privatekey, seed);
+qsc_kyber_encrypt(secret1, ciphertext, publickey, seed);
+qsc_kyber_decrypt(secret2, ciphertext, privatekey);
+```
 */
 
 use crate::qsc::{

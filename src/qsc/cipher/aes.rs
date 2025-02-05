@@ -4,52 +4,143 @@
 * This file is part of the QSC Cryptographic library
 *
 * This program is free software : you can redistribute it and / or modify
-* it under the terms of the GNU Affero General pub(crate)lic License as pub(crate)lished by
+* it under the terms of the GNU Affero General public License as pub(crate)lished by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Affero General pub(crate)lic License for more details.
+* See the GNU Affero General public License for more details.
 *
-* You should have received a copy of the GNU Affero General pub(crate)lic License
+* You should have received a copy of the GNU Affero General public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
-* \file aes.h
-* \brief An implementation of the AES symmetric cipher
-*
-* AES-256 CTR short-form api example \n
-* \code
-	fn aes256_crt() -> bool {
-		let ctx = &mut QscAesState::default();
-		let msg = &mut [0u8; QSC_AES_BLOCK_SIZE];
-		let plain = &mut [0u8; QSC_AES_BLOCK_SIZE];
-		let nonce = &mut [0u8; QSC_AES_BLOCK_SIZE];
-		let nonce2 = &mut [0u8; QSC_AES_BLOCK_SIZE];
-		let cipher = &mut [0u8; QSC_AES_BLOCK_SIZE];
+/*
+#### AES
+Rust Translation: 2024
 
-		let kp = QscAesKeyparams {
-			key: key.to_vec(), 
-			keylen: QSC_AES256_KEY_SIZE,
-			nonce: nonce.to_vec(),
-			info: [].to_vec(),
-			infolen: 0,
-		};
+The primary public api for the AES implementation:
+```rust
+use qrc_opensource_rs::{
+    cipher::aes::{
+        qsc_aes_initialize, qsc_aes_dispose, qsc_aes_ctrbe_transform,
+        QSC_AES_BLOCK_SIZE, QSC_AES256_KEY_SIZE,
+        QscAesKeyparams, QscAesState, QscAesCipherType, 
+    },
+    provider::rcrng::qsc_rcrng_generate,
+};
 
-		qsc_memutils_copy(nonce2, nonce, QSC_AES_BLOCK_SIZE);
-		qsc_aes_initialize(ctx, kp.clone(), QscAesCipherType::AES256);
-		qsc_aes_ctrbe_transform(ctx, cipher, msg, QSC_AES_BLOCK_SIZE);
-		qsc_memutils_copy(&mut ctx.nonce, nonce2, QSC_AES_BLOCK_SIZE);
-		qsc_aes_initialize(ctx, kp, QscAesCipherType::AES256);
-		qsc_aes_ctrbe_transform(ctx, plain, cipher, QSC_AES_BLOCK_SIZE);
-		qsc_aes_dispose(ctx);
-		
-		return msg == plain
-	}
-* \endcode
+let ctx = &mut QscAesState::default();
+let msg = &mut [0u8; QSC_AES_BLOCK_SIZE];
+qsc_rcrng_generate(msg, QSC_AES_BLOCK_SIZE);
+let plain = &mut [0u8; QSC_AES_BLOCK_SIZE];
+let nonce = &mut [0u8; QSC_AES_BLOCK_SIZE];
+qsc_rcrng_generate(nonce, QSC_AES_BLOCK_SIZE);
+let cipher = &mut [0u8; QSC_AES_BLOCK_SIZE];
+let key = &mut [0u8; QSC_AES256_KEY_SIZE];
+qsc_rcrng_generate(key, QSC_AES256_KEY_SIZE);
+
+let nonce2 = &mut nonce.clone();
+let kp = QscAesKeyparams {
+  key: key.to_vec(), 
+  keylen: QSC_AES256_KEY_SIZE,
+  nonce: nonce2.to_vec(),
+  info: [].to_vec(),
+  infolen: 0,
+};
+
+qsc_aes_initialize(ctx, kp.clone(), QscAesCipherType::AES256);
+qsc_aes_ctrbe_transform(ctx, cipher, msg, QSC_AES_BLOCK_SIZE);
+
+qsc_aes_initialize(ctx, kp, QscAesCipherType::AES256);
+qsc_aes_ctrbe_transform(ctx, plain, cipher, QSC_AES_BLOCK_SIZE);
+qsc_aes_dispose(ctx);
+```
+```rust
+use qrc_opensource_rs::{
+    cipher::aes::{
+        qsc_aes_hba256_initialize, qsc_aes_hba256_set_associated, qsc_aes_hba256_transform,
+        QSC_AES_BLOCK_SIZE, QSC_AES256_KEY_SIZE, QSC_HBA256_MAC_LENGTH,
+        QscAesKeyparams, QscAesHba256State, 
+    },
+    provider::rcrng::qsc_rcrng_generate,
+};
+
+let ctx = &mut QscAesHba256State::default();
+let msg = &mut [0u8; QSC_AES_BLOCK_SIZE];
+qsc_rcrng_generate(msg, QSC_AES_BLOCK_SIZE);
+let plain = &mut [0u8; QSC_AES_BLOCK_SIZE];
+let nonce = &mut [0u8; QSC_AES_BLOCK_SIZE];
+qsc_rcrng_generate(nonce, QSC_AES_BLOCK_SIZE);
+let cipher = &mut [0u8; QSC_AES_BLOCK_SIZE + QSC_HBA256_MAC_LENGTH];
+let key = &mut [0u8; QSC_AES256_KEY_SIZE];
+qsc_rcrng_generate(key, QSC_AES256_KEY_SIZE);
+let aad = &mut [0u8; 20];
+qsc_rcrng_generate(aad, 20);
+
+let nonce2 = &mut nonce.clone();
+let kp = QscAesKeyparams {
+  key: key.to_vec(), 
+  keylen: QSC_AES256_KEY_SIZE,
+  nonce: nonce2.to_vec(),
+  info: [].to_vec(),
+  infolen: 0,
+};
+
+qsc_aes_hba256_initialize(ctx, kp.clone(), true);
+qsc_aes_hba256_set_associated(ctx, aad, 20);
+qsc_aes_hba256_transform(ctx, cipher, msg, QSC_AES_BLOCK_SIZE);
+
+qsc_aes_hba256_initialize(ctx, kp, false);
+qsc_aes_hba256_set_associated(ctx, aad, 20);
+qsc_aes_hba256_transform(ctx, plain, cipher, QSC_AES_BLOCK_SIZE);
+```
+```rust
+use qrc_opensource_rs::{
+    cipher::aes::{
+        qsc_aes_initialize, qsc_aes_dispose,
+        qsc_aes_cbc_encrypt_block, qsc_aes_cbc_decrypt_block,
+        qsc_aes_ecb_encrypt_block, qsc_aes_ecb_decrypt_block,
+        QSC_AES_BLOCK_SIZE, QSC_AES256_KEY_SIZE,
+        QscAesKeyparams, QscAesState, QscAesCipherType, 
+    },
+    provider::rcrng::qsc_rcrng_generate,
+};
+
+let ctx = &mut QscAesState::default();
+let msg = &mut [0u8; QSC_AES_BLOCK_SIZE];
+qsc_rcrng_generate(msg, QSC_AES_BLOCK_SIZE);
+let plain = &mut [0u8; QSC_AES_BLOCK_SIZE];
+let iv = &mut [0u8; QSC_AES_BLOCK_SIZE];
+qsc_rcrng_generate(iv, QSC_AES_BLOCK_SIZE);
+let cipher = &mut [0u8; QSC_AES_BLOCK_SIZE];
+let key = &mut [0u8; QSC_AES256_KEY_SIZE];
+qsc_rcrng_generate(key, QSC_AES256_KEY_SIZE);
+
+let iv2 = &mut iv.clone();
+let kp = QscAesKeyparams {
+    key: key.to_vec(), 
+    keylen: QSC_AES256_KEY_SIZE,
+    nonce: iv2.to_vec(),
+    info: [].to_vec(),
+    infolen: 0,
+};
+
+qsc_aes_initialize(ctx, kp.clone(), QscAesCipherType::AES256);
+/* cbc api */
+qsc_aes_cbc_encrypt_block(ctx, cipher, msg);
+/* ecb api */
+qsc_aes_ecb_encrypt_block(ctx.to_owned(), cipher, msg);
+
+qsc_aes_initialize(ctx, kp, QscAesCipherType::AES256);
+/* cbc api */
+qsc_aes_cbc_decrypt_block(ctx, plain, cipher);
+/* ecb api */
+qsc_aes_ecb_decrypt_block(ctx.to_owned(), plain, cipher);
+qsc_aes_dispose(ctx);
+```
 */
 
 use crate::qsc::{

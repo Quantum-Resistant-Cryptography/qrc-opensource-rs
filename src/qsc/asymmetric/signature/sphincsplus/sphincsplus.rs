@@ -17,38 +17,39 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
-* \file sphincsplus.h
-* \date June 14, 2018
-* \updated February 7, 2024
-* \c to rust 2024-2025
-*
-* \brief The SphincsPlus API definitions \n
-* Contains the primary public api for the Sphincs+ asymmetric signature scheme implementation.
-*
-* \par Example
-* \code
-	fn sphincs() -> bool {
-		let prik = &mut [0u8; QSC_SPHINCSPLUS_PRIVATEKEY_SIZE];
-		let pubk = &mut [0u8; QSC_SPHINCSPLUS_PUBLICKEY_SIZE];
-		let hash = &mut [0u8; QRCS_CRYPTO_HASH_SIZE];
-		let mut hashlen = 0;
-		let inp = &mut [0u8; QSC_FILEUTILS_CHUNK_SIZE];
-		let sig = &mut [0u8; QSC_SPHINCSPLUS_SIGNATURE_SIZE + QRCS_CRYPTO_HASH_SIZE];
-		let mut siglen = 0;
+/*
+##### SphincsPlus
+Based entirely on the C reference branch of SPHINCS+ taken from the NIST Post Quantum Competition Round 3 submission.
+The NIST Post Quantum Competition [Round 3](https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions) Finalists.
+The [SPHINCS+](https://sphincs.org/) website.
+The SPHINCS+ [Algorithm](https://sphincs.org/data/sphincs+-specification.pdf) Specification.
 
+Date: June 14, 2018
+Updated: July 2, 2021
+Rust Translation: 2024
 
-		qsc_sphincsplus_generate_keypair(pubk, prik, qsc_acp_generate);
+The primary public api for the Sphincs+ asymmetric signature scheme implementation:
+```rust
+use qrc_opensource_rs::{
+  asymmetric::signature::sphincsplus::{
+    qsc_sphincsplus_generate_keypair, qsc_sphincsplus_sign, qsc_sphincsplus_verify,
+    QSC_SPHINCSPLUS_PRIVATEKEY_SIZE, QSC_SPHINCSPLUS_PUBLICKEY_SIZE, QSC_SPHINCSPLUS_SIGNATURE_SIZE, QRCS_CRYPTO_HASH_SIZE,
+  },
+  provider::rcrng::qsc_rcrng_generate,
+};
 
-		qsc_sphincsplus_sign(sig, &mut siglen, hash, QRCS_CRYPTO_HASH_SIZE, prik, qsc_acp_generate);
-		return qsc_sphincsplus_verify(hash, &mut hashlen, sig, siglen, pubk)
-	}
-* \endcode
-*
-* Based entirely on the C reference branch of SPHINCS+ taken from the NIST Post Quantum Competition Round 3 submission. \n
-* The NIST Post Quantum Competition <a href="https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions">Round 3</a> Finalists. \n
-* The <a href="https://sphincs.org/">SPHINCS+</a> website. \n
-* The SPHINCS+ <a href="https://sphincs.org/data/sphincs+-specification.pdf">Algorithm</a> Specification. \n
+let privatekey = &mut [0u8; QSC_SPHINCSPLUS_PRIVATEKEY_SIZE];
+let publickey = &mut [0u8; QSC_SPHINCSPLUS_PUBLICKEY_SIZE];
+let hash = &mut [0u8; QRCS_CRYPTO_HASH_SIZE];
+qsc_rcrng_generate(hash, QRCS_CRYPTO_HASH_SIZE);
+let mut hashlen = 0;
+let sig = &mut [0u8; QSC_SPHINCSPLUS_SIGNATURE_SIZE + QRCS_CRYPTO_HASH_SIZE];
+let mut siglen = 0;
+
+qsc_sphincsplus_generate_keypair(publickey, privatekey, qsc_rcrng_generate);
+qsc_sphincsplus_sign(sig, &mut siglen, hash, QRCS_CRYPTO_HASH_SIZE, privatekey, qsc_rcrng_generate);
+qsc_sphincsplus_verify(hash, &mut hashlen, sig, siglen, publickey);
+```
 */
 
 use crate::qsc::{

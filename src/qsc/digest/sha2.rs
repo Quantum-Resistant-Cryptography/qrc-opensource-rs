@@ -27,42 +27,60 @@
 * Contact: john.underhill@protonmail.com
 */
 
-/**
-* \file sha2.h
-* \author John Underhill
-* \date May 23, 2019
-* \updated September 12, 2020
-* \c to rust 2024-2025
-*
-* \brief SHA2 header definition \n
-* Contains the pub(crate)lic api and documentation for SHA2 digests, HMAC and HKDF implementations.
-*
-* SHA2-512 hash computation using long-form api \n
-* \code
-	fn hmac512() {
-		qsc_hmac512_compute(output: &mut [u8], mut message: &[u8], mut msglen: usize, key: &[u8], mut keylen: usize)
-	}
-* \endcode
-*
-* \remarks For usage examples, see sha3_test.h. \n
-*
-* \ section Links
-* NIST: The SHA-2 Standard http://csrc.nist.gov/pub(crate)lications/fips/fips180-4/fips-180-4.pdf \n
-* Analysis of SIMD Applicability to SHA Algorithms https://software.intel.com/sites/default/files/m/b/9/b/aciicmez.pdf \n
-*
-* \remarks
-* \par
-* The SHA2 and HMAC implementations use two different forms of api: short-form and long-form. \n
-* The short-form api, which initializes the state, processes a message, and finalizes by producing output, all in a single function call,
-* for example; qsc_sha512_compute(uint8_t* output, const uint8_t* message, size_t msglen),
-* the entire message array is processed and the hash code is written to the output array. \n
-* The long-form api uses an initialization call to prepare the state, a update call to process the message,
-* and the finalize call, which finalizes the state and generates a hash or mac-code. \n
-* The HKDF key derivation functions HKDF(HMAC(SHA2-256/512)), use only the short-form api, single-call functions, to generate pseudo-random to an output array. \n
-* Each of the function families (SHA2, HMAC, HKDF), have a corresponding set of reference constants associated with that member, example;
-* QSC_HKDF_256_KEY_SIZE is the minimum expected HKDF-256 key size in bytes, QSC_HMAC_512_MAC_SIZE is the minimum size of the HMAC-512 output mac-code output array.
-*
-* For additional usage examples, see sha2_test.h
+/*
+#### Sha2
+The SHA2 and HMAC implementations use two different forms of api: short-form and long-form.
+The short-form api, which initializes the state, processes a message, and finalizes by producing output, all in a single function call, for example; qsc_sha512_compute(), the entire message array is processed and the hash code is written to the output array.
+The long-form api uses an initialization call to prepare the state, a update call to process the message, and the finalize call, which finalizes the state and generates a hash or mac-code.
+The HKDF key derivation functions HKDF(HMAC(SHA2-256/512)), use only the short-form api, single-call functions, to generate pseudo-random to an output array.
+Each of the function families (SHA2, HMAC, HKDF), have a corresponding set of reference constants associated with that member, example; QSC_HKDF_256_KEY_SIZE is the minimum expected HKDF-256 key size in bytes, QSC_HMAC_512_MAC_SIZE is the minimum size of the HMAC-512 output mac-code output array.
+
+NIST: [The SHA-2 Standard](http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf)
+[Analysis of SIMD Applicability to SHA Algorithms](https://software.intel.com/sites/default/files/m/b/9/b/aciicmez.pdf)
+
+Author: John Underhill - May 23, 2019
+Updated: September 12, 2020
+Rust Translation: 2024
+
+The primary public api for SHA2 Implementation:
+```rust
+use qrc_opensource_rs::{
+  digest::sha2::{
+    qsc_hmac512_compute,
+    QSC_SHA2_512_HASH, QSC_SHA2_512_RATE,
+  },
+  provider::rcrng::qsc_rcrng_generate,
+};
+
+let hash = &mut [0u8; QSC_SHA2_512_HASH];
+let msg = &mut [0u8; QSC_SHA2_512_RATE];
+qsc_rcrng_generate(msg, QSC_SHA2_512_RATE);
+let key = &mut [0u8; 50];
+qsc_rcrng_generate(key, 50);
+
+/* compact api */
+qsc_hmac512_compute(hash, msg, QSC_SHA2_512_RATE, key, 50);
+```
+```rust
+use qrc_opensource_rs::{
+  digest::sha2::{
+    qsc_sha512_initialize, qsc_sha512_blockupdate, qsc_sha512_finalize,
+    QSC_SHA2_512_HASH, QSC_SHA2_512_RATE,
+    QscSha512State,
+  },
+  provider::rcrng::qsc_rcrng_generate,
+};
+
+let hash = &mut [0u8; QSC_SHA2_512_HASH];
+let msg = &mut [0u8; QSC_SHA2_512_RATE];
+qsc_rcrng_generate(msg, QSC_SHA2_512_RATE);
+
+/* long-form api */
+let ctx = &mut QscSha512State::default();
+qsc_sha512_initialize(ctx);
+qsc_sha512_blockupdate(ctx, msg, 1);
+qsc_sha512_finalize(ctx, hash, msg, QSC_SHA2_512_RATE);
+```
 */
 
 use crate::qsc::tools::intutils::{
