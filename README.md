@@ -18,15 +18,13 @@ The free opensource version of the Quantum Secure Cryptographic library in Rust 
 <a href="https://www.linkedin.com/company/qrcryptography">LinkedIn</a>
 </p>
 
-<details open="open">
-  <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
-  <ol>
-    <li><a href="#outline">Outline</a></li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#license">License</a></li>
-  </ol>
-</details>
+<summary><h2 style="display: inline-block">Table of Contents</h2></summary>
+<ol>
+  <li><a href="#outline">Outline</a></li>
+  <li><a href="#usage">Usage</a></li>
+  <li><a href="#roadmap">Roadmap</a></li>
+  <li><a href="#license">License</a></li>
+</ol>
 
 
 ## Outline
@@ -41,15 +39,13 @@ First add the ```qrc-opensource-rs``` crate to your ```Cargo.toml```:
 [dependencies]
 qrc-opensource-rs = "0.2"
 ```
-<details open="open">
+
   <summary><h4 style="display: inline-block">Examples</h4></summary>
   <ul>
     <li>
-      <details open="open">
         <summary><p style="display: inline-block">Asymmetric</p></summary>
         <ul>
           <li>
-            <details open="open">
               <summary><p style="display: inline-block">Cipher</p></summary>
               <ul>
                 <li>ECDH</li>
@@ -57,10 +53,8 @@ qrc-opensource-rs = "0.2"
                 <li><a href="#mceliece">McEliece</a></li>
                 <li>NTRU</li>
               </ul>
-            </details>
           </li>
           <li>
-            <details open="open">
               <summary><p style="display: inline-block">Signature</p></summary>
               <ul>
                 <li>Dilithium</li>
@@ -68,47 +62,37 @@ qrc-opensource-rs = "0.2"
                 <li>Falcon</li>
                 <li><a href="#sphincsplus">SphincsPlus</a></li>
               </ul>
-            </details>
           </li>
         </ul>
-      </details>
     </li>
     <li>
-      <details open="open">
         <summary><p style="display: inline-block">Cipher</p></summary>
         <ul>
           <li><a href="#aes">AES</a></li>
           <li>ChaCha20</li>
         </ul>
-      </details>
     </li>
     <li>
-      <details open="open">
         <summary><p style="display: inline-block">Digest</p></summary>
         <ul>
           <li><a href="#sha2">Sha2</a></li>
           <li><a href="#sha3">Sha3</a></li>
         </ul>
-      </details>
     </li>
     <li>
-      <details open="open">
         <summary><p style="display: inline-block">Mac</p></summary>
         <ul>
           <li><a href="#poly1305">Poly1305</a></li>
         </ul>
-      </details>
     </li>
     <li>
-      <details open="open">
         <summary><p style="display: inline-block">Numerics</p></summary>
         <ul>
           <li>Donna128</li>
         </ul>
-      </details>
     </li>
   </ul>
-</details>
+
 
 ### Asymmetric
 #### Cipher
