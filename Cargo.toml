@@ -1,6 +1,6 @@
 [package]
 name = "qrc-opensource-rs"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Quantum Resistant Cryptography (QRC)"]
 edition = "2021"
 description = "The free opensource version of the Quantum Secure Cryptographic library in Rust (QSC)"
