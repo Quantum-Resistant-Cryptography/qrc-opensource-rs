@@ -48,18 +48,13 @@ qrc-opensource-rs = "0.2"
           <li>
               <summary><p style="display: inline-block">Cipher</p></summary>
               <ul>
-                <li>ECDH</li>
                 <li><a href="#kyber">Kyber</a></li>
                 <li><a href="#mceliece">McEliece</a></li>
-                <li>NTRU</li>
               </ul>
           </li>
           <li>
               <summary><p style="display: inline-block">Signature</p></summary>
               <ul>
-                <li>Dilithium</li>
-                <li>ECDSA</li>
-                <li>Falcon</li>
                 <li><a href="#sphincsplus">SphincsPlus</a></li>
               </ul>
           </li>
@@ -69,7 +64,6 @@ qrc-opensource-rs = "0.2"
         <summary><p style="display: inline-block">Cipher</p></summary>
         <ul>
           <li><a href="#aes">AES</a></li>
-          <li>ChaCha20</li>
         </ul>
     </li>
     <li>
@@ -83,12 +77,6 @@ qrc-opensource-rs = "0.2"
         <summary><p style="display: inline-block">Mac</p></summary>
         <ul>
           <li><a href="#poly1305">Poly1305</a></li>
-        </ul>
-    </li>
-    <li>
-        <summary><p style="display: inline-block">Numerics</p></summary>
-        <ul>
-          <li>Donna128</li>
         </ul>
     </li>
   </ul>
