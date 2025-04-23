@@ -1,151 +1,107 @@
-mod qsc {
-    pub mod asymmetric {
-        pub mod cipher {
-            pub mod ecdh {
-                pub mod ec25519;
-                pub mod ecdh;
-                pub mod ecdhbase;
-            }
-            pub mod kyber {
-                pub mod kyber;
-                pub mod kyberbase;  
-            }
-            pub mod mceliece {
-                pub mod mceliece;
-                pub mod mceliecebase;
-            }
-            pub mod ntru {
-                pub mod ntru;
-                pub mod ntrubase;
-            }
-        }
-        pub mod signature {
-            pub mod dilithium {
-                pub mod dilithium;
-                pub mod dilithiumbase;
-            }
-            pub mod ecdsa {
-                pub mod ecdsa;
-                pub mod ecdsabase;
-            }
-            pub mod falcon {
-                pub mod falcon;
-                pub mod falconbase;
-            }
-            pub mod sphincsplus {
-                pub mod sphincsplus;
-                pub mod sphincsplusbase;
-            }
-        }
-    }
-    pub mod cipher {
-        pub mod aes;
-        pub mod chacha20;
-    }
-    pub mod common {
-        pub mod common;
-    }
-    pub mod digest {
-        pub mod sha2;
-        pub mod sha3;
-    }
-    pub mod drbg {
-        pub mod csg;
-    }
-    pub mod mac {
-        pub mod poly1305;
-    }
-    pub mod numerics {
-        pub mod donna128;
-    }
-    pub mod prng {
-        pub mod secrand;
-    }
-    pub mod provider {
-            pub mod rcrng;
-            pub mod trng;
-            pub mod osrng;
-    }
-    pub mod tools {
-        pub mod intutils;
-        pub mod memutils;
-        pub mod stringutils;
-        pub mod sysutils;
-    }
-}
+#![cfg_attr(feature = "no_std", no_std)]
 
 pub mod asymmetric {
     pub mod cipher {
-        pub mod kyber {
-            pub use crate::qsc::asymmetric::cipher::kyber::kyber::{
-                qsc_kyber_generate_keypair, qsc_kyber_encrypt, qsc_kyber_decrypt,
-                QSC_KYBER_CIPHERTEXT_SIZE, QSC_KYBER_PRIVATEKEY_SIZE, QSC_KYBER_PUBLICKEY_SIZE, QSC_KYBER_SHAREDSECRET_SIZE, QSC_KYBER_SEED_SIZE,
-            };
+        /*pub mod ecdhbody {
+            pub(crate) mod ec25519base;
+            pub(crate) mod ecdhbase;
+                        pub(crate) mod ecdhface;
+        }*/
+        pub mod kyberbody {
+            pub(crate) mod kyberbase;
+            pub(crate) mod kyberface;
         }
-        pub mod mceliece {
-            pub use crate::qsc::asymmetric::cipher::mceliece::mceliece::{
-                qsc_mceliece_generate_keypair, qsc_mceliece_encrypt, qsc_mceliece_decrypt,
-                QSC_MCELIECE_CIPHERTEXT_SIZE, QSC_MCELIECE_PRIVATEKEY_SIZE, QSC_MCELIECE_PUBLICKEY_SIZE, QSC_MCELIECE_SHAREDSECRET_SIZE, QSC_MCELIECE_SEED_SIZE,
-            };
+        pub mod mceliecebody {
+            pub(crate) mod mceliecebase;
+            pub(crate) mod mcelieceface;
         }
+        //pub mod ecdh;
+        pub mod kyber;
+        pub mod mceliece;
     }
     pub mod signature {
-        pub mod sphincsplus {
-            pub use crate::qsc::asymmetric::signature::sphincsplus::sphincsplus::{
-                qsc_sphincsplus_generate_keypair, qsc_sphincsplus_sign, qsc_sphincsplus_verify,
-                QSC_SPHINCSPLUS_PRIVATEKEY_SIZE, QSC_SPHINCSPLUS_PUBLICKEY_SIZE, QSC_SPHINCSPLUS_SIGNATURE_SIZE, QRCS_CRYPTO_HASH_SIZE,
-            };
+        /*pub mod dilithiumbody {
+            pub(crate) mod dilithiumbase;
+            pub(crate) mod dilithiumface;
+        }*/
+        /*pub mod ecdsabody {
+            pub(crate) mod ecdsabase;
+            pub(crate) mod ecdsaface;
+        }*/
+        /*pub mod falconbody {
+            pub(crate) mod falconbase;
+            pub(crate) mod falconface;
+        }*/
+        pub mod sphincsplusbody {
+            pub(crate) mod sphincsplusbase;
+            pub(crate) mod sphincsplusface;
         }
+        //pub mod dilithium;
+        //pub mod ecdsa;
+        //pub mod falcon;
+        pub mod sphincsplus;
     }
+    pub mod asymmetric;
 }
 pub mod cipher {
-    pub mod aes {
-        pub use crate::qsc::cipher::aes::{
-            qsc_aes_initialize, qsc_aes_dispose,
-            qsc_aes_cbc_encrypt_block, qsc_aes_cbc_decrypt_block,
-            qsc_aes_ctrbe_transform, qsc_aes_ctrle_transform,
-            qsc_aes_ecb_encrypt_block, qsc_aes_ecb_decrypt_block,
-            qsc_aes_hba256_initialize, qsc_aes_hba256_set_associated, qsc_aes_hba256_transform,
-            QSC_AES_BLOCK_SIZE, QSC_HBA_MAXINFO_SIZE, QSC_AES256_KEY_SIZE, QSC_HBA256_MAC_LENGTH,
-            QscAesKeyparams, QscAesState, QscAesCipherType, QscAesHba256State, 
-        };
-    }
+    pub mod aes;
+    pub mod chacha;
+    pub mod csx;
 }
 pub mod digest {
-    pub mod sha2 {
-        pub use crate::qsc::digest::sha2::{
-            qsc_hmac256_compute, qsc_hmac512_compute, 
-            qsc_sha256_initialize, qsc_sha256_blockupdate, qsc_sha256_finalize,
-            qsc_sha512_initialize, qsc_sha512_blockupdate, qsc_sha512_finalize, 
-            qsc_hkdf256_extract, qsc_hkdf256_expand,
-            qsc_hkdf512_extract, qsc_hkdf512_expand,
-            QSC_HMAC_256_MAC, QSC_HMAC_512_MAC, QSC_SHA2_256_HASH, QSC_SHA2_512_HASH, QSC_SHA2_256_RATE, QSC_SHA2_512_RATE,
-            QscHmac256State, QscHmac512State, QscSha256State, QscSha512State,
-        };
-    }
-    pub mod sha3 {
-        pub use crate::qsc::digest::sha3::{
-            qsc_sha3_compute256, qsc_sha3_compute512, qsc_sha3_initialize, qsc_sha3_update, qsc_sha3_finalize, 
-            qsc_shake128_compute, qsc_shake256_compute, qsc_shake512_compute, qsc_shake_initialize, qsc_shake_squeezeblocks,
-            qsc_cshake128_compute, qsc_cshake256_compute, qsc_cshake512_compute, qsc_cshake_initialize, qsc_cshake_squeezeblocks,
-            qsc_kmac128_compute, qsc_kmac256_compute, qsc_kmac512_compute, qsc_kmac_initialize, qsc_kmac_update, qsc_kmac_finalize,
-            qsc_keccak_dispose, 
-            QSC_SHA3_256_HASH_SIZE, QSC_SHA3_512_HASH_SIZE, QSC_KECCAK_256_RATE, QSC_KECCAK_512_RATE, QSC_KECCAK_STATE_SIZE, QSC_KECCAK_STATE_BYTE_SIZE, QSC_KECCAK_SHA3_DOMAIN_ID, QSC_KECCAK_SHAKE_DOMAIN_ID, QSC_KECCAK_KMAC_DOMAIN_ID, QSC_KECCAK_CSHAKE_DOMAIN_ID, QSC_KECCAK_PERMUTATION_ROUNDS,
-            QscKeccakState, QscKeccakRate,
-        };
-    }
+    pub mod sha2;
+    pub mod sha3;
+}
+pub mod common {
+    pub mod common;
+    pub mod timestamp;
+}
+pub mod drbg {
+    pub mod csg;
+    pub mod hcg;
+    pub mod scb;
 }
 pub mod mac {
-    pub mod poly1305 {
-        pub use crate::qsc::mac::poly1305::{
-            qsc_poly1305_compute, qsc_poly1305_initialize, qsc_poly1305_blockupdate, qsc_poly1305_update, qsc_poly1305_finalize, 
-            QSC_POLY1305_BLOCK_SIZE,
-            QscPoly1305State,
-        };
-    }
+    pub mod poly1305;
+}
+pub mod numerics {
+    pub mod donna128;
+}
+pub mod prng {
+    pub mod nistrng;
+    pub mod secrand;
 }
 pub mod provider {
-    pub mod rcrng {
-        pub use crate::qsc::provider::rcrng::qsc_rcrng_generate;
-    }
+    pub mod osrng;
+    pub mod rcrng;
+    pub mod trng;
 }
+
+pub mod tools {
+    #[cfg(not(feature = "intutils"))]
+    pub(crate) mod intutils;
+    #[cfg(not(feature = "memutils"))]
+    pub(crate) mod memutils;
+    #[cfg(not(feature = "stringutils"))]
+    pub(crate) mod stringutils;
+    #[cfg(not(feature = "sysutils"))]
+    pub(crate) mod sysutils;
+
+    #[cfg(feature = "consoleutils")]
+    pub mod consoleutils;
+    #[cfg(feature = "fileutils")]
+    pub mod fileutils;
+    #[cfg(feature = "folderutils")]
+    pub mod folderutils;
+    #[cfg(feature = "intutils")]
+    pub mod intutils;
+    #[cfg(feature = "memutils")]
+    pub mod memutils;
+    #[cfg(feature = "stringutils")]
+    pub mod stringutils;
+    #[cfg(feature = "sysutils")]
+    pub mod sysutils;
+}
+
+#[cfg(feature = "no_std")]
+extern crate alloc;

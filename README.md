@@ -6,7 +6,7 @@
 
 <h3>qrc-opensource-rs</h3>
 <p>
-The free opensource version of the Quantum Secure Cryptographic library in Rust (QSC)
+The free opensource version of the Quantum Secure Cryptographic library in Rust (QRC)
 <br />
 <br />
 <a href="https://github.com/Quantum-Resistant-Cryptography/qrc-opensource-rs">Source Code</a>
@@ -26,22 +26,228 @@ The free opensource version of the Quantum Secure Cryptographic library in Rust 
   <li><a href="#license">License</a></li>
 </ol>
 
-
 ## Outline
 
 This is intended to facilitate the deployment of quantum-resistant cryptography as per the Quantum Computing Cybersecurity Preparedness Act (12/22) of the United States of America. Note it does not include our enhanced designs, which are subject to patents, and available separately as commercial packages.
 
-
 ## Usage
 
-First add the ```qrc-opensource-rs``` crate to your ```Cargo.toml```:
+First add the ``qrc-opensource-rs`` crate to your ``Cargo.toml``:
+
 ```sh
 [dependencies]
-qrc-opensource-rs = "0.2"
+qrc-opensource-rs = "0.3"
 ```
 
-  <summary><h4 style="display: inline-block">Examples</h4></summary>
-  <ul>
+### Features
+
+###### Feature List
+
+<table>
+  <tr>
+    <td>
+      Name
+    </td>
+    <td>
+      Dependencies
+    </td>
+    <td>
+      Target
+    </td>
+    <td>
+      Description
+    </td>
+  </tr>
+  <tr>
+    <td>
+      std
+    </td>
+    <td>-</td>
+    <td>
+      STD
+    </td>
+    <td>
+      Default Feature
+    </td>
+  </tr>
+  <tr>
+    <td>
+      all-tools
+    </td>
+    <td>
+      var-tools<br>
+      sys-tools<br>
+    </td>
+    <td>
+      STD
+    </td>
+    <td>
+      All STD Tools
+    </td>
+  </tr>
+  <tr>
+    <td>
+      var-tools
+    </td>
+    <td>
+      intutils<br>
+      memutils<br>
+      stringutils<br>
+      sysutils<br>
+    </td>
+    <td>
+      STD
+    </td>
+    <td>
+      All Variable Manipulation Tools 
+    </td>
+  </tr>
+  <tr>
+    <td>
+      sys-tools
+    </td>
+    <td>
+      consoleutils<br>
+      fileutils<br>
+      folderutils
+    </td>
+    <td>
+      STD
+    </td>
+    <td>
+      All System Tools
+    </td>
+  </tr>
+  <tr>
+    <td>
+      no_std
+    </td>
+    <td>-</td>
+    <td>
+      NO_STD
+    </td>
+    <td>
+      Standard And Required Feature For NO_STD
+    </td>
+  </tr>
+  <tr>
+    <td>
+      var-tools-no_std
+    </td>
+    <td>
+      no_std<br>
+      intutils<br>
+      memutils<br>
+      sysutils<br>
+    </td>
+    <td>
+      NO_STD
+    </td>
+    <td>
+      All NO_STD Compatible Variable Manipulation Tools 
+    </td>
+  </tr>
+  <tr>
+    <td>
+      memutils
+    </td>
+    <td>-</td>
+    <td>
+      STD<br>
+      NO_STD
+    </td>
+    <td>
+      Memory Manipulation Tools
+    </td>
+  </tr>
+  <tr>
+    <td>
+      intutils
+    </td>
+    <td>-</td>
+    <td>
+      STD<br>
+      NO_STD
+    </td>
+    <td>
+      Common Integer Tools
+    </td>
+  </tr>
+  <tr>
+    <td>
+      sysutils
+    </td>
+    <td>-</td>
+    <td>
+      STD<br>
+      NO_STD
+    </td>
+    <td>
+      System Information Gathering Tools
+    </td>
+  </tr>
+  <tr>
+    <td>
+      stringutils
+    </td>
+    <td>-</td>
+    <td>
+      STD
+    </td>
+    <td>
+      String Manipulation Tools
+    </td>
+  </tr>
+  <tr>
+    <td>
+      folderutils
+    </td>
+    <td>-</td>
+    <td>
+      STD
+    </td>
+    <td>
+      System Directory Gathering Tools
+    </td>
+  </tr>
+  <tr>
+    <td>
+      fileutils
+    </td>
+    <td>-</td>
+    <td>
+      STD
+    </td>
+    <td>
+      File System Communication Tools
+    </td>
+  </tr>
+  <tr>
+    <td>
+      consoleutils
+    </td>
+    <td>-</td>
+    <td>
+      STD
+    </td>
+    <td>
+      Console/Terminal System Tools
+    </td>
+  </tr>
+</table>
+
+###### Feature Usage
+
+```sh
+[dependencies]
+qrc-opensource-rs = { version = "0.3", features = ["FEATURE1", "FEATURE2"] }
+```
+
+### Examples
+
+  View our Documentation for further information on how to impliment this crate at [Docs.rs](https://docs.rs/qrc-opensource-rs)
+
+<ul>
     <li>
         <summary><p style="display: inline-block">Asymmetric</p></summary>
         <ul>
@@ -64,6 +270,8 @@ qrc-opensource-rs = "0.2"
         <summary><p style="display: inline-block">Cipher</p></summary>
         <ul>
           <li><a href="#aes">AES</a></li>
+          <li><a href="#chacha">ChaCha</a></li>
+          <li><a href="#csx">CSX</a></li>
         </ul>
     </li>
     <li>
@@ -74,17 +282,40 @@ qrc-opensource-rs = "0.2"
         </ul>
     </li>
     <li>
+      <summary><p style="display: inline-block">DRBG</p></summary>
+      <ul>
+        <li><a href="#csg">CSG</a></li>
+        <li><a href="#hcg">HCG</a></li>
+        <li><a href="#scb">SCB</a></li>
+      </ul>
+    </li>
+    <li>
         <summary><p style="display: inline-block">Mac</p></summary>
         <ul>
           <li><a href="#poly1305">Poly1305</a></li>
         </ul>
     </li>
+    <li>
+      <summary><p style="display: inline-block">Numerics</p></summary>
+      <ul>
+        <li><a href="#donna128">Donna128</a></li>
+      </ul>
+    </li>
+    <li>
+      <summary><p style="display: inline-block">PRNG</p></summary>
+      <ul>
+        <li><a href="#nistrng">NistRng</a></li>
+        <li><a href="#secrand">SecRand</a></li>
+      </ul>
+    </li>
   </ul>
 
+#### Asymmetric
 
-### Asymmetric
-#### Cipher
-##### Kyber
+##### Cipher
+
+###### Kyber
+
 Based on the C reference branch of PQ-Crystals Kyber; including base code, comments, and api.
 Removed the K=2 parameter, and added a K=5. The NIST '512' parameter has fallen below the threshold
 required by NIST PQ S1 minimum.
@@ -95,36 +326,39 @@ The [Kyber](https://pq-crystals.org/kyber/index.shtml) website.
 The Kyber [Algorithm](https://pq-crystals.org/kyber/data/kyber-specification-round3-20210131.pdf) Specification.
 
 Date: January 10, 2018
-Updated: July 2, 2021
-Rust Translation: 2024
+C - Updated: Stiepan A. Kovac - July 2, 2021
+Rust Translation: Matt Warminger - 2024
+Updated: Matt Warminger - April 23, 2025
 
 The primary public api for the Kyber CCA-secure Key Encapsulation Mechanism implementation:
+
 ```rust
 use qrc_opensource_rs::{
   asymmetric::cipher::kyber::{
-    qsc_kyber_generate_keypair, qsc_kyber_encrypt, qsc_kyber_decrypt,
-    QSC_KYBER_SEED_SIZE, QSC_KYBER_PUBLICKEY_SIZE, QSC_KYBER_PRIVATEKEY_SIZE, QSC_KYBER_SHAREDSECRET_SIZE, QSC_KYBER_CIPHERTEXT_SIZE
+    qrc_kyber_generate_keypair, qrc_kyber_encrypt, qrc_kyber_decrypt,
+    QRC_KYBER_SEED_SIZE, QRC_KYBER_PUBLICKEY_SIZE, QRC_KYBER_PRIVATEKEY_SIZE, QRC_KYBER_SHAREDSECRET_SIZE, QRC_KYBER_CIPHERTEXT_SIZE
   },
-  provider::rcrng::qsc_rcrng_generate,
+  provider::rcrng::qrc_rcrng_generate,
 };
 
-let mut seed = [0u8; QSC_KYBER_SEED_SIZE];
-qsc_rcrng_generate(&mut seed, QSC_KYBER_SEED_SIZE);
+let mut seed = [0u8; QRC_KYBER_SEED_SIZE];
+qrc_rcrng_generate(&mut seed, QRC_KYBER_SEED_SIZE);
 
-let publickey = &mut vec![0u8; QSC_KYBER_PUBLICKEY_SIZE];
-let privatekey = &mut vec![0u8; QSC_KYBER_PRIVATEKEY_SIZE];
+let publickey = &mut [0u8; QRC_KYBER_PUBLICKEY_SIZE];
+let privatekey = &mut [0u8; QRC_KYBER_PRIVATEKEY_SIZE];
 
-let secret1 = &mut [0u8; QSC_KYBER_SHAREDSECRET_SIZE];
-let secret2 = &mut [0u8; QSC_KYBER_SHAREDSECRET_SIZE];
+let secret1 = &mut [0u8; QRC_KYBER_SHAREDSECRET_SIZE];
+let secret2 = &mut [0u8; QRC_KYBER_SHAREDSECRET_SIZE];
 
-let ciphertext = &mut [0u8; QSC_KYBER_CIPHERTEXT_SIZE];
+let ciphertext = &mut [0u8; QRC_KYBER_CIPHERTEXT_SIZE];
 
-qsc_kyber_generate_keypair(publickey, privatekey, seed);
-qsc_kyber_encrypt(secret1, ciphertext, publickey, seed);
-qsc_kyber_decrypt(secret2, ciphertext, privatekey);
+qrc_kyber_generate_keypair(publickey, privatekey, seed);
+qrc_kyber_encrypt(secret1, ciphertext, publickey, seed);
+qrc_kyber_decrypt(secret2, ciphertext, privatekey);
 ```
 
-##### McEliece
+###### McEliece
+
 Classic McEliece is a KEM designed for IND-CCA2 security at a very high security level, even against quantum computers.
 The KEM is built conservatively from a PKE designed for OW-CPA security, namely Niederreiter's dual version of McEliece's PKE using binary Goppa codes.
 Every level of the construction is designed so that future cryptographic auditors can be confident in the long-term security of post-quantum public-key encryption.
@@ -135,254 +369,409 @@ The [McEliece](https://classic.mceliece.org/) website.
 The McEliece [Algorithm](https://classic.mceliece.org/nist/mceliece-20201010.pdf) Specification.
 
 Authors: Daniel J. Bernstein, Tung Chou, Tanja Lange, and Peter Schwabe.
-Updated: John Underhill - June 28 2021
-Rust Translation: 2024
+Updated: Stiepan A. Kovac - June 28 2021
+Rust Translation: Matt Warminger - 2024
+Updated: Matt Warminger - April 23, 2025
 
 The primary public api for the Niederreiter dual form of the McEliece asymmetric cipher implementation:
+
 ```rust
 use qrc_opensource_rs::{
   asymmetric::cipher::mceliece::{
-    qsc_mceliece_generate_keypair, qsc_mceliece_encrypt, qsc_mceliece_decrypt,
-    QSC_MCELIECE_CIPHERTEXT_SIZE, QSC_MCELIECE_PRIVATEKEY_SIZE, QSC_MCELIECE_PUBLICKEY_SIZE, QSC_MCELIECE_SHAREDSECRET_SIZE, QSC_MCELIECE_SEED_SIZE,
+    qrc_mceliece_generate_keypair, qrc_mceliece_encrypt, qrc_mceliece_decrypt,
+    QRC_MCELIECE_CIPHERTEXT_SIZE, QRC_MCELIECE_PRIVATEKEY_SIZE, QRC_MCELIECE_PUBLICKEY_SIZE, QRC_MCELIECE_SHAREDSECRET_SIZE, QRC_MCELIECE_SEED_SIZE,
   },
-  provider::rcrng::qsc_rcrng_generate,
+  provider::rcrng::qrc_rcrng_generate,
 };
 
-let mut seed = [0u8; QSC_MCELIECE_SEED_SIZE];
-qsc_rcrng_generate(&mut seed, QSC_MCELIECE_SEED_SIZE);
+let mut seed = [0u8; QRC_MCELIECE_SEED_SIZE];
+qrc_rcrng_generate(&mut seed, QRC_MCELIECE_SEED_SIZE);
 
-let publickey = &mut vec![0u8; QSC_MCELIECE_PUBLICKEY_SIZE];
-let privatekey = &mut vec![0u8; QSC_MCELIECE_PRIVATEKEY_SIZE];
+let publickey = &mut vec![0u8; QRC_MCELIECE_PUBLICKEY_SIZE];
+let privatekey = &mut vec![0u8; QRC_MCELIECE_PRIVATEKEY_SIZE];
 
-let secret1 = &mut [0u8; QSC_MCELIECE_SHAREDSECRET_SIZE];
-let secret2 = &mut [0u8; QSC_MCELIECE_SHAREDSECRET_SIZE];
+let secret1 = &mut [0u8; QRC_MCELIECE_SHAREDSECRET_SIZE];
+let secret2 = &mut [0u8; QRC_MCELIECE_SHAREDSECRET_SIZE];
 
-let ciphertext = &mut [0u8; QSC_MCELIECE_CIPHERTEXT_SIZE];
+let ciphertext = &mut [0u8; QRC_MCELIECE_CIPHERTEXT_SIZE];
 
-qsc_mceliece_generate_keypair(publickey, privatekey, seed);	
-qsc_mceliece_encrypt(secret1, ciphertext, publickey, seed);
-qsc_mceliece_decrypt(secret2, ciphertext, privatekey);
+qrc_mceliece_generate_keypair(publickey, privatekey, seed);
+qrc_mceliece_encrypt(secret1, ciphertext, publickey, seed);
+qrc_mceliece_decrypt(secret2, ciphertext, privatekey);
 ```
 
-#### Signature
-##### SphincsPlus
+##### Signature
+
+###### SphincsPlus
+
 Based entirely on the C reference branch of SPHINCS+ taken from the NIST Post Quantum Competition Round 3 submission.
 The NIST Post Quantum Competition [Round 3](https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions) Finalists.
 The [SPHINCS+](https://sphincs.org/) website.
 The SPHINCS+ [Algorithm](https://sphincs.org/data/sphincs+-specification.pdf) Specification.
 
 Date: June 14, 2018
-Updated: July 2, 2021
-Rust Translation: 2024
+Updated: February 7, 2024
+Rust Translation: Matt Warminger - 2024
+Updated: Matt Warminger - April 23, 2025
 
 The primary public api for the Sphincs+ asymmetric signature scheme implementation:
+
 ```rust
 use qrc_opensource_rs::{
   asymmetric::signature::sphincsplus::{
-    qsc_sphincsplus_generate_keypair, qsc_sphincsplus_sign, qsc_sphincsplus_verify,
-    QSC_SPHINCSPLUS_PRIVATEKEY_SIZE, QSC_SPHINCSPLUS_PUBLICKEY_SIZE, QSC_SPHINCSPLUS_SIGNATURE_SIZE, QRCS_CRYPTO_HASH_SIZE,
+    qrc_sphincsplus_generate_keypair, qrc_sphincsplus_sign, qrc_sphincsplus_verify,
+    QRC_SPHINCSPLUS_PRIVATEKEY_SIZE, QRC_SPHINCSPLUS_PUBLICKEY_SIZE, QRC_SPHINCSPLUS_SIGNATURE_SIZE,
   },
-  provider::rcrng::qsc_rcrng_generate,
+  provider::rcrng::qrc_rcrng_generate,
 };
 
-let privatekey = &mut [0u8; QSC_SPHINCSPLUS_PRIVATEKEY_SIZE];
-let publickey = &mut [0u8; QSC_SPHINCSPLUS_PUBLICKEY_SIZE];
-let hash = &mut [0u8; QRCS_CRYPTO_HASH_SIZE];
-qsc_rcrng_generate(hash, QRCS_CRYPTO_HASH_SIZE);
+let privatekey = &mut [0u8; QRC_SPHINCSPLUS_PRIVATEKEY_SIZE];
+let publickey = &mut [0u8; QRC_SPHINCSPLUS_PUBLICKEY_SIZE];
+let hash = &mut [0u8; 64];
+qrc_rcrng_generate(hash, 64);
 let mut hashlen = 0;
-let sig = &mut [0u8; QSC_SPHINCSPLUS_SIGNATURE_SIZE + QRCS_CRYPTO_HASH_SIZE];
+let sig = &mut [0u8; QRC_SPHINCSPLUS_SIGNATURE_SIZE + 64];
 let mut siglen = 0;
 
-qsc_sphincsplus_generate_keypair(publickey, privatekey, qsc_rcrng_generate);
-qsc_sphincsplus_sign(sig, &mut siglen, hash, QRCS_CRYPTO_HASH_SIZE, privatekey, qsc_rcrng_generate);
-qsc_sphincsplus_verify(hash, &mut hashlen, sig, siglen, publickey);
+qrc_sphincsplus_generate_keypair(publickey, privatekey);
+qrc_sphincsplus_sign(sig, &mut siglen, hash, 64, privatekey);
+qrc_sphincsplus_verify(hash, &mut hashlen, sig, siglen, publickey);
 ```
 
-### Cipher
-#### AES
-Rust Translation: 2024
+#### Cipher
+
+##### AES
+
+Rust Translation: Matt Warminger - 2024
+Updated: Matt Warminger - April 23, 2025
 
 The primary public api for the AES implementation:
+
 ```rust
 use qrc_opensource_rs::{
     cipher::aes::{
-        qsc_aes_initialize, qsc_aes_dispose, qsc_aes_ctrbe_transform,
-        QSC_AES_BLOCK_SIZE, QSC_AES256_KEY_SIZE,
-        QscAesKeyparams, QscAesState, QscAesCipherType, 
+        qrc_aes_initialize, qrc_aes_dispose, qrc_aes_ctrbe_transform,
+        QRC_AES_BLOCK_SIZE, QRC_AES256_KEY_SIZE,
+        QrcAesKeyparams, QrcAesState, QrcAesCipherType, 
     },
-    provider::rcrng::qsc_rcrng_generate,
+    provider::rcrng::qrc_rcrng_generate,
 };
 
-let ctx = &mut QscAesState::default();
-let msg = &mut [0u8; QSC_AES_BLOCK_SIZE];
-qsc_rcrng_generate(msg, QSC_AES_BLOCK_SIZE);
-let plain = &mut [0u8; QSC_AES_BLOCK_SIZE];
-let nonce = &mut [0u8; QSC_AES_BLOCK_SIZE];
-qsc_rcrng_generate(nonce, QSC_AES_BLOCK_SIZE);
-let cipher = &mut [0u8; QSC_AES_BLOCK_SIZE];
-let key = &mut [0u8; QSC_AES256_KEY_SIZE];
-qsc_rcrng_generate(key, QSC_AES256_KEY_SIZE);
+let ctx = &mut QrcAesState::default();
+let msg = &mut [0u8; QRC_AES_BLOCK_SIZE];
+qrc_rcrng_generate(msg, QRC_AES_BLOCK_SIZE);
+let plain = &mut [0u8; QRC_AES_BLOCK_SIZE];
+let nonce = &mut [0u8; QRC_AES_BLOCK_SIZE];
+qrc_rcrng_generate(nonce, QRC_AES_BLOCK_SIZE);
+let cipher = &mut [0u8; QRC_AES_BLOCK_SIZE];
+let key = &mut [0u8; QRC_AES256_KEY_SIZE];
+qrc_rcrng_generate(key, QRC_AES256_KEY_SIZE);
 
-let nonce2 = &mut nonce.clone();
-let kp = QscAesKeyparams {
+let kp = QrcAesKeyparams {
   key: key.to_vec(), 
-  keylen: QSC_AES256_KEY_SIZE,
-  nonce: nonce2.to_vec(),
+  keylen: QRC_AES256_KEY_SIZE,
+  nonce: nonce.to_vec(),
   info: [].to_vec(),
   infolen: 0,
 };
 
-qsc_aes_initialize(ctx, kp.clone(), QscAesCipherType::AES256);
-qsc_aes_ctrbe_transform(ctx, cipher, msg, QSC_AES_BLOCK_SIZE);
+qrc_aes_initialize(ctx, kp.clone(), QrcAesCipherType::AES256);
+qrc_aes_ctrbe_transform(ctx, cipher, msg, QRC_AES_BLOCK_SIZE);
 
-qsc_aes_initialize(ctx, kp, QscAesCipherType::AES256);
-qsc_aes_ctrbe_transform(ctx, plain, cipher, QSC_AES_BLOCK_SIZE);
-qsc_aes_dispose(ctx);
+qrc_aes_initialize(ctx, kp, QrcAesCipherType::AES256);
+qrc_aes_ctrbe_transform(ctx, plain, cipher, QRC_AES_BLOCK_SIZE);
+qrc_aes_dispose(ctx);
 ```
+
 ```rust
 use qrc_opensource_rs::{
     cipher::aes::{
-        qsc_aes_hba256_initialize, qsc_aes_hba256_set_associated, qsc_aes_hba256_transform,
-        QSC_AES_BLOCK_SIZE, QSC_AES256_KEY_SIZE, QSC_HBA256_MAC_LENGTH,
-        QscAesKeyparams, QscAesHba256State, 
+        qrc_aes_hba256_initialize, qrc_aes_hba256_set_associated, qrc_aes_hba256_transform,
+        QRC_AES_BLOCK_SIZE, QRC_AES256_KEY_SIZE, QRC_HBA256_MAC_LENGTH,
+        QrcAesKeyparams, QrcAesHba256State, 
     },
-    provider::rcrng::qsc_rcrng_generate,
+    provider::rcrng::qrc_rcrng_generate,
 };
 
-let ctx = &mut QscAesHba256State::default();
-let msg = &mut [0u8; QSC_AES_BLOCK_SIZE];
-qsc_rcrng_generate(msg, QSC_AES_BLOCK_SIZE);
-let plain = &mut [0u8; QSC_AES_BLOCK_SIZE];
-let nonce = &mut [0u8; QSC_AES_BLOCK_SIZE];
-qsc_rcrng_generate(nonce, QSC_AES_BLOCK_SIZE);
-let cipher = &mut [0u8; QSC_AES_BLOCK_SIZE + QSC_HBA256_MAC_LENGTH];
-let key = &mut [0u8; QSC_AES256_KEY_SIZE];
-qsc_rcrng_generate(key, QSC_AES256_KEY_SIZE);
+let ctx = &mut QrcAesHba256State::default();
+let msg = &mut [0u8; QRC_AES_BLOCK_SIZE];
+qrc_rcrng_generate(msg, QRC_AES_BLOCK_SIZE);
+let plain = &mut [0u8; QRC_AES_BLOCK_SIZE];
+let nonce = &mut [0u8; QRC_AES_BLOCK_SIZE];
+qrc_rcrng_generate(nonce, QRC_AES_BLOCK_SIZE);
+let cipher = &mut [0u8; QRC_AES_BLOCK_SIZE + QRC_HBA256_MAC_LENGTH];
+let key = &mut [0u8; QRC_AES256_KEY_SIZE];
+qrc_rcrng_generate(key, QRC_AES256_KEY_SIZE);
 let aad = &mut [0u8; 20];
-qsc_rcrng_generate(aad, 20);
+qrc_rcrng_generate(aad, 20);
 
-let nonce2 = &mut nonce.clone();
-let kp = QscAesKeyparams {
+let kp = QrcAesKeyparams {
   key: key.to_vec(), 
-  keylen: QSC_AES256_KEY_SIZE,
-  nonce: nonce2.to_vec(),
+  keylen: QRC_AES256_KEY_SIZE,
+  nonce: nonce.to_vec(),
   info: [].to_vec(),
   infolen: 0,
 };
 
-qsc_aes_hba256_initialize(ctx, kp.clone(), true);
-qsc_aes_hba256_set_associated(ctx, aad, 20);
-qsc_aes_hba256_transform(ctx, cipher, msg, QSC_AES_BLOCK_SIZE);
+qrc_aes_hba256_initialize(ctx, kp.clone(), true);
+qrc_aes_hba256_set_associated(ctx, aad, 20);
+qrc_aes_hba256_transform(ctx, cipher, msg, QRC_AES_BLOCK_SIZE);
 
-qsc_aes_hba256_initialize(ctx, kp, false);
-qsc_aes_hba256_set_associated(ctx, aad, 20);
-qsc_aes_hba256_transform(ctx, plain, cipher, QSC_AES_BLOCK_SIZE);
+qrc_aes_hba256_initialize(ctx, kp, false);
+qrc_aes_hba256_set_associated(ctx, aad, 20);
+qrc_aes_hba256_transform(ctx, plain, cipher, QRC_AES_BLOCK_SIZE);
 ```
+
 ```rust
 use qrc_opensource_rs::{
     cipher::aes::{
-        qsc_aes_initialize, qsc_aes_dispose,
-        qsc_aes_cbc_encrypt_block, qsc_aes_cbc_decrypt_block,
-        qsc_aes_ecb_encrypt_block, qsc_aes_ecb_decrypt_block,
-        QSC_AES_BLOCK_SIZE, QSC_AES256_KEY_SIZE,
-        QscAesKeyparams, QscAesState, QscAesCipherType, 
+        qrc_aes_initialize, qrc_aes_dispose,
+        qrc_aes_cbc_encrypt_block, qrc_aes_cbc_decrypt_block,
+        qrc_aes_ecb_encrypt_block, qrc_aes_ecb_decrypt_block,
+        QRC_AES_BLOCK_SIZE, QRC_AES256_KEY_SIZE,
+        QrcAesKeyparams, QrcAesState, QrcAesCipherType, 
     },
-    provider::rcrng::qsc_rcrng_generate,
+    provider::rcrng::qrc_rcrng_generate,
 };
 
-let ctx = &mut QscAesState::default();
-let msg = &mut [0u8; QSC_AES_BLOCK_SIZE];
-qsc_rcrng_generate(msg, QSC_AES_BLOCK_SIZE);
-let plain = &mut [0u8; QSC_AES_BLOCK_SIZE];
-let iv = &mut [0u8; QSC_AES_BLOCK_SIZE];
-qsc_rcrng_generate(iv, QSC_AES_BLOCK_SIZE);
-let cipher = &mut [0u8; QSC_AES_BLOCK_SIZE];
-let key = &mut [0u8; QSC_AES256_KEY_SIZE];
-qsc_rcrng_generate(key, QSC_AES256_KEY_SIZE);
+let ctx = &mut QrcAesState::default();
+let msg = &mut [0u8; QRC_AES_BLOCK_SIZE];
+qrc_rcrng_generate(msg, QRC_AES_BLOCK_SIZE);
+let plain = &mut [0u8; QRC_AES_BLOCK_SIZE];
+let iv = &mut [0u8; QRC_AES_BLOCK_SIZE];
+qrc_rcrng_generate(iv, QRC_AES_BLOCK_SIZE);
+let cipher = &mut [0u8; QRC_AES_BLOCK_SIZE];
+let key = &mut [0u8; QRC_AES256_KEY_SIZE];
+qrc_rcrng_generate(key, QRC_AES256_KEY_SIZE);
 
-let iv2 = &mut iv.clone();
-let kp = QscAesKeyparams {
+let kp = QrcAesKeyparams {
     key: key.to_vec(), 
-    keylen: QSC_AES256_KEY_SIZE,
-    nonce: iv2.to_vec(),
+    keylen: QRC_AES256_KEY_SIZE,
+    nonce: iv.to_vec(),
     info: [].to_vec(),
     infolen: 0,
 };
 
-qsc_aes_initialize(ctx, kp.clone(), QscAesCipherType::AES256);
+qrc_aes_initialize(ctx, kp.clone(), QrcAesCipherType::AES256);
 /* cbc api */
-qsc_aes_cbc_encrypt_block(ctx, cipher, msg);
+qrc_aes_cbc_encrypt_block(ctx, cipher, msg);
 /* ecb api */
-qsc_aes_ecb_encrypt_block(ctx.to_owned(), cipher, msg);
+qrc_aes_ecb_encrypt_block(ctx.to_owned(), cipher, msg);
 
-qsc_aes_initialize(ctx, kp, QscAesCipherType::AES256);
+qrc_aes_initialize(ctx, kp, QrcAesCipherType::AES256);
 /* cbc api */
-qsc_aes_cbc_decrypt_block(ctx, plain, cipher);
+qrc_aes_cbc_decrypt_block(ctx, plain, cipher);
 /* ecb api */
-qsc_aes_ecb_decrypt_block(ctx.to_owned(), plain, cipher);
-qsc_aes_dispose(ctx);
+qrc_aes_ecb_decrypt_block(ctx.to_owned(), plain, cipher);
+qrc_aes_dispose(ctx);
 ```
 
-### Digest
-#### Sha2
+##### ChaCha
+
+Key sizes are 128- and 256-bit (16 and 32 byte).
+The nonce must be 64-bits in length (8 bytes).
+
+Author: John Underhill - April 7, 2018
+Rust Translation: Matt Warminger - 2025
+Updated: Matt Warminger - April 23, 2025
+
+An implementation of the ChaChaPoly20 stream cipher by Daniel J. Bernstein.
+
+```rust
+use qrc_opensource_rs::{
+        cipher::chacha::{
+            	qrc_chacha_dispose, qrc_chacha_initialize, qrc_chacha_transform,
+            	QrcChachaKeyparams, QrcChachaState, QRC_CHACHA_KEY256_SIZE, QRC_CHACHA_NONCE_SIZE
+	}, provider::rcrng::qrc_rcrng_generate
+};
+
+let out = &mut [0u8; 64];
+let msg = &mut [0u8; 64];
+qrc_rcrng_generate(msg, 64);
+let key = &mut [0u8; QRC_CHACHA_KEY256_SIZE];
+qrc_rcrng_generate(key, QRC_CHACHA_KEY256_SIZE);
+let nonce = &mut [0u8; QRC_CHACHA_NONCE_SIZE];
+qrc_rcrng_generate(nonce, QRC_CHACHA_NONCE_SIZE);
+let ctx = &mut QrcChachaState::default();
+
+let kp = &mut QrcChachaKeyparams::default();
+kp.key = key.to_vec();
+kp.keylen = QRC_CHACHA_KEY256_SIZE;
+kp.nonce = nonce.to_vec();
+
+qrc_chacha_initialize(ctx, kp.clone()));
+qrc_chacha_transform(ctx, out, msg, 64);
+qrc_chacha_dispose(ctx);
+```
+
+##### CSX
+
+An EXPERIMENTAL vectorized, 64-bit, 40-round stream cipher CSX512 implementation based on ChaCha.
+This cipher uses KMAC-512 to authenticate the cipher-text stream in an encrypt-then-mac authentication configuration.
+The CSX (authenticated Cipher Stream, ChaCha eXtended) cipher, is a hybrid of the ChaCha stream cipher,
+using 64-bit integers, a 1024-bit block and a 512-bit key. \n
+
+The pseudo-random bytes generator used by this cipher is the Keccak cSHAKE extended output function (XOF).
+The cSHAKE XOF is implemented in the 512-bit form of that function, and used to expand the input cipher-key into the cipher and MAC keys.
+CSX-512 uses a 512-bit input key, an a 16 byte nonce, and an optional tweak; the info parameter, up to 48 bytes in length.
+
+This is a 'tweakable cipher', the initialization parameters; qrc_csx_keyparams, include an info parameter that can be used as a secondary user input.
+Internally, the info parameter is used to customize the cSHAKE output, using the cSHAKE 'custom' parameter to pre-initialize the SHAKE state.
+The info parameter can be tweaked, with a user defined string 'info' in an qrc_csx_keyparams structure passed to the csx_intitialize(state,keyparams,encrypt).
+This tweak can be used as a 'domain key', or to differentiate cipher-text output from other implementations, or as a secondary secret-key input.
+
+CSX is an authenticated encryption with associated data (AEAD) stream cipher.
+The cSHAKE key-expansion function generates a key for the keyed hash-based MAC function; KMAC, used to generate the authentication code,
+which is appended to the cipher-text output of an encryption call.
+In decryption mode, before decryption is performed, an internal mac code is calculated, and compared to the code embedded in the cipher-text.
+If authentication fails, the cipher-text is not decrypted, and the qrc_csx_transform(state,out,in,inlen) function returns a boolean false value.
+The qrc_csx_set_associated(state,in,inlen) function can be used to add additional data to the MAC generators input, like packet-header data, or a custom code or counter.
+
+For authentication CSX can use either the standard form of KMAC, which uses 24 rounds, or the default authentication setting;
+a reduced-rounds version of KMAC that uses half the number of permutation rounds KMAC-R12.
+To enable the standard from of KMAC, pass the QRC_RCS_AUTH_KMAC as a compiler definition, or unrem the definition in this header file.
+To run CSX without authentication, remove the QRC_RCS_AUTHENTICATED in this header file.
+
+The CSX-512, known answer vectors are taken from [The CEX++ Cryptographic Library](https://github.com/Steppenwolfe65/CEX) `<br>`
+See the documentation and the csx_test.h tests for usage examples.
+
+Author: John Underhill - May 2, 2020
+Updated: Stiepan A Kovac - October 13, 2021
+Rust Translation: Matt Warminger - 2025
+Updated: Matt Warminger - April 23, 2025
+
+An implementation of the ChaChaPoly20 stream cipher by Daniel J. Bernstein.
+
+```rust
+use qrc_opensource_rs::{
+    cipher::csx::{
+        qrc_csx_dispose, qrc_csx_initialize, qrc_csx_set_associated, qrc_csx_transform,
+        QrcCsxKeyparams, QrcCsxState, QRC_CSX_KEY_SIZE, QRC_CSX_MAC_SIZE, QRC_CSX_NONCE_SIZE
+    },
+    provider::rcrng::qrc_rcrng_generate
+};
+
+
+let ad = &mut [0u8; 20];
+let enc = &mut [0u8; 128 + QRC_CSX_MAC_SIZE];
+
+let dec = &mut [0u8; 128];
+let key = &mut [0u8; QRC_CSX_KEY_SIZE];
+let msg = &mut [0u8; 128];
+qrc_rcrng_generate(msg, 128);
+let nce = &mut [0u8; QRC_CSX_NONCE_SIZE];
+qrc_rcrng_generate(nce, QRC_CSX_NONCE_SIZE);
+
+let state = &mut QrcCsxState::default();
+
+let kp = &mut QrcCsxKeyparams::default();
+kp.key = key.to_vec();
+kp.keylen = QRC_CSX_KEY_SIZE;
+kp.nonce = nce.to_vec();
+
+qrc_csx_initialize(state, kp.clone(), true);
+qrc_csx_set_associated(state, ad, 20);
+qrc_csx_transform(state, enc, msg, 128);
+
+qrc_csx_initialize(state, kp.clone(), false);
+qrc_csx_set_associated(state, ad, 20);
+qrc_csx_transform(state, dec, enc, 128);
+qrc_csx_dispose(state);
+```
+
+#### Digest
+
+##### Sha2
+
 The SHA2 and HMAC implementations use two different forms of api: short-form and long-form.
-The short-form api, which initializes the state, processes a message, and finalizes by producing output, all in a single function call, for example; qsc_sha512_compute(), the entire message array is processed and the hash code is written to the output array.
+The short-form api, which initializes the state, processes a message, and finalizes by producing output, all in a single function call, for example; qrc_sha512_compute(), the entire message array is processed and the hash code is written to the output array.
 The long-form api uses an initialization call to prepare the state, a update call to process the message, and the finalize call, which finalizes the state and generates a hash or mac-code.
 The HKDF key derivation functions HKDF(HMAC(SHA2-256/512)), use only the short-form api, single-call functions, to generate pseudo-random to an output array.
-Each of the function families (SHA2, HMAC, HKDF), have a corresponding set of reference constants associated with that member, example; QSC_HKDF_256_KEY_SIZE is the minimum expected HKDF-256 key size in bytes, QSC_HMAC_512_MAC_SIZE is the minimum size of the HMAC-512 output mac-code output array.
+Each of the function families (SHA2, HMAC, HKDF), have a corresponding set of reference constants associated with that member, example; QRC_HKDF_256_KEY_SIZE is the minimum expected HKDF-256 key size in bytes, QRC_HMAC_512_MAC_SIZE is the minimum size of the HMAC-512 output mac-code output array.
 
 NIST: [The SHA-2 Standard](http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf)
 [Analysis of SIMD Applicability to SHA Algorithms](https://software.intel.com/sites/default/files/m/b/9/b/aciicmez.pdf)
 
 Author: John Underhill - May 23, 2019
-Updated: September 12, 2020
-Rust Translation: 2024
+Updated: Stiepan A Kovac - Jul 11, 2024
+Rust Translation: Matt Warminger - 2024
+Updated: Matt Warminger - April 23, 2025
 
 The primary public api for SHA2 Implementation:
+
 ```rust
 use qrc_opensource_rs::{
   digest::sha2::{
-    qsc_hmac512_compute,
-    QSC_SHA2_512_HASH, QSC_SHA2_512_RATE,
+    qrc_hkdf512_expand,
+    QRC_SHA2_512_HASH_SIZE,
   },
-  provider::rcrng::qsc_rcrng_generate,
+  provider::rcrng::qrc_rcrng_generate,
 };
 
-let hash = &mut [0u8; QSC_SHA2_512_HASH];
-let msg = &mut [0u8; QSC_SHA2_512_RATE];
-qsc_rcrng_generate(msg, QSC_SHA2_512_RATE);
+let hash = &mut [0u8; QRC_SHA2_512_HASH_SIZE];
+let info = &mut [0u8; 20];
+qrc_rcrng_generate(info, 20);
 let key = &mut [0u8; 50];
-qsc_rcrng_generate(key, 50);
+qrc_rcrng_generate(key, 50);
 
 /* compact api */
-qsc_hmac512_compute(hash, msg, QSC_SHA2_512_RATE, key, 50);
+qrc_hkdf512_expand(hash, QRC_SHA2_512_HASH_SIZE, key, 50, info, 20);
 ```
+
 ```rust
 use qrc_opensource_rs::{
   digest::sha2::{
-    qsc_sha512_initialize, qsc_sha512_blockupdate, qsc_sha512_finalize,
-    QSC_SHA2_512_HASH, QSC_SHA2_512_RATE,
-    QscSha512State,
+    qrc_hmac512_compute, qrc_hmac512_initialize, qrc_hmac512_blockfinalize,
+    QRC_SHA2_512_HASH_SIZE, QrcHmac512State
   },
-  provider::rcrng::qsc_rcrng_generate,
+  provider::rcrng::qrc_rcrng_generate,
 };
 
-let hash = &mut [0u8; QSC_SHA2_512_HASH];
-let msg = &mut [0u8; QSC_SHA2_512_RATE];
-qsc_rcrng_generate(msg, QSC_SHA2_512_RATE);
+let hash = &mut [0u8; QRC_SHA2_512_HASH_SIZE];
+let msg = &mut [0u8; 20];
+qrc_rcrng_generate(msg, 20);
+let key = &mut [0u8; 50];
+qrc_rcrng_generate(key, 50);
 
-/* long-form api */
-let ctx = &mut QscSha512State::default();
-qsc_sha512_initialize(ctx);
-qsc_sha512_blockupdate(ctx, msg, 1);
-qsc_sha512_finalize(ctx, hash, msg, QSC_SHA2_512_RATE);
+/* compact api */
+qrc_hmac512_compute(hash, msg, 20, key, 50);
+
+/* test long-form api */
+let ctx = &mut QrcHmac512State::default();
+qrc_hmac512_initialize(ctx, key, 50);
+qrc_hmac512_blockfinalize(ctx, hash, msg, 20);
 ```
 
-#### Sha3
+```rust
+use qrc_opensource_rs::{
+    digest::sha2::{
+        qrc_sha512_compute, qrc_sha512_initialize, qrc_sha512_update, qrc_sha512_finalize,
+        QRC_SHA2_512_HASH_SIZE,
+        QrcSha512State,
+    },
+    provider::rcrng::qrc_rcrng_generate,
+};
+
+let hash = &mut [0u8; QRC_SHA2_512_HASH_SIZE];
+let msg = &mut [0u8; 20];
+qrc_rcrng_generate(msg, 20);
+
+/* compact api */
+qrc_sha512_compute(hash, msg, 20);
+
+/* long-form api */
+let ctx = &mut QrcSha512State::default();
+qrc_sha512_initialize(ctx);
+qrc_sha512_update(ctx, msg, 20);
+qrc_sha512_finalize(ctx, hash);
+```
+
+##### Sha3
+
 The SHA3, SHAKE, cSHAKE, and KMAC implementations all share two forms of api: short-form and long-form.
-The short-form api, which initializes the state, processes a message, and finalizes by producing output, all in a single function call, for example; qsc_sha3_compute512(), the entire message array is processed and the hash code is written to the output array.
+The short-form api, which initializes the state, processes a message, and finalizes by producing output, all in a single function call, for example; qrc_sha3_compute512(), the entire message array is processed and the hash code is written to the output array.
 The long-form api uses an initialization call to prepare the state, a blockupdate call if the message is longer than a single message block, and the finalize call, which finalizes the state and generates a hash, mac-code, or an array of pseudo-random.
-Each of the function families (SHA3, SHAKE, KMAC), have a corresponding set of reference constants associated with that member, example; SHAKE_256_KEY is the minimum expected SHAKE-256 key size in bytes, QSC_KMAC_512_MAC_SIZE is the minimum size of the KMAC-512 output mac-code output array, and QSC_KECCAK_512_RATE is the SHA3-512 message absorption rate.
+Each of the function families (SHA3, SHAKE, KMAC), have a corresponding set of reference constants associated with that member, example; SHAKE_256_KEY is the minimum expected SHAKE-256 key size in bytes, QRC_KMAC_512_MAC_SIZE is the minimum size of the KMAC-512 output mac-code output array, and QRC_KECCAK_512_RATE is the SHA3-512 message absorption rate.
 
 NIST: [SHA3 Fips202](http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf)
 NIST: [SP800-185](http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-185.pdf)
@@ -392,139 +781,566 @@ NIST: [SHA3 Third-Round Report](http://nvlpubs.nist.gov/nistpubs/ir/2012/NIST.IR
 Team Keccak: [Specifications summary](https://keccak.team/keccak_specs_summary.html)
 
 Author: John Underhill - October 27, 2019
-Updated: 19, 2021
-Rust Translation: 2024
+Updated: Stiepan A Kovac - 19, 2021
+Rust Translation: Matt Warminger - 2024
+Updated: Matt Warminger - April 23, 2025
 
 The primary public api for SHA3 digest, SHAKE, cSHAKE, and KMAC implementation:
+
 ```rust
 use qrc_opensource_rs::{
   digest::sha3::{
-    qsc_sha3_compute512, qsc_sha3_initialize, qsc_sha3_update, qsc_sha3_finalize, qsc_keccak_dispose,
-    QSC_SHA3_512_HASH_SIZE,
-    QscKeccakState, QscKeccakRate,
+    qrc_sha3_compute512, qrc_sha3_initialize, qrc_sha3_update, qrc_sha3_finalize, qrc_keccak_dispose,
+    QRC_SHA3_512_HASH_SIZE,
+    QrcKeccakState, QrcKeccakRate,
   },
-  provider::rcrng::qsc_rcrng_generate,
+  provider::rcrng::qrc_rcrng_generate,
 };
 
-let hash = &mut [0u8; QSC_SHA3_512_HASH_SIZE];
+let hash = &mut [0u8; QRC_SHA3_512_HASH_SIZE];
 let msg = &mut [0u8; 200];
-qsc_rcrng_generate(msg, 200);
+qrc_rcrng_generate(msg, 200);
 
 /* compact api */
-qsc_sha3_compute512(hash, msg, 200);
+qrc_sha3_compute512(hash, msg, 200);
 
 /* long-form api */
-let ctx = &mut QscKeccakState::default();
-qsc_sha3_initialize(ctx);
-qsc_sha3_update(ctx, QscKeccakRate::QscKeccakRate512 as usize, msg, 200);
-qsc_sha3_finalize(ctx, QscKeccakRate::QscKeccakRate512 as usize, hash);
-qsc_keccak_dispose(ctx);
+let ctx = &mut QrcKeccakState::default();
+qrc_sha3_initialize(ctx);
+qrc_sha3_update(ctx, QrcKeccakRate::QrcKeccakRate512 as usize, msg, 200);
+qrc_sha3_finalize(ctx, QrcKeccakRate::QrcKeccakRate512 as usize, hash);
+qrc_keccak_dispose(ctx);
 ```
+
 ```rust
 use qrc_opensource_rs::{
   digest::sha3::{
-    qsc_kmac512_compute, qsc_kmac_initialize, qsc_kmac_update, qsc_kmac_finalize,
-    qsc_keccak_dispose, 
-    QSC_SHA3_512_HASH_SIZE,
-    QscKeccakState, QscKeccakRate,
+    qrc_kmac512_compute, qrc_kmac_initialize, qrc_kmac_update, qrc_kmac_finalize,
+    qrc_keccak_dispose, 
+    QRC_SHA3_512_HASH_SIZE,
+    QrcKeccakState, QrcKeccakRate,
   },
-  provider::rcrng::qsc_rcrng_generate,
+  provider::rcrng::qrc_rcrng_generate,
 };
 
-let hash = &mut [0u8; QSC_SHA3_512_HASH_SIZE];
+let hash = &mut [0u8; QRC_SHA3_512_HASH_SIZE];
 let msg = &mut [0u8; 200];
-qsc_rcrng_generate(msg, 200);
+qrc_rcrng_generate(msg, 200);
 let key = &mut [0u8; 50];
-qsc_rcrng_generate(key, 50);
+qrc_rcrng_generate(key, 50);
 let cust = &mut [0u8; 100];
-qsc_rcrng_generate(cust, 100);
+qrc_rcrng_generate(cust, 100);
 
 /* compact api */
-qsc_kmac512_compute(hash, QSC_SHA3_512_HASH_SIZE, msg, 200, key, 50, cust, 100);
+qrc_kmac512_compute(hash, QRC_SHA3_512_HASH_SIZE, msg, 200, key, 50, cust, 100);
 
 /* long-form api */
-let ctx = &mut QscKeccakState::default();
-qsc_kmac_initialize(ctx, QscKeccakRate::QscKeccakRate512 as usize, key, 50, cust, 100);
-qsc_kmac_update(ctx, QscKeccakRate::QscKeccakRate512 as usize, msg, 200);
-qsc_kmac_finalize(ctx, QscKeccakRate::QscKeccakRate512 as usize, hash, QSC_SHA3_512_HASH_SIZE);
-qsc_keccak_dispose(ctx);
+let ctx = &mut QrcKeccakState::default();
+qrc_kmac_initialize(ctx, QrcKeccakRate::QrcKeccakRate512 as usize, key, 50, cust, 100);
+qrc_kmac_update(ctx, QrcKeccakRate::QrcKeccakRate512 as usize, msg, 200);
+qrc_kmac_finalize(ctx, QrcKeccakRate::QrcKeccakRate512 as usize, hash, QRC_SHA3_512_HASH_SIZE);
+qrc_keccak_dispose(ctx);
 ```
+
 ```rust
 use qrc_opensource_rs::{
   digest::sha3::{
-    qsc_cshake512_compute, qsc_cshake_initialize, qsc_cshake_squeezeblocks, qsc_keccak_dispose, 
-    QSC_KECCAK_512_RATE,
-    QscKeccakState, QscKeccakRate,
+    qrc_cshake512_compute, qrc_cshake_initialize, qrc_cshake_squeezeblocks, qrc_keccak_dispose, 
+    QRC_KECCAK_512_RATE,
+    QrcKeccakState, QrcKeccakRate,
   },
-  provider::rcrng::qsc_rcrng_generate,
+  provider::rcrng::qrc_rcrng_generate,
 };
 
-let hash = &mut [0u8; QSC_KECCAK_512_RATE];
+let hash = &mut [0u8; QRC_KECCAK_512_RATE];
 let msg = &mut [0u8; 200];
-qsc_rcrng_generate(msg, 200);
+qrc_rcrng_generate(msg, 200);
 let cust = &mut [0u8; 15];
-qsc_rcrng_generate(cust, 15);
+qrc_rcrng_generate(cust, 15);
 
 /* compact api */
-qsc_cshake512_compute(hash, QSC_KECCAK_512_RATE, msg, 200, &[], 0, cust, 15);
+qrc_cshake512_compute(hash, QRC_KECCAK_512_RATE, msg, 200, &[], 0, cust, 15);
 
 /* long-form api */
-let ctx = &mut QscKeccakState::default();
-qsc_cshake_initialize(ctx, QscKeccakRate::QscKeccakRate512 as usize, msg, 200, &[], 0, cust, 15);
-qsc_cshake_squeezeblocks(ctx, QscKeccakRate::QscKeccakRate512 as usize, hash, 1);
-qsc_keccak_dispose(ctx);
+let ctx = &mut QrcKeccakState::default();
+qrc_cshake_initialize(ctx, QrcKeccakRate::QrcKeccakRate512 as usize, msg, 200, &[], 0, cust, 15);
+qrc_cshake_squeezeblocks(ctx, QrcKeccakRate::QrcKeccakRate512 as usize, hash, 1);
+qrc_keccak_dispose(ctx);
 ```
+
 ```rust
 use qrc_opensource_rs::{
   digest::sha3::{
-    qsc_shake512_compute, qsc_shake_initialize, qsc_shake_squeezeblocks, qsc_keccak_dispose, 
-    QscKeccakState, QscKeccakRate,
+    qrc_shake512_compute, qrc_shake_initialize, qrc_shake_squeezeblocks, qrc_keccak_dispose, 
+    QrcKeccakState, QrcKeccakRate,
   },
-  provider::rcrng::qsc_rcrng_generate,
+  provider::rcrng::qrc_rcrng_generate,
 };
 
 let hash = &mut [0u8; 512];
 let msg = &mut [0u8; 200];
-qsc_rcrng_generate(msg, 200);
+qrc_rcrng_generate(msg, 200);
 
 /* compact api */
-qsc_shake512_compute(hash, 512, msg, 200);
+qrc_shake512_compute(hash, 512, msg, 200);
 
 /* long-form api */
-let ctx = &mut QscKeccakState::default();
-qsc_shake_initialize(ctx, QscKeccakRate::QscKeccakRate512 as usize, msg, 200);
-qsc_shake_squeezeblocks(ctx, QscKeccakRate::QscKeccakRate512 as usize, hash, 1);
-qsc_keccak_dispose(ctx);
+let ctx = &mut QrcKeccakState::default();
+qrc_shake_initialize(ctx, QrcKeccakRate::QrcKeccakRate512 as usize, msg, 200);
+qrc_shake_squeezeblocks(ctx, QrcKeccakRate::QrcKeccakRate512 as usize, hash, 1);
+qrc_keccak_dispose(ctx);
 ```
 
-### Mac
-#### Poly1305
-Rust Translation: 2024
+```rust
+use qrc_opensource_rs::{
+  digest::sha3::{
+    qrc_kpa_initialize, qrc_kpa_update, qrc_kpa_finalize, 
+    QrcKpaState,
+  },
+  provider::rcrng::qrc_rcrng_generate,
+};
+
+let hash = &mut [0u8; 64];
+let msg = &mut [0u8; 200];
+qrc_rcrng_generate(msg, 200);
+let key = &mut [0u8; 64];
+qrc_rcrng_generate(key, 64);
+let cust = &mut [0u8; 15];
+qrc_rcrng_generate(cust, 15);
+
+
+/* long-form api */
+let ctx = &mut QrcKpaState::default();
+qrc_kpa_initialize(ctx, key, 64, cust, 15);
+qrc_kpa_update(ctx, msg, 200);
+qrc_kpa_finalize(ctx, hash, 64);
+```
+
+#### DRGB
+
+##### CSG
+
+CSG uses the Keccak cSHAKE XOF function to produce pseudo-random bytes from a seeded custom SHAKE generator.
+If a 32-byte key is used, the implementation uses the cSHAKE-256 implementation for pseudo-random generation, if a 64-byte key is used, the generator uses cSHAKE-512.
+An optional predictive resistance feature, enabled through the initialize function, injects random bytes into the generator at initialization and 1MB intervals,
+creating a non-deterministic pseudo-random output.
+Pseudo random bytes are cached internally, and the generator can be initialized and then reused without requiring re-initialization in an online configuration.
+The generator can be updated with new seed material, which is absorbed into the Keccak state.
+
+NIST: [SHA3 Fips202](http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf)
+NIST: [SP800-185](http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-185.pd)
+NIST: [SHA3 Keccak Submission](http://keccak.noekeon.org/Keccak-submission-3.pdf)
+NIST: [SHA3 Keccak Slides](http://csrc.nist.gov/groups/ST/hash/sha-3/documents/Keccak-slides-at-NIST.pdf)
+NIST: [SHA3 Third-Round Report](http://nvlpubs.nist.gov/nistpubs/ir/2012/NIST.IR.7896.pdf)
+Team Keccak: [Specifications summary](https://keccak.team/keccak_specs_summary.html)
+
+Rust Translation: Matt Warminger - 2025
+Updated: Matt Warminger - April 23, 2025
+
+CSG pseudo-random bytes generator:
+
+```rust
+use qrc_opensource_rs::{
+    drbg::csg::{
+        qrc_csg_dispose, qrc_csg_generate, qrc_csg_initialize, qrc_csg_update,
+        QrcCsgState, QRC_CSG_512_SEED_SIZE
+    }, 
+    provider::rcrng::qrc_rcrng_generate,
+};
+
+let seed = &mut [0u8; QRC_CSG_512_SEED_SIZE];
+qrc_rcrng_generate(seed, QRC_CSG_512_SEED_SIZE);
+let add = &mut [0u8; 64];
+qrc_rcrng_generate(add, 64);
+let out = &mut [0u8; 200];
+let ctx = &mut QrcCsgState::default();
+
+qrc_csg_initialize(ctx, seed, QRC_CSG_512_SEED_SIZE, &[], 0, false);
+qrc_csg_update(ctx, add, 64);
+qrc_csg_generate(ctx, out, 200);
+qrc_csg_dispose(ctx);
+```
+
+##### HCG
+
+HCG has a similar configuration to the HKDF Expand pseudo-random generator, but with a 128-bit nonce, and a default info parameter.
+
+The HKDF Scheme: [Cryptographic Extraction and Key Derivation](http://eprint.iacr.org/2010/264.pdf)
+RFC 2104 HMAC: [Keyed-Hashing for Message Authentication](http://tools.ietf.org/html/rfc2104)
+Fips 198-1: [The Keyed-Hash Message Authentication Code (HMAC)](http://csrc.nist.gov/publications/fips/fips198-1/FIPS-198-1_final.pdf)
+Fips 180-4: [Secure Hash Standard (SHS)](http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf)
+
+Author: John Underhill - August 31, 2020
+Rust Translation: Matt Warminger - 2025
+Updated: Matt Warminger - April 23, 2025
+
+HCG pseudo-random bytes generator:
+
+```rust
+use qrc_opensource_rs::{
+    drbg::hcg::{
+        qrc_hcg_dispose, qrc_hcg_generate, qrc_hcg_initialize, qrc_hcg_update,
+        QrcHcgState, QRC_HCG_SEED_SIZE
+    },
+    provider::rcrng::qrc_rcrng_generate,
+};
+
+let seed = &mut [0u8; QRC_HCG_SEED_SIZE];
+qrc_rcrng_generate(seed, QRC_HCG_SEED_SIZE);
+let add = &mut [0u8; 64];
+qrc_rcrng_generate(add, 64);
+let out = &mut [0u8; 200];
+let ctx = &mut QrcHcgState::default();
+
+
+qrc_hcg_initialize(ctx, seed, QRC_HCG_SEED_SIZE, &[], 0, false);
+qrc_hcg_update(ctx, add, 64);
+qrc_hcg_generate(ctx, out, 200);
+qrc_hcg_dispose(ctx);
+```
+
+##### SCB
+
+CSG uses the Keccak cSHAKE XOF function to produce pseudo-random bytes from a seeded custom SHAKE generator.
+If a 32-byte key is used, the implementation uses the cSHAKE-256 implementation for pseudo-random generation, if a 64-byte key is used, the generator uses cSHAKE-512.
+The CPU cost feature is an iteration count in the cost mechanism, it determines the number of times both the state absorption and memory expansion functions execute.
+The Memory cost, is the maximum number of megabytes the internal cache is expanded to, during execution of the cost mechanism.
+The maximum values of Memory and CPU cost should be determined based on the estimated capability of an adversary,
+if set too high, the application will become unsuable, if set too low, it may fall within their computational capabilities.
+The recommended low-threshold parameters are c:500, m:100.
+The generator can be updated with new seed material, which is absorbed into the Keccak state.
+
+NIST: [SHA3 Fips202](http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf)
+NIST: [SP800-185](http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-185.pd)
+NIST: [SHA3 Keccak Submission](http://keccak.noekeon.org/Keccak-submission-3.pdf)
+NIST: [SHA3 Keccak Slides](http://csrc.nist.gov/groups/ST/hash/sha-3/documents/Keccak-slides-at-NIST.pdf)
+NIST: [SHA3 Third-Round Report](http://nvlpubs.nist.gov/nistpubs/ir/2012/NIST.IR.7896.pdf)
+Team Keccak: [Specifications summary](https://keccak.team/keccak_specs_summary.html)
+
+Rust Translation: Matt Warminger - 2025
+Updated: Matt Warminger - April 23, 2025
+
+An implementation of the SHAKE Cost Based SCB key derivation function:
+
+```rust
+use qrc_opensource_rs::{
+    drbg::scb::{
+        qrc_scb_dispose, qrc_scb_generate, qrc_scb_initialize,
+        QrcScbState, QRC_SCB_512_SEED_SIZE
+    },
+    provider::rcrng::qrc_rcrng_generate,
+};
+
+let seed = &mut [0u8; QRC_SCB_512_SEED_SIZE];
+qrc_rcrng_generate(seed, QRC_SCB_512_SEED_SIZE);
+let add = &mut [0u8; 64];
+qrc_rcrng_generate(add, 64);
+let out = &mut [0u8; 200];
+let ctx = &mut QrcScbState::default();
+
+qrc_scb_initialize(ctx, seed, QRC_SCB_512_SEED_SIZE, &[], 0, 10, 10);
+qrc_scb_generate(ctx, out, 200);
+qrc_scb_dispose(ctx);
+```
+
+#### Mac
+
+##### Poly1305
+
+Rust Translation: Matt Warminger - 2024
+Updated: Matt Warminger - April 23, 2025
 
 The primary public api for the Poly1305 implementation:
+
 ```rust
 use qrc_opensource_rs::{
   mac::poly1305::{
-    qsc_poly1305_compute, qsc_poly1305_initialize, qsc_poly1305_update, qsc_poly1305_finalize, 
-    QscPoly1305State,
+    qrc_poly1305_compute, qrc_poly1305_initialize, qrc_poly1305_update, qrc_poly1305_finalize, 
+    QrcPoly1305State,
   },
-  provider::rcrng::qsc_rcrng_generate,
+  provider::rcrng::qrc_rcrng_generate,
 };
 
 let key = &mut [0u8; 32];
-qsc_rcrng_generate(key, 32);
+qrc_rcrng_generate(key, 32);
 let mac = &mut [0u8; 16];
 let msg = &mut [0u8; 64];
-qsc_rcrng_generate(msg, 64);
+qrc_rcrng_generate(msg, 64);
 
 /* compact api */
-qsc_poly1305_compute(mac, msg, 64, key); 
+qrc_poly1305_compute(mac, msg, 64, key); 
 
 /* long-form api */
-let ctx = &mut QscPoly1305State::default();
-qsc_poly1305_initialize(ctx, key);
-qsc_poly1305_update(ctx, msg, 64);
-qsc_poly1305_finalize(ctx, mac);
+let ctx = &mut QrcPoly1305State::default();
+qrc_poly1305_initialize(ctx, key);
+qrc_poly1305_update(ctx, msg, 64);
+qrc_poly1305_finalize(ctx, mac);
+```
+
+#### Numerics
+
+##### Donna128
+
+Rust Translation: Matt Warminger - 2025
+Updated: Matt Warminger - April 23, 2025
+
+The primary public api for the Donna128 implementation:
+
+```rust
+use qrc_opensource_rs::{
+    numerics::donna128::{
+        qrc_donna128_shift_left, qrc_donna128_shift_right, Uint128
+    },
+    provider::rcrng::qrc_rcrng_generate
+};
+
+let mut out = [0u8; 8];    
+let mut x = Uint128::default();
+
+qrc_rcrng_generate(&mut out, 8);
+x.high =  u64::from_le_bytes(out);
+qrc_rcrng_generate(&mut out, 8);
+x.low = u64::from_le_bytes(out);
+
+x = qrc_donna128_shift_right(x, 32);
+x = qrc_donna128_shift_left(x, 32);
+```
+
+```rust
+use qrc_opensource_rs::{
+    numerics::donna128::{
+        qrc_donna128_andl, qrc_donna128_andh, Uint128
+    },
+    provider::rcrng::qrc_rcrng_generate
+};
+
+let mut out = [0u8; 8];    
+let mut x = Uint128::default();
+
+qrc_rcrng_generate(&mut out, 8);
+x.high =  u64::from_le_bytes(out);
+qrc_rcrng_generate(&mut out, 8);
+x.low = u64::from_le_bytes(out);
+
+qrc_rcrng_generate(&mut out, 8);
+let y = qrc_donna128_andl(x, u64::from_le_bytes(out));
+
+
+let mut out = [0u8; 8];    
+let mut x = Uint128::default();
+
+qrc_rcrng_generate(&mut out, 8);
+x.high =  u64::from_le_bytes(out);
+qrc_rcrng_generate(&mut out, 8);
+x.low = u64::from_le_bytes(out);
+
+qrc_rcrng_generate(&mut out, 8);
+let y = qrc_donna128_andh(x, u64::from_le_bytes(out));
+```
+
+```rust
+use qrc_opensource_rs::{
+    numerics::donna128::{
+        qrc_donna128_multiply, Uint128
+    },
+    provider::rcrng::qrc_rcrng_generate
+};
+
+let mut out = [0u8; 8];    
+let mut x = Uint128::default();
+
+qrc_rcrng_generate(&mut out, 8);
+x.high =  u64::from_le_bytes(out);
+qrc_rcrng_generate(&mut out, 8);
+x.low = u64::from_le_bytes(out);
+
+qrc_rcrng_generate(&mut out, 8);
+x = qrc_donna128_multiply(x, 2);
+```
+
+```rust
+use qrc_opensource_rs::{
+    numerics::donna128::{
+        qrc_donna128_add, Uint128
+    },
+    provider::rcrng::qrc_rcrng_generate
+};
+
+let mut out = [0u8; 8];    
+let mut x = Uint128::default();
+let mut y = Uint128::default();
+
+qrc_rcrng_generate(&mut out, 8);
+x.high =  u64::from_le_bytes(out);
+qrc_rcrng_generate(&mut out, 8);
+x.low = u64::from_le_bytes(out);
+
+qrc_rcrng_generate(&mut out, 8);
+y.high =  u64::from_le_bytes(out);
+qrc_rcrng_generate(&mut out, 8);
+y.low = u64::from_le_bytes(out);
+
+qrc_rcrng_generate(&mut out, 8);
+x = qrc_donna128_add(x, y);
+
+```
+
+```rust
+use qrc_opensource_rs::{
+    numerics::donna128::{
+        qrc_donna128_or, Uint128
+    },
+    provider::rcrng::qrc_rcrng_generate
+};
+
+let mut out = [0u8; 8];    
+let mut x = Uint128::default();
+let mut y = Uint128::default();
+
+qrc_rcrng_generate(&mut out, 8);
+x.high =  u64::from_le_bytes(out);
+qrc_rcrng_generate(&mut out, 8);
+x.low = u64::from_le_bytes(out);
+
+qrc_rcrng_generate(&mut out, 8);
+y.high =  u64::from_le_bytes(out);
+qrc_rcrng_generate(&mut out, 8);
+y.low = u64::from_le_bytes(out);
+
+qrc_rcrng_generate(&mut out, 8);
+x = qrc_donna128_or(x, y);
+```
+
+#### PRNG
+
+##### SecRand
+
+Rust Translation: Matt Warminger - 2024
+Updated: Matt Warminger - April 23, 2025
+
+implementation of an secure pseudo-random generator:
+
+```rust
+use qrc_opensource_rs::{
+    prng::secrand::{
+        qrc_secrand_generate, qrc_secrand_destroy, qrc_secrand_initialize, QrcSecrandState
+    }, 
+    provider::rcrng::qrc_rcrng_generate
+};
+
+let seed= &mut [0u8; 64];
+qrc_rcrng_generate(seed, 64);
+let out = &mut [0u8; 64];
+let secrand_state = &mut QrcSecrandState::default(); 
+qrc_secrand_initialize(secrand_state, seed, 64, &[], 0);
+qrc_secrand_generate(secrand_state, out, 64);
+qrc_secrand_destroy(secrand_state);
+```
+
+```rust
+use qrc_opensource_rs::{
+    asymmetric::asymmetric::{
+        qrc_asymmetric_secrand_generate, AsymmetricRandState
+    }, 
+    prng::secrand::{
+        qrc_secrand_destroy, qrc_secrand_initialize
+    }, 
+    provider::rcrng::qrc_rcrng_generate
+};
+
+let seed = &mut [0u8; 64];
+qrc_rcrng_generate(seed, 64);
+let out = &mut [0u8; 64];
+let asymmetric_state = &mut AsymmetricRandState::default(); 
+qrc_secrand_initialize(&mut asymmetric_state.secrand_state, seed, 64, &[], 0);
+qrc_asymmetric_secrand_generate(asymmetric_state, out, 64);
+qrc_secrand_destroy(&mut asymmetric_state.secrand_state);
+```
+
+##### NistRng
+
+<h6>This is not a secure RNG, and should be used for testing purposes only.<h6>
+
+Rust Translation: Matt Warminger - 2025
+Updated: Matt Warminger - April 23, 2025
+
+```rust
+use qrc_opensource_rs::{
+    prng::nistrng::{
+        qrc_nistrng_prng_generate, qrc_nistrng_prng_initialize, 
+        QRCTEST_NIST_RNG_SEED_SIZE, QrctestNistAes256State
+    }, 
+    provider::rcrng::qrc_rcrng_generate
+};
+
+let seed: &mut [u8; 48] = &mut [0u8; QRCTEST_NIST_RNG_SEED_SIZE];
+qrc_rcrng_generate(seed, QRCTEST_NIST_RNG_SEED_SIZE);
+let out = &mut [0u8; 64];
+let nistrng_state = &mut QrctestNistAes256State::default(); 
+qrc_nistrng_prng_initialize(nistrng_state, seed, &[], 0);
+qrc_nistrng_prng_generate(nistrng_state, out, 64);
+```
+
+```rust
+use qrc_opensource_rs::{
+    asymmetric::asymmetric::{
+        qrc_asymmetric_nistrng_generate, AsymmetricRandState
+    }, 
+    prng::nistrng::{
+        qrc_nistrng_prng_initialize, QRCTEST_NIST_RNG_SEED_SIZE
+    }, 
+    provider::rcrng::qrc_rcrng_generate
+};
+
+let seed: &mut [u8; 48] = &mut [0u8; QRCTEST_NIST_RNG_SEED_SIZE];
+qrc_rcrng_generate(seed, QRCTEST_NIST_RNG_SEED_SIZE);
+let out = &mut [0u8; 64];
+let asymmetric_state = &mut AsymmetricRandState::default(); 
+qrc_nistrng_prng_initialize(&mut asymmetric_state.nist_test_state, seed, &[], 0);
+qrc_asymmetric_nistrng_generate(asymmetric_state, out, 64);
+```
+
+#### Provider
+
+##### RcRng
+
+<h6>Recommended Provider, combination of latter two.</h6>
+
+Rust Translation: Matt Warminger - 2024
+Updated: Matt Warminger - April 23, 2025
+
+Resource RNG:
+
+```rust
+use qrc_opensource_rs::provider::rcrng::qrc_rcrng_generate;
+let out = &mut [0u8; 64];
+qrc_rcrng_generate(out, 64);
+```
+
+##### OsRng
+
+Rust Translation: Matt Warminger - 2024
+Updated: Matt Warminger - April 23, 2025
+
+OSRing RNG:
+
+```rust
+use qrc_opensource_rs::provider::osrng::qrc_osrng_generate;
+let out = &mut [0u8; 64];
+qrc_osrng_generate(out, 64);
+```
+
+##### TrRng
+
+Rust Translation: Matt Warminger - 2024
+Updated: Matt Warminger - April 23, 2025
+
+Thread RNG:
+
+```rust
+use qrc_opensource_rs::provider::trrng::qrc_trrng_generate;
+let out = &mut [0u8; 64];
+qrc_trrng_generate(out, 64);
 ```
 
 ## Roadmap
@@ -533,20 +1349,13 @@ NOTE The package is under active development. As such, it is likely to
 remain volatile until a 1.0.0 release.
 
 Todo:
+
 <ul>
   <li>Asymmetric/Cipher/ECDH</li>
-  <li>Asymmetric/Cipher/NTRU</li>
   <li>Asymmetric/Signature/Dilithium</li>
   <li>Asymmetric/Signature/ECDSA</li>
   <li>Asymmetric/Signature/Falcon</li>
-  <li>Cipher/ChaCha20</li>
-  <li>Numerics/Donna128</li>
 <ul>
-</ul>
-  <li>Missing Functions Of Modules Added (Sha2/3, Aes, etc)</li>
-  <li>Final Format Update</li>
-</ul>
-
 
 ## License
 
