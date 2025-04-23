@@ -316,19 +316,19 @@ qrc-opensource-rs = { version = "0.3", features = ["FEATURE1", "FEATURE2"] }
 
 ###### Kyber
 
-Based on the C reference branch of PQ-Crystals Kyber; including base code, comments, and api.
+Based on the C reference branch of PQ-Crystals Kyber; including base code, comments, and api.<br>
 Removed the K=2 parameter, and added a K=5. The NIST '512' parameter has fallen below the threshold
-required by NIST PQ S1 minimum.
-The new K5 parameter may have a better chance of long-term security, with only a small increase in cost.
+required by NIST PQ S1 minimum.<br>
+The new K5 parameter may have a better chance of long-term security, with only a small increase in cost.<br>
 
-The NIST Post Quantum Competition [Round 3](https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions) Finalists.
-The [Kyber](https://pq-crystals.org/kyber/index.shtml) website.
-The Kyber [Algorithm](https://pq-crystals.org/kyber/data/kyber-specification-round3-20210131.pdf) Specification.
+The NIST Post Quantum Competition [Round 3](https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions) Finalists.<br>
+The [Kyber](https://pq-crystals.org/kyber/index.shtml) website.<br>
+The Kyber [Algorithm](https://pq-crystals.org/kyber/data/kyber-specification-round3-20210131.pdf) Specification.<br>
 
-Date: January 10, 2018
-C - Updated: Stiepan A. Kovac - July 2, 2021
-Rust Translation: Matt Warminger - 2024
-Updated: Matt Warminger - April 23, 2025
+Date: January 10, 2018<br>
+C - Updated: Stiepan A. Kovac - July 2, 2021<br>
+Rust Translation: Matt Warminger - 2024<br>
+Updated: Matt Warminger - April 23, 2025<br>
 
 The primary public api for the Kyber CCA-secure Key Encapsulation Mechanism implementation:
 
@@ -359,19 +359,19 @@ qrc_kyber_decrypt(secret2, ciphertext, privatekey);
 
 ###### McEliece
 
-Classic McEliece is a KEM designed for IND-CCA2 security at a very high security level, even against quantum computers.
-The KEM is built conservatively from a PKE designed for OW-CPA security, namely Niederreiter's dual version of McEliece's PKE using binary Goppa codes.
-Every level of the construction is designed so that future cryptographic auditors can be confident in the long-term security of post-quantum public-key encryption.
+Classic McEliece is a KEM designed for IND-CCA2 security at a very high security level, even against quantum computers.<br>
+The KEM is built conservatively from a PKE designed for OW-CPA security, namely Niederreiter's dual version of McEliece's PKE using binary Goppa codes.<br>
+Every level of the construction is designed so that future cryptographic auditors can be confident in the long-term security of post-quantum public-key encryption.<br>
 
-Based entirely on the C reference branch of Dilithium taken from the NIST Post Quantum Competition Round 3 submission.
-The NIST Post Quantum Competition [Round 3](https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions) Finalists.
-The [McEliece](https://classic.mceliece.org/) website.
-The McEliece [Algorithm](https://classic.mceliece.org/nist/mceliece-20201010.pdf) Specification.
+Based entirely on the C reference branch of Dilithium taken from the NIST Post Quantum Competition Round 3 submission.<br>
+The NIST Post Quantum Competition [Round 3](https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions) Finalists.<br>
+The [McEliece](https://classic.mceliece.org/) website.<br>
+The McEliece [Algorithm](https://classic.mceliece.org/nist/mceliece-20201010.pdf) Specification.<br>
 
-Authors: Daniel J. Bernstein, Tung Chou, Tanja Lange, and Peter Schwabe.
-Updated: Stiepan A. Kovac - June 28 2021
-Rust Translation: Matt Warminger - 2024
-Updated: Matt Warminger - April 23, 2025
+Authors: Daniel J. Bernstein, Tung Chou, Tanja Lange, and Peter Schwabe.<br>
+Updated: Stiepan A. Kovac - June 28 2021<br>
+Rust Translation: Matt Warminger - 2024<br>
+Updated: Matt Warminger - April 23, 2025<br>
 
 The primary public api for the Niederreiter dual form of the McEliece asymmetric cipher implementation:
 
@@ -404,15 +404,15 @@ qrc_mceliece_decrypt(secret2, ciphertext, privatekey);
 
 ###### SphincsPlus
 
-Based entirely on the C reference branch of SPHINCS+ taken from the NIST Post Quantum Competition Round 3 submission.
-The NIST Post Quantum Competition [Round 3](https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions) Finalists.
-The [SPHINCS+](https://sphincs.org/) website.
-The SPHINCS+ [Algorithm](https://sphincs.org/data/sphincs+-specification.pdf) Specification.
+Based entirely on the C reference branch of SPHINCS+ taken from the NIST Post Quantum Competition Round 3 submission.<br>
+The NIST Post Quantum Competition [Round 3](https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions) Finalists.<br>
+The [SPHINCS+](https://sphincs.org/) website.<br>
+The SPHINCS+ [Algorithm](https://sphincs.org/data/sphincs+-specification.pdf) Specification.<br>
 
-Date: June 14, 2018
-Updated: February 7, 2024
-Rust Translation: Matt Warminger - 2024
-Updated: Matt Warminger - April 23, 2025
+Date: June 14, 2018<br>
+Updated: February 7, 2024<br>
+Rust Translation: Matt Warminger - 2024<br>
+Updated: Matt Warminger - April 23, 2025<br>
 
 The primary public api for the Sphincs+ asymmetric signature scheme implementation:
 
@@ -442,8 +442,8 @@ qrc_sphincsplus_verify(hash, &mut hashlen, sig, siglen, publickey);
 
 ##### AES
 
-Rust Translation: Matt Warminger - 2024
-Updated: Matt Warminger - April 23, 2025
+Rust Translation: Matt Warminger - 2024<br>
+Updated: Matt Warminger - April 23, 2025<br>
 
 The primary public api for the AES implementation:
 
@@ -568,14 +568,14 @@ qrc_aes_dispose(ctx);
 
 ##### ChaCha
 
-Key sizes are 128- and 256-bit (16 and 32 byte).
-The nonce must be 64-bits in length (8 bytes).
+Key sizes are 128- and 256-bit (16 and 32 byte).<br>
+The nonce must be 64-bits in length (8 bytes).<br>
 
-Author: John Underhill - April 7, 2018
-Rust Translation: Matt Warminger - 2025
-Updated: Matt Warminger - April 23, 2025
+Author: John Underhill - April 7, 2018<br>
+Rust Translation: Matt Warminger - 2025<br>
+Updated: Matt Warminger - April 23, 2025<br>
 
-An implementation of the ChaChaPoly20 stream cipher by Daniel J. Bernstein.
+An implementation of the ChaChaPoly20 stream cipher by Daniel J. Bernstein:
 
 ```rust
 use qrc_opensource_rs::{
@@ -599,46 +599,46 @@ kp.key = key.to_vec();
 kp.keylen = QRC_CHACHA_KEY256_SIZE;
 kp.nonce = nonce.to_vec();
 
-qrc_chacha_initialize(ctx, kp.clone()));
+qrc_chacha_initialize(ctx, kp.clone());
 qrc_chacha_transform(ctx, out, msg, 64);
 qrc_chacha_dispose(ctx);
 ```
 
 ##### CSX
 
-An EXPERIMENTAL vectorized, 64-bit, 40-round stream cipher CSX512 implementation based on ChaCha.
-This cipher uses KMAC-512 to authenticate the cipher-text stream in an encrypt-then-mac authentication configuration.
+An EXPERIMENTAL vectorized, 64-bit, 40-round stream cipher CSX512 implementation based on ChaCha.<br>
+This cipher uses KMAC-512 to authenticate the cipher-text stream in an encrypt-then-mac authentication configuration.<br>
 The CSX (authenticated Cipher Stream, ChaCha eXtended) cipher, is a hybrid of the ChaCha stream cipher,
-using 64-bit integers, a 1024-bit block and a 512-bit key. \n
+using 64-bit integers, a 1024-bit block and a 512-bit key.<br>
 
-The pseudo-random bytes generator used by this cipher is the Keccak cSHAKE extended output function (XOF).
-The cSHAKE XOF is implemented in the 512-bit form of that function, and used to expand the input cipher-key into the cipher and MAC keys.
-CSX-512 uses a 512-bit input key, an a 16 byte nonce, and an optional tweak; the info parameter, up to 48 bytes in length.
+The pseudo-random bytes generator used by this cipher is the Keccak cSHAKE extended output function (XOF).<br>
+The cSHAKE XOF is implemented in the 512-bit form of that function, and used to expand the input cipher-key into the cipher and MAC keys.<br>
+CSX-512 uses a 512-bit input key, an a 16 byte nonce, and an optional tweak; the info parameter, up to 48 bytes in length.<br>
 
-This is a 'tweakable cipher', the initialization parameters; qrc_csx_keyparams, include an info parameter that can be used as a secondary user input.
-Internally, the info parameter is used to customize the cSHAKE output, using the cSHAKE 'custom' parameter to pre-initialize the SHAKE state.
-The info parameter can be tweaked, with a user defined string 'info' in an qrc_csx_keyparams structure passed to the csx_intitialize(state,keyparams,encrypt).
-This tweak can be used as a 'domain key', or to differentiate cipher-text output from other implementations, or as a secondary secret-key input.
+This is a 'tweakable cipher', the initialization parameters; qrc_csx_keyparams, include an info parameter that can be used as a secondary user input.<br>
+Internally, the info parameter is used to customize the cSHAKE output, using the cSHAKE 'custom' parameter to pre-initialize the SHAKE state.<br>
+The info parameter can be tweaked, with a user defined string 'info' in an qrc_csx_keyparams structure passed to the csx_intitialize(state,keyparams,encrypt).<br>
+This tweak can be used as a 'domain key', or to differentiate cipher-text output from other implementations, or as a secondary secret-key input.<br>
 
-CSX is an authenticated encryption with associated data (AEAD) stream cipher.
+CSX is an authenticated encryption with associated data (AEAD) stream cipher.<br>
 The cSHAKE key-expansion function generates a key for the keyed hash-based MAC function; KMAC, used to generate the authentication code,
-which is appended to the cipher-text output of an encryption call.
-In decryption mode, before decryption is performed, an internal mac code is calculated, and compared to the code embedded in the cipher-text.
-If authentication fails, the cipher-text is not decrypted, and the qrc_csx_transform(state,out,in,inlen) function returns a boolean false value.
-The qrc_csx_set_associated(state,in,inlen) function can be used to add additional data to the MAC generators input, like packet-header data, or a custom code or counter.
+which is appended to the cipher-text output of an encryption call.<br>
+In decryption mode, before decryption is performed, an internal mac code is calculated, and compared to the code embedded in the cipher-text.<br>
+If authentication fails, the cipher-text is not decrypted, and the qrc_csx_transform(state,out,in,inlen) function returns a boolean false value.<br>
+The qrc_csx_set_associated(state,in,inlen) function can be used to add additional data to the MAC generators input, like packet-header data, or a custom code or counter.<br>
 
 For authentication CSX can use either the standard form of KMAC, which uses 24 rounds, or the default authentication setting;
-a reduced-rounds version of KMAC that uses half the number of permutation rounds KMAC-R12.
-To enable the standard from of KMAC, pass the QRC_RCS_AUTH_KMAC as a compiler definition, or unrem the definition in this header file.
-To run CSX without authentication, remove the QRC_RCS_AUTHENTICATED in this header file.
+a reduced-rounds version of KMAC that uses half the number of permutation rounds KMAC-R12.<br>
+To enable the standard from of KMAC, pass the QRC_RCS_AUTH_KMAC as a compiler definition, or unrem the definition in this header file.<br>
+To run CSX without authentication, remove the QRC_RCS_AUTHENTICATED in this header file.<br>
 
-The CSX-512, known answer vectors are taken from [The CEX++ Cryptographic Library](https://github.com/Steppenwolfe65/CEX) `<br>`
-See the documentation and the csx_test.h tests for usage examples.
+The CSX-512, known answer vectors are taken from [The CEX++ Cryptographic Library](https://github.com/Steppenwolfe65/CEX)<br>
+See the documentation and the csx_test.h tests for usage examples.<br>
 
-Author: John Underhill - May 2, 2020
-Updated: Stiepan A Kovac - October 13, 2021
-Rust Translation: Matt Warminger - 2025
-Updated: Matt Warminger - April 23, 2025
+Author: John Underhill - May 2, 2020<br>
+Updated: Stiepan A Kovac - October 13, 2021<br>
+Rust Translation: Matt Warminger - 2025<br>
+Updated: Matt Warminger - April 23, 2025<br>
 
 An implementation of the ChaChaPoly20 stream cipher by Daniel J. Bernstein.
 
@@ -683,19 +683,19 @@ qrc_csx_dispose(state);
 
 ##### Sha2
 
-The SHA2 and HMAC implementations use two different forms of api: short-form and long-form.
-The short-form api, which initializes the state, processes a message, and finalizes by producing output, all in a single function call, for example; qrc_sha512_compute(), the entire message array is processed and the hash code is written to the output array.
-The long-form api uses an initialization call to prepare the state, a update call to process the message, and the finalize call, which finalizes the state and generates a hash or mac-code.
-The HKDF key derivation functions HKDF(HMAC(SHA2-256/512)), use only the short-form api, single-call functions, to generate pseudo-random to an output array.
-Each of the function families (SHA2, HMAC, HKDF), have a corresponding set of reference constants associated with that member, example; QRC_HKDF_256_KEY_SIZE is the minimum expected HKDF-256 key size in bytes, QRC_HMAC_512_MAC_SIZE is the minimum size of the HMAC-512 output mac-code output array.
+The SHA2 and HMAC implementations use two different forms of api: short-form and long-form.<br>
+The short-form api, which initializes the state, processes a message, and finalizes by producing output, all in a single function call, for example; qrc_sha512_compute(), the entire message array is processed and the hash code is written to the output array.<br>
+The long-form api uses an initialization call to prepare the state, a update call to process the message, and the finalize call, which finalizes the state and generates a hash or mac-code.<br>
+The HKDF key derivation functions HKDF(HMAC(SHA2-256/512)), use only the short-form api, single-call functions, to generate pseudo-random to an output array.<br>
+Each of the function families (SHA2, HMAC, HKDF), have a corresponding set of reference constants associated with that member, example; QRC_HKDF_256_KEY_SIZE is the minimum expected HKDF-256 key size in bytes, QRC_HMAC_512_MAC_SIZE is the minimum size of the HMAC-512 output mac-code output array.<br>
 
-NIST: [The SHA-2 Standard](http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf)
-[Analysis of SIMD Applicability to SHA Algorithms](https://software.intel.com/sites/default/files/m/b/9/b/aciicmez.pdf)
+NIST: [The SHA-2 Standard](http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf)<br>
+[Analysis of SIMD Applicability to SHA Algorithms](https://software.intel.com/sites/default/files/m/b/9/b/aciicmez.pdf)<br>
 
-Author: John Underhill - May 23, 2019
-Updated: Stiepan A Kovac - Jul 11, 2024
-Rust Translation: Matt Warminger - 2024
-Updated: Matt Warminger - April 23, 2025
+Author: John Underhill - May 23, 2019<br>
+Updated: Stiepan A Kovac - Jul 11, 2024<br>
+Rust Translation: Matt Warminger - 2024<br>
+Updated: Matt Warminger - April 23, 2025<br>
 
 The primary public api for SHA2 Implementation:
 
@@ -768,22 +768,22 @@ qrc_sha512_finalize(ctx, hash);
 
 ##### Sha3
 
-The SHA3, SHAKE, cSHAKE, and KMAC implementations all share two forms of api: short-form and long-form.
-The short-form api, which initializes the state, processes a message, and finalizes by producing output, all in a single function call, for example; qrc_sha3_compute512(), the entire message array is processed and the hash code is written to the output array.
-The long-form api uses an initialization call to prepare the state, a blockupdate call if the message is longer than a single message block, and the finalize call, which finalizes the state and generates a hash, mac-code, or an array of pseudo-random.
-Each of the function families (SHA3, SHAKE, KMAC), have a corresponding set of reference constants associated with that member, example; SHAKE_256_KEY is the minimum expected SHAKE-256 key size in bytes, QRC_KMAC_512_MAC_SIZE is the minimum size of the KMAC-512 output mac-code output array, and QRC_KECCAK_512_RATE is the SHA3-512 message absorption rate.
+The SHA3, SHAKE, cSHAKE, and KMAC implementations all share two forms of api: short-form and long-form.<br>
+The short-form api, which initializes the state, processes a message, and finalizes by producing output, all in a single function call, for example; qrc_sha3_compute512(), the entire message array is processed and the hash code is written to the output array.<br>
+The long-form api uses an initialization call to prepare the state, a blockupdate call if the message is longer than a single message block, and the finalize call, which finalizes the state and generates a hash, mac-code, or an array of pseudo-random.<br>
+Each of the function families (SHA3, SHAKE, KMAC), have a corresponding set of reference constants associated with that member, example; SHAKE_256_KEY is the minimum expected SHAKE-256 key size in bytes, QRC_KMAC_512_MAC_SIZE is the minimum size of the KMAC-512 output mac-code output array, and QRC_KECCAK_512_RATE is the SHA3-512 message absorption rate.<br>
 
-NIST: [SHA3 Fips202](http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf)
-NIST: [SP800-185](http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-185.pdf)
-NIST: [SHA3 Keccak Submission](http://keccak.noekeon.org/Keccak-submission-3.pdf)
-NIST: [SHA3 Keccak Slides](http://csrc.nist.gov/groups/ST/hash/sha-3/documents/Keccak-slides-at-NIST.pdf)
-NIST: [SHA3 Third-Round Report](http://nvlpubs.nist.gov/nistpubs/ir/2012/NIST.IR.7896.pdf)
-Team Keccak: [Specifications summary](https://keccak.team/keccak_specs_summary.html)
+NIST: [SHA3 Fips202](http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf)<br>
+NIST: [SP800-185](http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-185.pdf)<br>
+NIST: [SHA3 Keccak Submission](http://keccak.noekeon.org/Keccak-submission-3.pdf)<br>
+NIST: [SHA3 Keccak Slides](http://csrc.nist.gov/groups/ST/hash/sha-3/documents/Keccak-slides-at-NIST.pdf)<br>
+NIST: [SHA3 Third-Round Report](http://nvlpubs.nist.gov/nistpubs/ir/2012/NIST.IR.7896.pdf)<br>
+Team Keccak: [Specifications summary](https://keccak.team/keccak_specs_summary.html)<br>
 
-Author: John Underhill - October 27, 2019
-Updated: Stiepan A Kovac - 19, 2021
-Rust Translation: Matt Warminger - 2024
-Updated: Matt Warminger - April 23, 2025
+Author: John Underhill - October 27, 2019<br>
+Updated: Stiepan A Kovac - 19, 2021<br>
+Rust Translation: Matt Warminger - 2024<br>
+Updated: Matt Warminger - April 23, 2025<br>
 
 The primary public api for SHA3 digest, SHAKE, cSHAKE, and KMAC implementation:
 
@@ -920,22 +920,22 @@ qrc_kpa_finalize(ctx, hash, 64);
 
 ##### CSG
 
-CSG uses the Keccak cSHAKE XOF function to produce pseudo-random bytes from a seeded custom SHAKE generator.
-If a 32-byte key is used, the implementation uses the cSHAKE-256 implementation for pseudo-random generation, if a 64-byte key is used, the generator uses cSHAKE-512.
-An optional predictive resistance feature, enabled through the initialize function, injects random bytes into the generator at initialization and 1MB intervals,
+CSG uses the Keccak cSHAKE XOF function to produce pseudo-random bytes from a seeded custom SHAKE generator.<br>
+If a 32-byte key is used, the implementation uses the cSHAKE-256 implementation for pseudo-random generation, if a 64-byte key is used, the generator uses cSHAKE-512.<br>
+An optional predictive resistance feature, enabled through the initialize function, injects random bytes into the generator at initialization and 1MB intervals,<br>
 creating a non-deterministic pseudo-random output.
-Pseudo random bytes are cached internally, and the generator can be initialized and then reused without requiring re-initialization in an online configuration.
-The generator can be updated with new seed material, which is absorbed into the Keccak state.
+Pseudo random bytes are cached internally, and the generator can be initialized and then reused without requiring re-initialization in an online configuration.<br>
+The generator can be updated with new seed material, which is absorbed into the Keccak state.<br>
 
-NIST: [SHA3 Fips202](http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf)
-NIST: [SP800-185](http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-185.pd)
-NIST: [SHA3 Keccak Submission](http://keccak.noekeon.org/Keccak-submission-3.pdf)
-NIST: [SHA3 Keccak Slides](http://csrc.nist.gov/groups/ST/hash/sha-3/documents/Keccak-slides-at-NIST.pdf)
-NIST: [SHA3 Third-Round Report](http://nvlpubs.nist.gov/nistpubs/ir/2012/NIST.IR.7896.pdf)
-Team Keccak: [Specifications summary](https://keccak.team/keccak_specs_summary.html)
+NIST: [SHA3 Fips202](http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf)<br>
+NIST: [SP800-185](http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-185.pd)<br>
+NIST: [SHA3 Keccak Submission](http://keccak.noekeon.org/Keccak-submission-3.pdf)<br>
+NIST: [SHA3 Keccak Slides](http://csrc.nist.gov/groups/ST/hash/sha-3/documents/Keccak-slides-at-NIST.pdf)<br>
+NIST: [SHA3 Third-Round Report](http://nvlpubs.nist.gov/nistpubs/ir/2012/NIST.IR.7896.pdf)<br>
+Team Keccak: [Specifications summary](https://keccak.team/keccak_specs_summary.html)<br>
 
-Rust Translation: Matt Warminger - 2025
-Updated: Matt Warminger - April 23, 2025
+Rust Translation: Matt Warminger - 2025<br>
+Updated: Matt Warminger - April 23, 2025<br>
 
 CSG pseudo-random bytes generator:
 
@@ -963,16 +963,16 @@ qrc_csg_dispose(ctx);
 
 ##### HCG
 
-HCG has a similar configuration to the HKDF Expand pseudo-random generator, but with a 128-bit nonce, and a default info parameter.
+HCG has a similar configuration to the HKDF Expand pseudo-random generator, but with a 128-bit nonce, and a default info parameter.<br>
 
-The HKDF Scheme: [Cryptographic Extraction and Key Derivation](http://eprint.iacr.org/2010/264.pdf)
-RFC 2104 HMAC: [Keyed-Hashing for Message Authentication](http://tools.ietf.org/html/rfc2104)
-Fips 198-1: [The Keyed-Hash Message Authentication Code (HMAC)](http://csrc.nist.gov/publications/fips/fips198-1/FIPS-198-1_final.pdf)
-Fips 180-4: [Secure Hash Standard (SHS)](http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf)
+The HKDF Scheme: [Cryptographic Extraction and Key Derivation](http://eprint.iacr.org/2010/264.pdf)<br>
+RFC 2104 HMAC: [Keyed-Hashing for Message Authentication](http://tools.ietf.org/html/rfc2104)<br>
+Fips 198-1: [The Keyed-Hash Message Authentication Code (HMAC)](http://csrc.nist.gov/publications/fips/fips198-1/FIPS-198-1_final.pdf)<br>
+Fips 180-4: [Secure Hash Standard (SHS)](http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf)<br>
 
-Author: John Underhill - August 31, 2020
-Rust Translation: Matt Warminger - 2025
-Updated: Matt Warminger - April 23, 2025
+Author: John Underhill - August 31, 2020<br>
+Rust Translation: Matt Warminger - 2025<br>
+Updated: Matt Warminger - April 23, 2025<br>
 
 HCG pseudo-random bytes generator:
 
@@ -1001,24 +1001,24 @@ qrc_hcg_dispose(ctx);
 
 ##### SCB
 
-CSG uses the Keccak cSHAKE XOF function to produce pseudo-random bytes from a seeded custom SHAKE generator.
-If a 32-byte key is used, the implementation uses the cSHAKE-256 implementation for pseudo-random generation, if a 64-byte key is used, the generator uses cSHAKE-512.
-The CPU cost feature is an iteration count in the cost mechanism, it determines the number of times both the state absorption and memory expansion functions execute.
-The Memory cost, is the maximum number of megabytes the internal cache is expanded to, during execution of the cost mechanism.
+CSG uses the Keccak cSHAKE XOF function to produce pseudo-random bytes from a seeded custom SHAKE generator.<br>
+If a 32-byte key is used, the implementation uses the cSHAKE-256 implementation for pseudo-random generation, if a 64-byte key is used, the generator uses cSHAKE-512.<br>
+The CPU cost feature is an iteration count in the cost mechanism, it determines the number of times both the state absorption and memory expansion functions execute.<br>
+The Memory cost, is the maximum number of megabytes the internal cache is expanded to, during execution of the cost mechanism.<br>
 The maximum values of Memory and CPU cost should be determined based on the estimated capability of an adversary,
-if set too high, the application will become unsuable, if set too low, it may fall within their computational capabilities.
-The recommended low-threshold parameters are c:500, m:100.
-The generator can be updated with new seed material, which is absorbed into the Keccak state.
+if set too high, the application will become unsuable, if set too low, it may fall within their computational capabilities.<br>
+The recommended low-threshold parameters are c:500, m:100.<br>
+The generator can be updated with new seed material, which is absorbed into the Keccak state.<br>
 
-NIST: [SHA3 Fips202](http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf)
-NIST: [SP800-185](http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-185.pd)
-NIST: [SHA3 Keccak Submission](http://keccak.noekeon.org/Keccak-submission-3.pdf)
-NIST: [SHA3 Keccak Slides](http://csrc.nist.gov/groups/ST/hash/sha-3/documents/Keccak-slides-at-NIST.pdf)
-NIST: [SHA3 Third-Round Report](http://nvlpubs.nist.gov/nistpubs/ir/2012/NIST.IR.7896.pdf)
-Team Keccak: [Specifications summary](https://keccak.team/keccak_specs_summary.html)
+NIST: [SHA3 Fips202](http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf)<br>
+NIST: [SP800-185](http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-185.pd)<br>
+NIST: [SHA3 Keccak Submission](http://keccak.noekeon.org/Keccak-submission-3.pdf)<br>
+NIST: [SHA3 Keccak Slides](http://csrc.nist.gov/groups/ST/hash/sha-3/documents/Keccak-slides-at-NIST.pdf)<br>
+NIST: [SHA3 Third-Round Report](http://nvlpubs.nist.gov/nistpubs/ir/2012/NIST.IR.7896.pdf)<br>
+Team Keccak: [Specifications summary](https://keccak.team/keccak_specs_summary.html)<br>
 
-Rust Translation: Matt Warminger - 2025
-Updated: Matt Warminger - April 23, 2025
+Rust Translation: Matt Warminger - 2025<br>
+Updated: Matt Warminger - April 23, 2025<br>
 
 An implementation of the SHAKE Cost Based SCB key derivation function:
 
@@ -1047,8 +1047,8 @@ qrc_scb_dispose(ctx);
 
 ##### Poly1305
 
-Rust Translation: Matt Warminger - 2024
-Updated: Matt Warminger - April 23, 2025
+Rust Translation: Matt Warminger - 2024<br>
+Updated: Matt Warminger - April 23, 2025<br>
 
 The primary public api for the Poly1305 implementation:
 
@@ -1081,8 +1081,8 @@ qrc_poly1305_finalize(ctx, mac);
 
 ##### Donna128
 
-Rust Translation: Matt Warminger - 2025
-Updated: Matt Warminger - April 23, 2025
+Rust Translation: Matt Warminger - 2025<br>
+Updated: Matt Warminger - April 23, 2025<br>
 
 The primary public api for the Donna128 implementation:
 
@@ -1215,10 +1215,10 @@ x = qrc_donna128_or(x, y);
 
 ##### SecRand
 
-Rust Translation: Matt Warminger - 2024
-Updated: Matt Warminger - April 23, 2025
+Rust Translation: Matt Warminger - 2024<br>
+Updated: Matt Warminger - April 23, 2025<br>
 
-implementation of an secure pseudo-random generator:
+Implementation of an secure pseudo-random generator:
 
 ```rust
 use qrc_opensource_rs::{
@@ -1259,10 +1259,10 @@ qrc_secrand_destroy(&mut asymmetric_state.secrand_state);
 
 ##### NistRng
 
-<h6>This is not a secure RNG, and should be used for testing purposes only.<h6>
+<h6>This is not a secure RNG, and should be used for testing purposes only.</h6>
 
-Rust Translation: Matt Warminger - 2025
-Updated: Matt Warminger - April 23, 2025
+Rust Translation: Matt Warminger - 2025<br>
+Updated: Matt Warminger - April 23, 2025<br>
 
 ```rust
 use qrc_opensource_rs::{
@@ -1306,8 +1306,8 @@ qrc_asymmetric_nistrng_generate(asymmetric_state, out, 64);
 
 <h6>Recommended Provider, combination of latter two.</h6>
 
-Rust Translation: Matt Warminger - 2024
-Updated: Matt Warminger - April 23, 2025
+Rust Translation: Matt Warminger - 2024<br>
+Updated: Matt Warminger - April 23, 2025<br>
 
 Resource RNG:
 
@@ -1319,8 +1319,8 @@ qrc_rcrng_generate(out, 64);
 
 ##### OsRng
 
-Rust Translation: Matt Warminger - 2024
-Updated: Matt Warminger - April 23, 2025
+Rust Translation: Matt Warminger - 2024<br>
+Updated: Matt Warminger - April 23, 2025<br>
 
 OSRing RNG:
 
@@ -1332,8 +1332,8 @@ qrc_osrng_generate(out, 64);
 
 ##### TrRng
 
-Rust Translation: Matt Warminger - 2024
-Updated: Matt Warminger - April 23, 2025
+Rust Translation: Matt Warminger - 2024<br>
+Updated: Matt Warminger - April 23, 2025<br>
 
 Thread RNG:
 
@@ -1345,8 +1345,7 @@ qrc_trrng_generate(out, 64);
 
 ## Roadmap
 
-NOTE The package is under active development. As such, it is likely to
-remain volatile until a 1.0.0 release.
+NOTE The package is under active development. As such, it is likely to remain volatile until a 1.0.0 release.<br>
 
 Todo:
 
@@ -1355,9 +1354,9 @@ Todo:
   <li>Asymmetric/Signature/Dilithium</li>
   <li>Asymmetric/Signature/ECDSA</li>
   <li>Asymmetric/Signature/Falcon</li>
-<ul>
+</ul>
 
 ## License
 
-The contents of this repository are licensed under the GNU AFFERO GENERAL PUBLIC LICENSE Version 3.
+The contents of this repository are licensed under the GNU AFFERO GENERAL PUBLIC LICENSE Version 3.<br>
 See [LICENSE](LICENSE) for more information on the license.
