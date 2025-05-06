@@ -1,7 +1,4 @@
 /target
 /Cargo.lock
-src/asymmetric/cipher/ecdhbody
-src/asymmetric/cipher/ecdh.rs
 src/asymmetric/signature/dilithiumbody
-src/asymmetric/signature/ecdsabody
 src/asymmetric/signature/falconbody

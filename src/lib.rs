@@ -2,11 +2,11 @@
 
 pub mod asymmetric {
     pub mod cipher {
-        /*pub mod ecdhbody {
+        pub mod ecdhbody {
             pub(crate) mod ec25519base;
             pub(crate) mod ecdhbase;
-                        pub(crate) mod ecdhface;
-        }*/
+            pub(crate) mod ecdhface;
+        }
         pub mod kyberbody {
             pub(crate) mod kyberbase;
             pub(crate) mod kyberface;
@@ -15,7 +15,7 @@ pub mod asymmetric {
             pub(crate) mod mceliecebase;
             pub(crate) mod mcelieceface;
         }
-        //pub mod ecdh;
+        pub mod ecdh;
         pub mod kyber;
         pub mod mceliece;
     }
@@ -24,10 +24,10 @@ pub mod asymmetric {
             pub(crate) mod dilithiumbase;
             pub(crate) mod dilithiumface;
         }*/
-        /*pub mod ecdsabody {
+        pub mod ecdsabody {
             pub(crate) mod ecdsabase;
             pub(crate) mod ecdsaface;
-        }*/
+        }
         /*pub mod falconbody {
             pub(crate) mod falconbase;
             pub(crate) mod falconface;
@@ -37,7 +37,7 @@ pub mod asymmetric {
             pub(crate) mod sphincsplusface;
         }
         //pub mod dilithium;
-        //pub mod ecdsa;
+        pub mod ecdsa;
         //pub mod falcon;
         pub mod sphincsplus;
     }

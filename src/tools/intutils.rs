@@ -776,6 +776,14 @@ pub fn qrc_intutils_copy32(output: &mut [u32], input: &[u32], length: usize) {
         }
     }
 }
+pub fn qrc_intutils_copy32i(output: &mut [i32], input: &[i32], length: usize) {
+    if length != 0 {
+        for i in 0..length {
+            let bytes = input[i].to_ne_bytes();
+            output[i] = i32::from_ne_bytes(bytes);
+        }
+    }
+}
 pub fn qrc_intutils_copy64(output: &mut [u64], input: &[u64], length: usize) {
     if length != 0 {
         for i in 0..length {

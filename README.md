@@ -254,6 +254,7 @@ qrc-opensource-rs = { version = "0.3", features = ["FEATURE1", "FEATURE2"] }
           <li>
               <summary><p style="display: inline-block">Cipher</p></summary>
               <ul>
+                <li><a href="#ecdh">ECDH</a></li>
                 <li><a href="#kyber">Kyber</a></li>
                 <li><a href="#mceliece">McEliece</a></li>
               </ul>
@@ -261,6 +262,7 @@ qrc-opensource-rs = { version = "0.3", features = ["FEATURE1", "FEATURE2"] }
           <li>
               <summary><p style="display: inline-block">Signature</p></summary>
               <ul>
+                <li><a href="#ecdsa">ECDSA</a></li>
                 <li><a href="#sphincsplus">SphincsPlus</a></li>
               </ul>
           </li>
@@ -308,11 +310,61 @@ qrc-opensource-rs = { version = "0.3", features = ["FEATURE1", "FEATURE2"] }
         <li><a href="#secrand">SecRand</a></li>
       </ul>
     </li>
+    <li>
+      <summary><p style="display: inline-block">Provider</p></summary>
+      <ul>
+      <li><a href="#rcrng">RcRng</a></li>
+        <li><a href="#osrng">OsRng</a></li>
+        <li><a href="#trng">Trng</a></li>
+      </ul>
+    </li>
   </ul>
 
 #### Asymmetric
 
 ##### Cipher
+
+###### ECDH
+
+Reference implementations:<br>
+[LibSodium by Frank Denis](https://github.com/jedisct1/libsodium)<br>
+[curve25519-donna by Adam Langley](https://github.com/agl/curve25519-donna)<br>
+[NaCI by Daniel J. Bernstein, Tanja Lange, Peter Schwabe](https://nacl.cr.yp.to)<br>
+
+Rewritten for Misra compliance and optimization<br>
+Date:  John G. Underhill - September 21, 2020<br>
+Rust Translation: Matt Warminger - 2025<br>
+
+The primary public api for the Elliptic Curve Diffie Hellman key exchange:
+
+```rust
+use qrc_opensource_rs::{
+    asymmetric::cipher::ecdh::{
+        qrc_ecdh_generate_seeded_keypair, qrc_ecdh_key_exchange, 
+        QRC_ECDH_PRIVATEKEY_SIZE, QRC_ECDH_PUBLICKEY_SIZE, QRC_ECDH_SEED_SIZE, QRC_ECDH_SHAREDSECRET_SIZE
+    }, 
+    provider::rcrng::qrc_rcrng_generate
+};
+
+let mut seed1 = [0u8; QRC_ECDH_SEED_SIZE];
+qrc_rcrng_generate(&mut seed1, QRC_ECDH_SEED_SIZE);
+let mut seed2 = [0u8; QRC_ECDH_SEED_SIZE];
+qrc_rcrng_generate(&mut seed2, QRC_ECDH_SEED_SIZE);
+
+let publickey1 = &mut [0u8; QRC_ECDH_PUBLICKEY_SIZE];
+let publickey2 = &mut [0u8; QRC_ECDH_PUBLICKEY_SIZE];
+let privatekey1 = &mut [0u8; QRC_ECDH_PRIVATEKEY_SIZE];
+let privatekey2 = &mut [0u8; QRC_ECDH_PRIVATEKEY_SIZE];
+
+let secret1 = &mut [0u8; QRC_ECDH_SHAREDSECRET_SIZE];
+let secret2 = &mut [0u8; QRC_ECDH_SHAREDSECRET_SIZE];
+
+qrc_ecdh_generate_seeded_keypair(publickey1, privatekey1, &seed1);
+qrc_ecdh_generate_seeded_keypair(publickey2, privatekey2, &seed2);
+
+qrc_ecdh_key_exchange(secret1, privatekey1, publickey2);
+qrc_ecdh_key_exchange(secret2, privatekey2, publickey1);
+```
 
 ###### Kyber
 
@@ -401,6 +453,44 @@ qrc_mceliece_decrypt(secret2, ciphertext, privatekey);
 ```
 
 ##### Signature
+
+###### ECDSA
+
+Reference implementations:<br>
+[LibSodium by Frank Denis](https://github.com/jedisct1/libsodium)<br>
+[curve25519-donna by Adam Langley](https://github.com/agl/curve25519-donna)<br>
+[NaCI by Daniel J. Bernstein, Tanja Lange, Peter Schwabe](https://nacl.cr.yp.to)<br>
+
+Rewritten for Misra compliance and optimization<br>
+Date:  John G. Underhill - September 21, 2020<br>
+Rust Translation: Matt Warminger - 2025<br>
+
+The primary public api for the ECDSA asymmetric signature scheme implementation:
+
+```rust
+use qrc_opensource_rs::{
+    asymmetric::signature::ecdsa::{
+        qrc_ecdsa_generate_seeded_keypair, qrc_ecdsa_sign, qrc_ecdsa_verify, 
+        QRC_ECDSA_PRIVATEKEY_SIZE, QRC_ECDSA_PUBLICKEY_SIZE, QRC_ECDSA_SEED_SIZE, QRC_ECDSA_SIGNATURE_SIZE
+    }, 
+    provider::rcrng::qrc_rcrng_generate
+};
+
+let msg = &mut [0u8; 64];
+let mout = &mut [0u8; QRC_ECDSA_SIGNATURE_SIZE + 64];
+let seed = &mut [0u8; QRC_ECDSA_SEED_SIZE];
+qrc_rcrng_generate(seed, QRC_ECDSA_SEED_SIZE);
+let sig = &mut [0u8; QRC_ECDSA_SIGNATURE_SIZE + 64];
+let privatekey = &mut [0u8; QRC_ECDSA_PRIVATEKEY_SIZE];
+let publickey = &mut [0u8; QRC_ECDSA_PUBLICKEY_SIZE];
+
+let msglen = &mut (64usize);
+let siglen = &mut (QRC_ECDSA_SIGNATURE_SIZE + 64);
+
+qrc_ecdsa_generate_seeded_keypair(publickey, privatekey, seed);
+qrc_ecdsa_sign(sig, siglen, msg, msglen.clone(), privatekey);
+qrc_ecdsa_verify(mout, msglen, sig, siglen.clone(), publickey);
+```
 
 ###### SphincsPlus
 
@@ -1350,9 +1440,7 @@ NOTE The package is under active development. As such, it is likely to remain vo
 Todo:
 
 <ul>
-  <li>Asymmetric/Cipher/ECDH</li>
   <li>Asymmetric/Signature/Dilithium</li>
-  <li>Asymmetric/Signature/ECDSA</li>
   <li>Asymmetric/Signature/Falcon</li>
 </ul>
 
