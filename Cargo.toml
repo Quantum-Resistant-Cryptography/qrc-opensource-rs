@@ -11,7 +11,7 @@ repository = "https://github.com/Quantum-Resistant-Cryptography/qrc-opensource-r
 license-file = "LICENSE"
 keywords = ["cryptography", "quantum", "post-quantum", "rust"]
 categories = ["cryptography"]
-exclude = ["/target","/Cargo.lock","src/asymmetric/cipher/ecdhbody","src/asymmetric/cipher/ecdh.rs","src/asymmetric/signature/dilithiumbody","src/asymmetric/signature/ecdsabody","src/asymmetric/signature/falconbody"]
+exclude = ["/target","/Cargo.lock","src/asymmetric/signature/falconbody"]
 
 [lib]
 name = "qrc_opensource_rs"

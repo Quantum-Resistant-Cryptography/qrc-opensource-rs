@@ -19,6 +19,9 @@
 
 use crate::{asymmetric::asymmetric::AsymmetricRandState, common::common::{QRC_DILITHIUM_S2N256Q8380417K4, QRC_DILITHIUM_S3N256Q8380417K6, QRC_DILITHIUM_S5N256Q8380417K8}, digest::sha3::{qrc_keccak_incremental_block_absorb, qrc_keccak_incremental_finalize, qrc_keccak_incremental_squeeze, qrc_keccak_initialize_state, qrc_keccak_squeezeblocks, qrc_shake256_compute, QrcKeccakState, QRC_KECCAK_128_RATE, QRC_KECCAK_256_RATE, QRC_KECCAK_PERMUTATION_ROUNDS, QRC_KECCAK_SHAKE_DOMAIN_ID}, tools::intutils::{qrc_intutils_clear8, qrc_intutils_copy32i, qrc_intutils_copy8, qrc_intutils_verify}};
 
+#[cfg(feature = "no_std")]
+use alloc::borrow::ToOwned;
+
 /* \cond DOXYGEN_IGNORE */
 
 pub const QRC_DILITHIUM_RANDOMIZED_SIGNING: bool = false;
