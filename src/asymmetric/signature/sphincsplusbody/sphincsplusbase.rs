@@ -1,3 +1,22 @@
+/* The AGPL version 3 License (AGPLv3)
+*
+* Copyright (c) 2024 DFD & QRC Eurosmart SA
+* This file is part of the QRC Cryptographic library
+*
+* This program is free software : you can redistribute it and / or modify
+* it under the terms of the GNU Affero General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GNU Affero General Public License for more details.
+*
+* You should have received a copy of the GNU Affero General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 use crate::{asymmetric::asymmetric::AsymmetricRandState, common::common::{QRC_SPHINCSPLUS_S3S192SHAKERF, QRC_SPHINCSPLUS_S3S192SHAKERS, QRC_SPHINCSPLUS_S5S256SHAKERF, QRC_SPHINCSPLUS_S5S256SHAKERS}, digest::sha3::{qrc_keccak_incremental_absorb, qrc_keccak_incremental_finalize, qrc_keccak_incremental_squeeze, qrc_shake256_compute, QrcKeccakState, QRC_KECCAK_256_RATE, QRC_KECCAK_SHAKE_DOMAIN_ID}, tools::intutils::{qrc_intutils_be64to8, qrc_intutils_clear8all, qrc_intutils_copy32, qrc_intutils_copy8, qrc_intutils_transform_32to8, qrc_intutils_transform_8to32, qrc_intutils_verify}};
 
 use core::mem::size_of;

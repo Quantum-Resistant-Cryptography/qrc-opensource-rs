@@ -117,8 +117,9 @@ pub fn qrc_mceliece_decapsulate(
     if privatekey.len() == QRC_MCELIECE_PRIVATEKEY_SIZE {
         return qrc_mceliece_ref_decapsulate(secret, ciphertext, privatekey) == 0;
     } else {
-        false
+        return false;
     }
+    
 }
 
 /*
@@ -135,11 +136,7 @@ pub fn qrc_mceliece_decrypt(
     ciphertext: &[u8; QRC_MCELIECE_CIPHERTEXT_SIZE],
     privatekey: &[u8],
 ) -> bool {
-    if privatekey.len() == QRC_MCELIECE_PRIVATEKEY_SIZE {
-        return qrc_mceliece_decapsulate(secret, ciphertext, privatekey);
-    } else {
-        false
-    }
+    return qrc_mceliece_decapsulate(secret, ciphertext, privatekey);
 }
 
 /*

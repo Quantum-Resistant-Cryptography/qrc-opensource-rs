@@ -1,7 +1,7 @@
 /* The AGPL version 3 License (AGPLv3)
 *
 * Copyright (c) 2022 Digital Freedom Defence Inc.
-* This file is part of the QRC Cryptographic library
+* This file is part of the QSC Cryptographic library
 *
 * This program is free software : you can redistribute it and / or modify
 * it under the terms of the GNU Affero General Public License as published by

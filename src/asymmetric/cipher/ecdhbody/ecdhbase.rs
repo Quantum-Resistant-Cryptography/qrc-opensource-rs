@@ -1,7 +1,7 @@
 /* The AGPL version 3 License (AGPLv3)
 *
 * Copyright (c) 2022 Digital Freedom Defence Inc.
-* This file is part of the QRC Cryptographic library
+* This file is part of the QSC Cryptographic library
 *
 * This program is free software : you can redistribute it and / or modify
 * it under the terms of the GNU Affero General Public License as published by
@@ -122,10 +122,6 @@ fn crypto_scalarmult_curve25519_ref10(q: &mut [u8], n: &[u8], p: &[u8]) -> i32 {
         fe25519_0(&mut z2);
         fe25519_copy(&mut x3, x1);
         fe25519_1(&mut z3);
-
-        //println!("{:?}", &z3[..5]);
-
-        //println!("{:?} : {:?}", &x3[..5], &z3[..5]);
 
         let mut swap = 0 as u32;
         let mut pos = 255 as u32;

@@ -109,10 +109,8 @@ pub fn qrc_sphincsplus_generate_keypair_custrand(asymmetric_state: &mut Asymmetr
 * \param rng_generate: Pointer to the random generator
 */
 pub fn qrc_sphincsplus_sign(signedmsg: &mut [u8], smsglen: &mut usize, message: &[u8], msglen: usize, privatekey: &[u8; QRC_SPHINCSPLUS_PRIVATEKEY_SIZE]) {
-	if (signedmsg.len() - message.len()) == QRC_SPHINCSPLUS_SIGNATURE_SIZE {
-		let asymmetric_state = &mut AsymmetricRandState::default(); 
-		qrc_sphincsplus_sign_custrand(asymmetric_state, signedmsg, smsglen, message, msglen, privatekey, qrc_asymmetric_rcrng_generate);
-	}
+    let asymmetric_state = &mut AsymmetricRandState::default(); 
+    qrc_sphincsplus_sign_custrand(asymmetric_state, signedmsg, smsglen, message, msglen, privatekey, qrc_asymmetric_rcrng_generate);
 }
 pub fn qrc_sphincsplus_sign_custrand(asymmetric_state: &mut AsymmetricRandState, signedmsg: &mut [u8], smsglen: &mut usize, message: &[u8], msglen: usize, privatekey: &[u8], rng_generate: fn(&mut AsymmetricRandState, &mut [u8], usize) -> bool) {
 	sphincsplus_ref_sign(asymmetric_state, signedmsg, smsglen, message, msglen, privatekey, rng_generate);
@@ -129,9 +127,5 @@ pub fn qrc_sphincsplus_sign_custrand(asymmetric_state: &mut AsymmetricRandState,
 * \return Returns true for success
 */
 pub fn qrc_sphincsplus_verify(message: &mut [u8], msglen: &mut usize, signedmsg: &[u8], smsglen: usize, publickey: &[u8; QRC_SPHINCSPLUS_PUBLICKEY_SIZE]) -> bool {
-	let mut res = false;
-	if (signedmsg.len() - message.len()) == QRC_SPHINCSPLUS_SIGNATURE_SIZE {
-		res = sphincsplus_ref_sign_open(message, msglen, signedmsg, smsglen, publickey);
-	}
-	return res;
+	return sphincsplus_ref_sign_open(message, msglen, signedmsg, smsglen, publickey);
 }

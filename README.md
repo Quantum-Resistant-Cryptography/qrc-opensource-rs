@@ -262,6 +262,7 @@ qrc-opensource-rs = { version = "0.3", features = ["FEATURE1", "FEATURE2"] }
           <li>
               <summary><p style="display: inline-block">Signature</p></summary>
               <ul>
+                <li><a href="#dilithium">Dilithium</a></li>
                 <li><a href="#ecdsa">ECDSA</a></li>
                 <li><a href="#sphincsplus">SphincsPlus</a></li>
               </ul>
@@ -380,7 +381,7 @@ The Kyber [Algorithm](https://pq-crystals.org/kyber/data/kyber-specification-rou
 Date: January 10, 2018<br>
 C - Updated: Stiepan A. Kovac - July 2, 2021<br>
 Rust Translation: Matt Warminger - 2024<br>
-Updated: Matt Warminger - April 23, 2025<br>
+Updated: QRC - April 23, 2025<br>
 
 The primary public api for the Kyber CCA-secure Key Encapsulation Mechanism implementation:
 
@@ -423,7 +424,7 @@ The McEliece [Algorithm](https://classic.mceliece.org/nist/mceliece-20201010.pdf
 Authors: Daniel J. Bernstein, Tung Chou, Tanja Lange, and Peter Schwabe.<br>
 Updated: Stiepan A. Kovac - June 28 2021<br>
 Rust Translation: Matt Warminger - 2024<br>
-Updated: Matt Warminger - April 23, 2025<br>
+Updated: QRC - April 23, 2025<br>
 
 The primary public api for the Niederreiter dual form of the McEliece asymmetric cipher implementation:
 
@@ -453,6 +454,37 @@ qrc_mceliece_decrypt(secret2, ciphertext, privatekey);
 ```
 
 ##### Signature
+
+###### Dilithium
+
+Based entirely on the C reference branch of Dilithium taken from the NIST Post Quantum Competition Round 3 submission.<br>
+The NIST Post Quantum Competition [Round 3](https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions) Finalists.<br>
+* The [Dilithium](https://pq-crystals.org/dilithium/index.shtml) web-site.<br>
+* The Dilithium [Algorithm](https://pq-crystals.org/dilithium/data/dilithium-specification-round3-20210208.pdf) Specification.<br>
+
+Date: July 2, 2021<br>
+Rust Translation: Matt Warminger - 2025<br>
+
+The primary public api for the Dilithium asymmetric signature scheme implementation:
+
+```rust
+use qrc_opensource_rs::asymmetric::signature::dilithium::{
+  qrc_dilithium_generate_keypair, qrc_dilithium_sign, qrc_dilithium_verify,
+  QRC_DILITHIUM_PRIVATEKEY_SIZE, QRC_DILITHIUM_PUBLICKEY_SIZE, QRC_DILITHIUM_SIGNATURE_SIZE
+};
+
+let msg = &mut [0u8; 64];
+let sig = &mut [0u8; QRC_DILITHIUM_SIGNATURE_SIZE + 64];
+let sk = &mut [0u8; QRC_DILITHIUM_PRIVATEKEY_SIZE];
+let pk = &mut [0u8; QRC_DILITHIUM_PUBLICKEY_SIZE];
+
+let msglen = &mut (64isize);
+let siglen = &mut 0;
+
+qrc_dilithium_generate_keypair(pk, sk);
+qrc_dilithium_sign(sig, siglen, msg, 64, sk);
+qrc_dilithium_verify(msg, msglen, sig, siglen.clone(), pk);
+```
 
 ###### ECDSA
 
@@ -502,7 +534,7 @@ The SPHINCS+ [Algorithm](https://sphincs.org/data/sphincs+-specification.pdf) Sp
 Date: June 14, 2018<br>
 Updated: February 7, 2024<br>
 Rust Translation: Matt Warminger - 2024<br>
-Updated: Matt Warminger - April 23, 2025<br>
+Updated: QRC - April 23, 2025<br>
 
 The primary public api for the Sphincs+ asymmetric signature scheme implementation:
 
@@ -533,7 +565,7 @@ qrc_sphincsplus_verify(hash, &mut hashlen, sig, siglen, publickey);
 ##### AES
 
 Rust Translation: Matt Warminger - 2024<br>
-Updated: Matt Warminger - April 23, 2025<br>
+Updated: QRC - April 23, 2025<br>
 
 The primary public api for the AES implementation:
 
@@ -663,7 +695,7 @@ The nonce must be 64-bits in length (8 bytes).<br>
 
 Author: John Underhill - April 7, 2018<br>
 Rust Translation: Matt Warminger - 2025<br>
-Updated: Matt Warminger - April 23, 2025<br>
+Updated: QRC - April 23, 2025<br>
 
 An implementation of the ChaChaPoly20 stream cipher by Daniel J. Bernstein:
 
@@ -728,7 +760,7 @@ See the documentation and the csx_test.h tests for usage examples.<br>
 Author: John Underhill - May 2, 2020<br>
 Updated: Stiepan A Kovac - October 13, 2021<br>
 Rust Translation: Matt Warminger - 2025<br>
-Updated: Matt Warminger - April 23, 2025<br>
+Updated: QRC - April 23, 2025<br>
 
 An implementation of the ChaChaPoly20 stream cipher by Daniel J. Bernstein.
 
@@ -785,7 +817,7 @@ NIST: [The SHA-2 Standard](http://csrc.nist.gov/publications/fips/fips180-4/fips
 Author: John Underhill - May 23, 2019<br>
 Updated: Stiepan A Kovac - Jul 11, 2024<br>
 Rust Translation: Matt Warminger - 2024<br>
-Updated: Matt Warminger - April 23, 2025<br>
+Updated: QRC - April 23, 2025<br>
 
 The primary public api for SHA2 Implementation:
 
@@ -871,9 +903,9 @@ NIST: [SHA3 Third-Round Report](http://nvlpubs.nist.gov/nistpubs/ir/2012/NIST.IR
 Team Keccak: [Specifications summary](https://keccak.team/keccak_specs_summary.html)<br>
 
 Author: John Underhill - October 27, 2019<br>
-Updated: Stiepan A Kovac - 19, 2021<br>
+Updated: Stiepan A Kovac - February 7, 2024<br>
 Rust Translation: Matt Warminger - 2024<br>
-Updated: Matt Warminger - April 23, 2025<br>
+Updated: QRC - April 23, 2025<br>
 
 The primary public api for SHA3 digest, SHAKE, cSHAKE, and KMAC implementation:
 
@@ -1025,7 +1057,7 @@ NIST: [SHA3 Third-Round Report](http://nvlpubs.nist.gov/nistpubs/ir/2012/NIST.IR
 Team Keccak: [Specifications summary](https://keccak.team/keccak_specs_summary.html)<br>
 
 Rust Translation: Matt Warminger - 2025<br>
-Updated: Matt Warminger - April 23, 2025<br>
+Updated: QRC - April 23, 2025<br>
 
 CSG pseudo-random bytes generator:
 
@@ -1062,7 +1094,7 @@ Fips 180-4: [Secure Hash Standard (SHS)](http://csrc.nist.gov/publications/fips/
 
 Author: John Underhill - August 31, 2020<br>
 Rust Translation: Matt Warminger - 2025<br>
-Updated: Matt Warminger - April 23, 2025<br>
+Updated: QRC - April 23, 2025<br>
 
 HCG pseudo-random bytes generator:
 
@@ -1108,7 +1140,7 @@ NIST: [SHA3 Third-Round Report](http://nvlpubs.nist.gov/nistpubs/ir/2012/NIST.IR
 Team Keccak: [Specifications summary](https://keccak.team/keccak_specs_summary.html)<br>
 
 Rust Translation: Matt Warminger - 2025<br>
-Updated: Matt Warminger - April 23, 2025<br>
+Updated: QRC - April 23, 2025<br>
 
 An implementation of the SHAKE Cost Based SCB key derivation function:
 
@@ -1138,7 +1170,7 @@ qrc_scb_dispose(ctx);
 ##### Poly1305
 
 Rust Translation: Matt Warminger - 2024<br>
-Updated: Matt Warminger - April 23, 2025<br>
+Updated: QRC - April 23, 2025<br>
 
 The primary public api for the Poly1305 implementation:
 
@@ -1172,7 +1204,7 @@ qrc_poly1305_finalize(ctx, mac);
 ##### Donna128
 
 Rust Translation: Matt Warminger - 2025<br>
-Updated: Matt Warminger - April 23, 2025<br>
+Updated: QRC - April 23, 2025<br>
 
 The primary public api for the Donna128 implementation:
 
@@ -1306,7 +1338,7 @@ x = qrc_donna128_or(x, y);
 ##### SecRand
 
 Rust Translation: Matt Warminger - 2024<br>
-Updated: Matt Warminger - April 23, 2025<br>
+Updated: QRC - April 23, 2025<br>
 
 Implementation of an secure pseudo-random generator:
 
@@ -1352,7 +1384,7 @@ qrc_secrand_destroy(&mut asymmetric_state.secrand_state);
 <h6>This is not a secure RNG, and should be used for testing purposes only.</h6>
 
 Rust Translation: Matt Warminger - 2025<br>
-Updated: Matt Warminger - April 23, 2025<br>
+Updated: QRC - April 23, 2025<br>
 
 ```rust
 use qrc_opensource_rs::{
@@ -1397,7 +1429,7 @@ qrc_asymmetric_nistrng_generate(asymmetric_state, out, 64);
 <h6>Recommended Provider, combination of latter two.</h6>
 
 Rust Translation: Matt Warminger - 2024<br>
-Updated: Matt Warminger - April 23, 2025<br>
+Updated: QRC - April 23, 2025<br>
 
 Resource RNG:
 
@@ -1410,7 +1442,7 @@ qrc_rcrng_generate(out, 64);
 ##### OsRng
 
 Rust Translation: Matt Warminger - 2024<br>
-Updated: Matt Warminger - April 23, 2025<br>
+Updated: QRC - April 23, 2025<br>
 
 OSRing RNG:
 
@@ -1423,7 +1455,7 @@ qrc_osrng_generate(out, 64);
 ##### TrRng
 
 Rust Translation: Matt Warminger - 2024<br>
-Updated: Matt Warminger - April 23, 2025<br>
+Updated: QRC - April 23, 2025<br>
 
 Thread RNG:
 
@@ -1440,7 +1472,6 @@ NOTE The package is under active development. As such, it is likely to remain vo
 Todo:
 
 <ul>
-  <li>Asymmetric/Signature/Dilithium</li>
   <li>Asymmetric/Signature/Falcon</li>
 </ul>
 

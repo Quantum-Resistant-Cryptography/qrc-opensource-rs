@@ -20,10 +20,10 @@ pub mod asymmetric {
         pub mod mceliece;
     }
     pub mod signature {
-        /*pub mod dilithiumbody {
+        pub mod dilithiumbody {
             pub(crate) mod dilithiumbase;
             pub(crate) mod dilithiumface;
-        }*/
+        }
         pub mod ecdsabody {
             pub(crate) mod ecdsabase;
             pub(crate) mod ecdsaface;
@@ -36,7 +36,7 @@ pub mod asymmetric {
             pub(crate) mod sphincsplusbase;
             pub(crate) mod sphincsplusface;
         }
-        //pub mod dilithium;
+        pub mod dilithium;
         pub mod ecdsa;
         //pub mod falcon;
         pub mod sphincsplus;

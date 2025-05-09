@@ -1,3 +1,22 @@
+/* The AGPL version 3 License (AGPLv3)
+*
+* Copyright (c) 2024 DFD & QRC Eurosmart SA
+* This file is part of the QRC Cryptographic library
+*
+* This program is free software : you can redistribute it and / or modify
+* it under the terms of the GNU Affero General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GNU Affero General Public License for more details.
+*
+* You should have received a copy of the GNU Affero General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 use crate::tools::intutils::{qrc_intutils_be32to8, qrc_intutils_be64to8, qrc_intutils_be8to32, qrc_intutils_be8to64, qrc_intutils_clear32, qrc_intutils_clear64, qrc_intutils_clear8, qrc_intutils_copy32, qrc_intutils_copy64, qrc_intutils_copy8, qrc_intutils_min};
 
 use core::{mem::size_of, default::Default};

@@ -80,9 +80,9 @@ use alloc::{vec, borrow::ToOwned};
 			key[i] |= mask;
 		}
 
-		return (ret_decrypt.wrapping_add(ret_confirm)) as i32 + padding_ok;
+		return ret_decrypt as i32 + ret_confirm as i32 + padding_ok;
 	} else {
-		return (ret_decrypt.wrapping_add(ret_confirm)) as i32;
+		return ret_decrypt as i32 + ret_confirm as i32;
 	}
 }
 
