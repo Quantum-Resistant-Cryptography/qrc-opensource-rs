@@ -1,21 +1,29 @@
 /* The AGPL version 3 License (AGPLv3)
-*
-* Copyright (c) 2024 DFD & QRC Eurosmart SA
-* This file is part of the QRC Cryptographic library
-*
+* 
+* Copyright (c) 2021 Digital Freedom Defence Inc.
+* This file is part of the QSC Cryptographic library
+* 
 * This program is free software : you can redistribute it and / or modify
 * it under the terms of the GNU Affero General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
-*
+* 
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Affero General Public License for more details.
-*
+* 
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
-*/
+*
+*
+*
+* Copyright (c) Original-2021 John G. Underhill <john.underhill@mailfence.com>
+* Copyright (c) 2022-Present QRC Eurosmart SA <opensource-support@qrcrypto.ch>
+*
+* The following code is a derivative work of the code from the QSC Cryptographic library in C, 
+* which is licensed AGPLv3. This code therefore is also licensed under the terms of 
+* the GNU Affero General Public License, version 3. The AGPL version 3 License (AGPLv3). */
 
 use crate::{asymmetric::asymmetric::AsymmetricRandState, common::common::{QRC_SPHINCSPLUS_S3S192SHAKERF, QRC_SPHINCSPLUS_S3S192SHAKERS, QRC_SPHINCSPLUS_S5S256SHAKERF, QRC_SPHINCSPLUS_S5S256SHAKERS}, digest::sha3::{qrc_keccak_incremental_absorb, qrc_keccak_incremental_finalize, qrc_keccak_incremental_squeeze, qrc_shake256_compute, QrcKeccakState, QRC_KECCAK_256_RATE, QRC_KECCAK_SHAKE_DOMAIN_ID}, tools::intutils::{qrc_intutils_be64to8, qrc_intutils_clear8all, qrc_intutils_copy32, qrc_intutils_copy8, qrc_intutils_transform_32to8, qrc_intutils_transform_8to32, qrc_intutils_verify}};
 
@@ -24,7 +32,6 @@ use core::mem::size_of;
 #[cfg(feature = "no_std")]
 use alloc::{vec, borrow::ToOwned};
 
-/* \cond DOXYGEN_IGNORE */
 
 /*
 * \brief Generates a SphincsPlus public/private key-pair from a seed
@@ -55,6 +62,7 @@ pub fn sphincsplus_ref_generate_seed_keypair(pk: &mut [u8], sk: &mut [u8], seed:
     let skowned = &sk.to_owned();
     let skspx = &skowned[2 * SPX_N..].to_owned();
     sphincsplus_treehash(&mut sk[3 * SPX_N..], auth_path, skowned, skspx, 0, 0, SPX_TREE_HEIGHT as u32, sphincsplus_wots_gen_leaf, top_tree_addr);
+
     qrc_intutils_copy8(&mut pk[SPX_N..], &sk[3 * SPX_N..], SPX_N);
 
     return 0;
@@ -271,7 +279,7 @@ pub fn sphincsplus_ref_sign_open(m: &mut [u8], mlen: &mut usize, sm: &[u8], smle
         *mlen = smlen - SPX_BYTES;
         res = sphincsplus_ref_sign_verify(sm, SPX_BYTES, &sm[SPX_BYTES..], mlen.clone(), pk);
 
-        if res == true {
+        if res {
             /* If verification was successful, move the message to the right place. */
             qrc_intutils_copy8(m, &sm[SPX_BYTES..], mlen.clone());
         } else {
@@ -286,8 +294,6 @@ pub fn sphincsplus_ref_sign_open(m: &mut [u8], mlen: &mut usize, sm: &[u8], smle
 
     return res;
 }
-
-/* \endcond DOXYGEN_IGNORE */
 
 
 /* params.h */
@@ -466,7 +472,7 @@ fn sphincsplus_ull_to_bytes(out: &mut [u8], outlen: u32, mut int: u64) {
         out[pos as usize] = int as u8 & 0xFF;
         int >>= 8;
         
-        if pos <= 0 {
+        if pos == 0 {
             break;
         }
     } 
@@ -539,10 +545,10 @@ fn sphincsplus_set_keypair_addr(addr: &mut [u32; 8], keypair: u32) {
     if SPX_FULL_HEIGHT/SPX_D > 8 {
         /* We have > 256 OTS at the bottom of the Merkle tree; to specify
         which one, we'd need to express it in two bytes */
-        addr_slice[SPX_OFFSET_KP_ADDR2] = keypair as u8 >> 8;
-    } else {
-        addr_slice[SPX_OFFSET_KP_ADDR1] = keypair as u8;
+        addr_slice[SPX_OFFSET_KP_ADDR2] = (keypair >> 8) as u8;
     }
+    addr_slice[SPX_OFFSET_KP_ADDR1] = keypair as u8;
+
     qrc_intutils_copy32(addr, &qrc_intutils_transform_8to32(&addr_slice), 8);
     qrc_intutils_clear8all(&mut addr_slice);
 }
@@ -556,9 +562,9 @@ fn sphincsplus_copy_keypair_addr(out: &mut [u32; 8], int: [u32; 8]) {
     let int_slice = qrc_intutils_transform_32to8(&int);
     if SPX_FULL_HEIGHT/SPX_D > 8 {
         out_slice[SPX_OFFSET_KP_ADDR2] = int_slice[SPX_OFFSET_KP_ADDR2];
-    } else {
-        out_slice[SPX_OFFSET_KP_ADDR1] = int_slice[SPX_OFFSET_KP_ADDR1];
     }
+    out_slice[SPX_OFFSET_KP_ADDR1] = int_slice[SPX_OFFSET_KP_ADDR1];
+    
     qrc_intutils_copy32(out, &qrc_intutils_transform_8to32(&out_slice), 8);
     qrc_intutils_clear8all(&mut out_slice);
 }
@@ -672,10 +678,12 @@ fn sphincsplus_thash(out: &mut [u8], int: &[u8], inblocks: u32, pubseed: &[u8], 
     }
 
     qrc_shake256_compute(out, SPX_N, &buf, keylen + blklen);
+
     bitmask.fill(0);
     buf.fill(0);
 
 }
+
 
 fn sphincsplus_compute_root(root: &mut [u8], leaf: &[u8], mut leaf_idx: u32, mut idx_offset: u32, mut auth_path: &[u8], tree_height: u32, pubseed: &[u8], addr: &mut [u32; 8]) {
     /* Computes a root node given a leaf and an auth path.
@@ -750,7 +758,6 @@ fn sphincsplus_treehash(root: &mut [u8], auth_path: &mut [u8], sk_seed: &[u8], p
         }
 
         /* While the top-most nodes are of equal height.. */
-
         loop {
             if offset < 2 || heights[offset - 1] != heights[offset - 2] {
                 break;
@@ -1037,8 +1044,11 @@ fn sphincsplus_wots_gen_leaf(leaf: &mut [u8], sk_seed: &[u8], pubseed: &[u8], ad
 
     sphincsplus_copy_subtree_addr(wots_addr,  tree_addr);
     sphincsplus_set_keypair_addr(wots_addr, addr_idx);
-    sphincsplus_wots_gen_pk(pk, sk_seed, pubseed, wots_addr);
 
+
+
+    sphincsplus_wots_gen_pk(pk, sk_seed, pubseed, wots_addr);
     sphincsplus_copy_keypair_addr(wots_pk_addr, wots_addr.clone());
+
     sphincsplus_thash(leaf, pk, SPX_WOTS_LEN as u32, pubseed, wots_pk_addr);
 }

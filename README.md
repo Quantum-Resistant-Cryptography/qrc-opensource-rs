@@ -180,6 +180,7 @@ qrc-opensource-rs = "0.3"
     <td>-</td>
     <td>
       STD<br>
+      SEMI<br>
       NO_STD
     </td>
     <td>
@@ -234,7 +235,197 @@ qrc-opensource-rs = "0.3"
       Console/Terminal System Tools
     </td>
   </tr>
+    <tr>
+    <td>
+      log-no_std
+    </td>
+    <td>-</td>
+    <td>
+      NO_STD
+    </td>
+    <td>
+      Console/Terminal Logging Tools
+    </td>
+  </tr>
 </table>
+
+###### Cryptographic Parameter  Features
+
+The following features set the parameters for the cryptographic functions
+
+<table>
+  <tr>
+    <td>
+      Name
+    </td>
+    <td>
+      Description
+    </td>
+    <td>
+      Default
+    </td>
+  </tr>
+  <tr>
+    <td>
+      ECDH_S1EC25519
+    </td>
+    <td>
+      Implement the ECDH S1EC25519 parameter set
+    </td><td>x</td>
+  </tr>
+  <tr><td></td><td></td><td></td></tr>
+    <tr>
+    <td>
+      KYBER_S3Q3329N256K3
+    </td>
+    <td>
+      Implement the Kyber S3Q3329N256K3 parameter set
+    </td><td></td>
+  </tr>
+  <tr>
+    <td>
+      KYBER_S5Q3329N256K4
+    </td>
+    <td>
+      Implement the Kyber S5Q3329N256K4 parameter set
+    </td><td>x</td>
+  </tr>
+  <tr>
+    <td>
+      KYBER_S6Q3329N256K5
+    </td>
+    <td>
+      Implement the Kyber S6Q3329N256K5 parameter set. (Experimental only)
+    </td><td></td>
+  </tr>
+  <tr><td></td><td></td><td></td></tr>
+  <tr>
+    <td>
+      MCELIECE_S3N4608T96
+    </td>
+    <td>
+      Implement the McEliece S3-N4608T96 parameter set
+    </td><td></td>
+  </tr>
+  <tr>
+    <td>
+      MCELIECE_S5N6688T128
+    </td>
+    <td>
+      Implement the McEliece S5-N6688T128 parameter set
+    </td><td>x</td>
+  </tr>
+  <tr>
+    <td>
+      MCELIECE_S5N6960T119
+    </td>
+    <td>
+      Implement the McEliece S5-N6960T119 parameter set
+    </td><td></td>
+  </tr>
+  <tr>
+    <td>
+      MCELIECE_S5N8192T128
+    </td>
+    <td>
+      Implement the McEliece S5-N8192T128 parameter set
+    </td><td></td>
+  </tr>
+  <tr><td></td><td></td><td></td></tr>
+  <tr>
+    <td>
+      DILITHIUM_S2N256Q8380417K4
+    </td>
+    <td>
+      Implement the Dilithium S2N256Q8380417 parameter set
+    </td><td></td>
+  </tr>
+  <tr>
+    <td>
+      DILITHIUM_S3N256Q8380417K6
+    </td>
+    <td>
+      Implement the Dilithium S3N256Q83804 parameter set
+    </td><td>x</td>
+  </tr>
+  <tr>
+    <td>
+      DILITHIUM_S5N256Q8380417K8
+    </td>
+    <td>
+      Implement the Dilithium S5N256Q8380417 parameter set
+    </td><td></td>
+  </tr>
+  <tr><td></td><td></td><td></td></tr>
+  <tr>
+    <td>
+      ECDSA_S1EC25519
+    </td>
+    <td>
+      Implement the ECDSA S1EC25519 parameter set
+    </td><td>x</td>
+  </tr>
+  <tr><td></td><td></td><td></td></tr>
+  <!--<tr>
+    <td>
+      FALCON_S3SHAKE256F512
+    </td>
+    <td>
+      Implement the Falcon S3SHAKE256F512 parameter set
+    </td><td></td>
+  </tr>
+  <tr>
+    <td>
+      FALCON_S5SHAKE256F1024
+    </td>
+    <td>
+      Implement the Falcon S5SHAKE256F1024 parameter set
+    </td><td>x</td>
+  </tr>
+  <tr><td></td><td></td><td></td></tr>-->
+  <tr>
+    <td>
+      SPHINCSPLUS_S3S192SHAKERS
+    </td>
+    <td>
+      Implement the SphincsPlus S3S192SHAKERS robust small parameter set
+    </td><td></td>
+  </tr>
+  <tr>
+    <td>
+      SPHINCSPLUS_S3S192SHAKERF
+    </td>
+    <td>
+      Implement the SphincsPlus S3S192SHAKERF robust fast parameter set
+    </td><td></td>
+  </tr>
+  <tr>
+    <td>
+      SPHINCSPLUS_S5S256SHAKERS
+    </td>
+    <td>
+      Implement the SphincsPlus S5S256SHAKERS robust small parameter set
+    </td><td></td>
+  </tr>
+  <tr>
+    <td>
+      SPHINCSPLUS_S5S256SHAKERF
+    </td>
+    <td>
+      Implement the SphincsPlus S5S256SHAKERF robust fast parameter set
+    </td><td>x</td>
+  </tr>
+  <tr><td></td><td></td><td></td></tr>
+  <tr>
+    <td>
+      MIN_MEMORY_CLEAR
+    </td>
+    <td>
+      Disables secure memory clearing (Compatibility only)
+    </td><td></td>
+  </tr>
+</table>
+
 
 ###### Feature Usage
 
@@ -264,6 +455,7 @@ qrc-opensource-rs = { version = "0.3", features = ["FEATURE1", "FEATURE2"] }
               <ul>
                 <li><a href="#dilithium">Dilithium</a></li>
                 <li><a href="#ecdsa">ECDSA</a></li>
+                <!--<li><a href="#falcon">Falcon</a></li>-->
                 <li><a href="#sphincsplus">SphincsPlus</a></li>
               </ul>
           </li>
@@ -333,6 +525,7 @@ Reference implementations:<br>
 [NaCI by Daniel J. Bernstein, Tanja Lange, Peter Schwabe](https://nacl.cr.yp.to)<br>
 
 Rewritten for Misra compliance and optimization<br>
+Derived from John G. Underhill's AGPLv3 QSC library in C<br>
 Date:  John G. Underhill - September 21, 2020<br>
 Rust Translation: Matt Warminger - 2025<br>
 
@@ -378,6 +571,7 @@ The NIST Post Quantum Competition [Round 3](https://csrc.nist.gov/Projects/post-
 The [Kyber](https://pq-crystals.org/kyber/index.shtml) website.<br>
 The Kyber [Algorithm](https://pq-crystals.org/kyber/data/kyber-specification-round3-20210131.pdf) Specification.<br>
 
+Derived from John G. Underhill's AGPLv3 QSC library in C<br>
 Date: January 10, 2018<br>
 C - Updated: Stiepan A. Kovac - July 2, 2021<br>
 Rust Translation: Matt Warminger - 2024<br>
@@ -421,10 +615,11 @@ The NIST Post Quantum Competition [Round 3](https://csrc.nist.gov/Projects/post-
 The [McEliece](https://classic.mceliece.org/) website.<br>
 The McEliece [Algorithm](https://classic.mceliece.org/nist/mceliece-20201010.pdf) Specification.<br>
 
+Derived from John G. Underhill's AGPLv3 QSC library in C<br>
 Authors: Daniel J. Bernstein, Tung Chou, Tanja Lange, and Peter Schwabe.<br>
 Updated: Stiepan A. Kovac - June 28 2021<br>
 Rust Translation: Matt Warminger - 2024<br>
-Updated: QRC - April 23, 2025<br>
+Updated: QRC - July 7, 2025<br>
 
 The primary public api for the Niederreiter dual form of the McEliece asymmetric cipher implementation:
 
@@ -462,6 +657,7 @@ The NIST Post Quantum Competition [Round 3](https://csrc.nist.gov/Projects/post-
 * The [Dilithium](https://pq-crystals.org/dilithium/index.shtml) web-site.<br>
 * The Dilithium [Algorithm](https://pq-crystals.org/dilithium/data/dilithium-specification-round3-20210208.pdf) Specification.<br>
 
+Derived from John G. Underhill's AGPLv3 QSC library in C<br>
 Date: July 2, 2021<br>
 Rust Translation: Matt Warminger - 2025<br>
 
@@ -494,6 +690,7 @@ Reference implementations:<br>
 [NaCI by Daniel J. Bernstein, Tanja Lange, Peter Schwabe](https://nacl.cr.yp.to)<br>
 
 Rewritten for Misra compliance and optimization<br>
+Derived from John G. Underhill's AGPLv3 QSC library in C<br>
 Date:  John G. Underhill - September 21, 2020<br>
 Rust Translation: Matt Warminger - 2025<br>
 
@@ -523,6 +720,27 @@ qrc_ecdsa_generate_seeded_keypair(publickey, privatekey, seed);
 qrc_ecdsa_sign(sig, siglen, msg, msglen.clone(), privatekey);
 qrc_ecdsa_verify(mout, msglen, sig, siglen.clone(), publickey);
 ```
+<!--
+###### Falcon
+
+Based entirely on the C reference branch of Falcon taken from the NIST Post Quantum Competition Round 3 submission.<br>
+The NIST Post Quantum Competition [Round 3](https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions) Finalists.<br>
+The [Falcon](https://falcon-sign.info/) website.<br>
+The Falcon [Algorithm](https://falcon-sign.info/falcon.pdf) Specification.<br>
+
+
+Rewritten for Misra compliance and library integration<br>
+Derived from John G. Underhill's AGPLv3 QSC library in C<br>
+Author: Thomas Pornin <thomas.pornin@nccgroup.com><br>
+Updated: John G. Underhill<br>
+Rust Translation: Matt Warminger - 2025<br>
+
+The primary public api for the Falcon asymmetric signature scheme implementation:
+
+```rust
+
+```
+-->
 
 ###### SphincsPlus
 
@@ -531,10 +749,11 @@ The NIST Post Quantum Competition [Round 3](https://csrc.nist.gov/Projects/post-
 The [SPHINCS+](https://sphincs.org/) website.<br>
 The SPHINCS+ [Algorithm](https://sphincs.org/data/sphincs+-specification.pdf) Specification.<br>
 
-Date: June 14, 2018<br>
+Derived from John G. Underhill's AGPLv3 QSC library in C<br>
+Date: John G. Underhill - June 14, 2018<br>
 Updated: February 7, 2024<br>
 Rust Translation: Matt Warminger - 2024<br>
-Updated: QRC - April 23, 2025<br>
+Updated: QRC - July 9, 2025<br>
 
 The primary public api for the Sphincs+ asymmetric signature scheme implementation:
 
@@ -564,6 +783,7 @@ qrc_sphincsplus_verify(hash, &mut hashlen, sig, siglen, publickey);
 
 ##### AES
 
+Derived from John G. Underhill's AGPLv3 QSC library in C<br>
 Rust Translation: Matt Warminger - 2024<br>
 Updated: QRC - April 23, 2025<br>
 
@@ -693,7 +913,8 @@ qrc_aes_dispose(ctx);
 Key sizes are 128- and 256-bit (16 and 32 byte).<br>
 The nonce must be 64-bits in length (8 bytes).<br>
 
-Author: John Underhill - April 7, 2018<br>
+Derived from John G. Underhill's AGPLv3 QSC library in C<br>
+Author: John G. Underhill - April 7, 2018<br>
 Rust Translation: Matt Warminger - 2025<br>
 Updated: QRC - April 23, 2025<br>
 
@@ -757,7 +978,8 @@ To run CSX without authentication, remove the QRC_RCS_AUTHENTICATED in this head
 The CSX-512, known answer vectors are taken from [The CEX++ Cryptographic Library](https://github.com/Steppenwolfe65/CEX)<br>
 See the documentation and the csx_test.h tests for usage examples.<br>
 
-Author: John Underhill - May 2, 2020<br>
+Derived from John G. Underhill's AGPLv3 QSC library in C<br>
+Author: John G. Underhill - May 2, 2020<br>
 Updated: Stiepan A Kovac - October 13, 2021<br>
 Rust Translation: Matt Warminger - 2025<br>
 Updated: QRC - April 23, 2025<br>
@@ -814,7 +1036,8 @@ Each of the function families (SHA2, HMAC, HKDF), have a corresponding set of re
 NIST: [The SHA-2 Standard](http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf)<br>
 [Analysis of SIMD Applicability to SHA Algorithms](https://software.intel.com/sites/default/files/m/b/9/b/aciicmez.pdf)<br>
 
-Author: John Underhill - May 23, 2019<br>
+Derived from John G. Underhill's AGPLv3 QSC library in C<br>
+Author: John G. Underhill - May 23, 2019<br>
 Updated: Stiepan A Kovac - Jul 11, 2024<br>
 Rust Translation: Matt Warminger - 2024<br>
 Updated: QRC - April 23, 2025<br>
@@ -902,7 +1125,8 @@ NIST: [SHA3 Keccak Slides](http://csrc.nist.gov/groups/ST/hash/sha-3/documents/K
 NIST: [SHA3 Third-Round Report](http://nvlpubs.nist.gov/nistpubs/ir/2012/NIST.IR.7896.pdf)<br>
 Team Keccak: [Specifications summary](https://keccak.team/keccak_specs_summary.html)<br>
 
-Author: John Underhill - October 27, 2019<br>
+Derived from John G. Underhill's AGPLv3 QSC library in C<br>
+Author: John G. Underhill - October 27, 2019<br>
 Updated: Stiepan A Kovac - February 7, 2024<br>
 Rust Translation: Matt Warminger - 2024<br>
 Updated: QRC - April 23, 2025<br>
@@ -1056,6 +1280,7 @@ NIST: [SHA3 Keccak Slides](http://csrc.nist.gov/groups/ST/hash/sha-3/documents/K
 NIST: [SHA3 Third-Round Report](http://nvlpubs.nist.gov/nistpubs/ir/2012/NIST.IR.7896.pdf)<br>
 Team Keccak: [Specifications summary](https://keccak.team/keccak_specs_summary.html)<br>
 
+Derived from John G. Underhill's AGPLv3 QSC library in C<br>
 Rust Translation: Matt Warminger - 2025<br>
 Updated: QRC - April 23, 2025<br>
 
@@ -1092,7 +1317,8 @@ RFC 2104 HMAC: [Keyed-Hashing for Message Authentication](http://tools.ietf.org/
 Fips 198-1: [The Keyed-Hash Message Authentication Code (HMAC)](http://csrc.nist.gov/publications/fips/fips198-1/FIPS-198-1_final.pdf)<br>
 Fips 180-4: [Secure Hash Standard (SHS)](http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf)<br>
 
-Author: John Underhill - August 31, 2020<br>
+Derived from John G. Underhill's AGPLv3 QSC library in C<br>
+Author: John G. Underhill - August 31, 2020<br>
 Rust Translation: Matt Warminger - 2025<br>
 Updated: QRC - April 23, 2025<br>
 
@@ -1139,6 +1365,7 @@ NIST: [SHA3 Keccak Slides](http://csrc.nist.gov/groups/ST/hash/sha-3/documents/K
 NIST: [SHA3 Third-Round Report](http://nvlpubs.nist.gov/nistpubs/ir/2012/NIST.IR.7896.pdf)<br>
 Team Keccak: [Specifications summary](https://keccak.team/keccak_specs_summary.html)<br>
 
+Derived from John G. Underhill's AGPLv3 QSC library in C<br>
 Rust Translation: Matt Warminger - 2025<br>
 Updated: QRC - April 23, 2025<br>
 
@@ -1169,6 +1396,7 @@ qrc_scb_dispose(ctx);
 
 ##### Poly1305
 
+Derived from John G. Underhill's AGPLv3 QSC library in C<br>
 Rust Translation: Matt Warminger - 2024<br>
 Updated: QRC - April 23, 2025<br>
 
@@ -1203,6 +1431,7 @@ qrc_poly1305_finalize(ctx, mac);
 
 ##### Donna128
 
+Derived from John G. Underhill's AGPLv3 QSC library in C<br>
 Rust Translation: Matt Warminger - 2025<br>
 Updated: QRC - April 23, 2025<br>
 
@@ -1337,6 +1566,7 @@ x = qrc_donna128_or(x, y);
 
 ##### SecRand
 
+Derived from John G. Underhill's AGPLv3 QSC library in C<br>
 Rust Translation: Matt Warminger - 2024<br>
 Updated: QRC - April 23, 2025<br>
 
@@ -1383,6 +1613,7 @@ qrc_secrand_destroy(&mut asymmetric_state.secrand_state);
 
 <h6>This is not a secure RNG, and should be used for testing purposes only.</h6>
 
+Derived from John G. Underhill's AGPLv3 QSC library in C<br>
 Rust Translation: Matt Warminger - 2025<br>
 Updated: QRC - April 23, 2025<br>
 
@@ -1428,6 +1659,7 @@ qrc_asymmetric_nistrng_generate(asymmetric_state, out, 64);
 
 <h6>Recommended Provider, combination of latter two.</h6>
 
+Derived from John G. Underhill's AGPLv3 QSC library in C<br>
 Rust Translation: Matt Warminger - 2024<br>
 Updated: QRC - April 23, 2025<br>
 
@@ -1441,6 +1673,7 @@ qrc_rcrng_generate(out, 64);
 
 ##### OsRng
 
+Derived from John G. Underhill's AGPLv3 QSC library in C<br>
 Rust Translation: Matt Warminger - 2024<br>
 Updated: QRC - April 23, 2025<br>
 
@@ -1454,6 +1687,7 @@ qrc_osrng_generate(out, 64);
 
 ##### TrRng
 
+Derived from John G. Underhill's AGPLv3 QSC library in C<br>
 Rust Translation: Matt Warminger - 2024<br>
 Updated: QRC - April 23, 2025<br>
 

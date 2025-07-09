@@ -1,23 +1,29 @@
 /* The AGPL version 3 License (AGPLv3)
-*
-* Copyright (c) 2022 Digital Freedom Defence Inc.
+* 
+* Copyright (c) 2021 Digital Freedom Defence Inc.
 * This file is part of the QSC Cryptographic library
-*
+* 
 * This program is free software : you can redistribute it and / or modify
 * it under the terms of the GNU Affero General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
-*
+* 
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Affero General Public License for more details.
-*
+* 
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
-*/
-
-/* \cond DOXYGEN_IGNORE */
+*
+*
+*
+* Copyright (c) Original-2021 John G. Underhill <john.underhill@mailfence.com>
+* Copyright (c) 2022-Present QRC Eurosmart SA <opensource-support@qrcrypto.ch>
+*
+* The following code is a derivative work of the code from the QSC Cryptographic library in C, 
+* which is licensed AGPLv3. This code therefore is also licensed under the terms of 
+* the GNU Affero General Public License, version 3. The AGPL version 3 License (AGPLv3). */
 
 use crate::{asymmetric::cipher::ecdhbody::ec25519base::{ge25519_double_scalarmult_vartime, ge25519_frombytes_negate_vartime, ge25519_has_small_order, ge25519_is_canonical, Ge25519P2, Ge25519P3, ge25519_p3_tobytes, ge25519_scalarmult_base, ge25519_tobytes, qrc_sc25519_verify, sc25519_clamp, sc25519_is_canonical, sc25519_muladd, sc25519_reduce, QRC_EC25519_PUBLICKEY_SIZE, QRC_EC25519_SEED_SIZE, QRC_EC25519_SIGNATURE_SIZE}, digest::sha2::{qrc_sha512_compute, qrc_sha512_finalize, qrc_sha512_initialize, qrc_sha512_update, QrcSha512State}, tools::intutils::{qrc_intutils_are_equal8, qrc_intutils_clear8, qrc_intutils_copy8}};
 
@@ -88,7 +94,7 @@ pub fn qrc_ed25519_verify(message: &mut [u8], msglen: &mut usize, signedmsg: &[u
 	let msglen1 = smsglen - QRC_EC25519_SIGNATURE_SIZE;
 	let mut res = 0;
 
-	if ecdsa_ed25519_verify(signedmsg, &signedmsg[QRC_EC25519_SIGNATURE_SIZE..], msglen1, publickey) == false {
+	if !ecdsa_ed25519_verify(signedmsg, &signedmsg[QRC_EC25519_SIGNATURE_SIZE..], msglen1, publickey) {
 		qrc_intutils_clear8(message, msglen1);
 		*msglen = 0;
 		res = -1;
@@ -99,8 +105,6 @@ pub fn qrc_ed25519_verify(message: &mut [u8], msglen: &mut usize, signedmsg: &[u
 
 	return res;
 }
-
-/* \endcond DOXYGEN_IGNORE */
 
 fn ecdsa_ed25519_sign(sm: &mut [u8], smlen: &mut usize, m: &[u8], mlen: usize, sk: &[u8]) -> i32 {
 	let az = &mut [0u8; 64];
@@ -170,7 +174,7 @@ fn ecdsa_ed25519_verify(sig: &[u8], m: &[u8], mlen: usize, pk: &[u8]) -> bool {
 		res = false;
 	}
 
-	if res == true {
+	if res {
 		qrc_sha512_initialize(ctx);
 		qrc_sha512_update(ctx, sig, 32);
 		qrc_sha512_update(ctx, pk, 32);
@@ -181,7 +185,7 @@ fn ecdsa_ed25519_verify(sig: &[u8], m: &[u8], mlen: usize, pk: &[u8]) -> bool {
 		ge25519_double_scalarmult_vartime(r, h, a.clone(), &sig[32..]);
 		ge25519_tobytes(rcheck, r.clone());
 
-		if ((qrc_sc25519_verify(rcheck, sig, 32) == 0) | ((!(rcheck == sig)))) != true || (qrc_intutils_are_equal8(sig, rcheck, 32) == false) {
+		if !((qrc_sc25519_verify(rcheck, sig, 32) == 0) | ((!(rcheck == sig)))) || !(qrc_intutils_are_equal8(sig, rcheck, 32)) {
 			res = false;
 		}
 	}

@@ -1,7 +1,7 @@
 /* The AGPL version 3 License (AGPLv3)
 *
 * Copyright (c) 2024 DFD & QRC Eurosmart SA
-* This file is part of the QRC Cryptographic library
+* This file is part of the QSC Cryptographic library
 *
 * This program is free software : you can redistribute it and / or modify
 * it under the terms of the GNU Affero General public License as published by
@@ -15,6 +15,8 @@
 *
 * You should have received a copy of the GNU Affero General public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+Derived from John G. Underhill's AGPL QSC library in C
 */
 
 use crate::{
@@ -132,17 +134,17 @@ pub fn qrc_rcrng_generate(output: &mut [u8], length: usize) -> bool {
 	/* add a seed using RDRAND used as cSHAKE custom parameter */
 	let mut res = qrc_osrng_generate(cust, len);
 
-	if res == false {
+	if !res {
 		/* fall-back to system provider */
 		res = qrc_trng_generate(cust, len);
 	}
 
-	if res == true {
+	if res {
 		/* generate primary key using system random provider */
 		res = qrc_trng_generate(key, len);
 	}
 
-	if res == true {
+	if res {
 		/* key cSHAKE-512 to generate the pseudo-random output, using all three entropy sources */
 		qrc_cshake512_compute(output, qrc_intutils_min(length, QRC_RCRNG_SEED_MAX), key, len, stat, len, cust, len);
 	}

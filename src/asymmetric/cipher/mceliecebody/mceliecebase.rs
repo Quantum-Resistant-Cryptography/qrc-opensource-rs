@@ -1,21 +1,29 @@
 /* The AGPL version 3 License (AGPLv3)
-*
-* Copyright (c) 2024 DFD & QRC Eurosmart SA
-* This file is part of the QRC Cryptographic library
-*
+* 
+* Copyright (c) 2021 Digital Freedom Defence Inc.
+* This file is part of the QSC Cryptographic library
+* 
 * This program is free software : you can redistribute it and / or modify
 * it under the terms of the GNU Affero General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
-*
+* 
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Affero General Public License for more details.
-*
+* 
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
+*
+*
+*
+* Copyright (c) Original-2021 John G. Underhill <john.underhill@mailfence.com>
+* Copyright (c) 2022-Present QRC Eurosmart SA <opensource-support@qrcrypto.ch>
+*
+* The following code is a derivative work of the code from the QSC Cryptographic library in C, 
+* which is licensed AGPLv3. This code therefore is also licensed under the terms of 
+* the GNU Affero General Public License, version 3. The AGPL version 3 License (AGPLv3). */
 
 use crate::{asymmetric::asymmetric::AsymmetricRandState, common::common::{QRC_MCELIECE_S3N4608T96, QRC_MCELIECE_S5N6688T128, QRC_MCELIECE_S5N6960T119, QRC_MCELIECE_S5N8192T128}, digest::sha3::qrc_shake256_compute, tools::intutils::{qrc_intutils_clear16, qrc_intutils_clear16i, qrc_intutils_clear32i, qrc_intutils_clear8, qrc_intutils_clear8all, qrc_intutils_copy16, qrc_intutils_copy64, qrc_intutils_copy8, qrc_intutils_min, qrc_intutils_transform_32to8, qrc_intutils_transform_8to16, qrc_intutils_transform_itou_16, qrc_intutils_transform_itou_32, qrc_intutils_transform_utoi_16}};
 
@@ -25,7 +33,6 @@ use core::mem::size_of;
 use alloc::{vec, borrow::ToOwned};
 
 
- /* \cond DOXYGEN_IGNORE */
  
  /* operations.h */
  
@@ -216,7 +223,6 @@ pub fn qrc_mceliece_ref_encapsulate(asymmetric_state: &mut AsymmetricRandState, 
 }
 
  
- /* \endcond DOXYGEN_IGNORE */
  
 
 /* params.h */
@@ -627,7 +633,7 @@ pub fn eval(f: &[Gf], a: Gf) -> Gf {
 		r = gf_mul(r, a);
 		r = gf_add(r, f[i]);		
 
-		if i <= 0 {
+		if i == 0 {
 			break;
 		};
 	} 
@@ -1374,12 +1380,11 @@ pub fn syndrome(s: &mut [u8], pk: &[u8], e: &[u8]) {
 
 		if QRC_MCELIECE_S5N6960T119 {
 			let tail = MCELIECE_PK_NROWS % 8;
-			for j in ((MCELIECE_SYS_N / 8 - 1)..=(MCELIECE_SYS_N / 8 - MCELIECE_PK_ROW_BYTES)).rev() {
+			for j in ((MCELIECE_SYS_N / 8 - MCELIECE_PK_ROW_BYTES)..=(MCELIECE_SYS_N / 8 - 1)).rev() {
 				row[j] = (row[j] << tail) | (row[j - 1] >> (8 - tail));
 			}
 
 			row[i / 8] |= 1 << (i % 8);
-
 		} else {
 			row[i / 8] |= 1 << (i % 8);
 		}
@@ -1570,14 +1575,17 @@ pub fn pk_gen(pk: &mut [u8], mut sk: &[u8], perm: &[u32], pi: &mut [i16]) -> i32
 			let tail = MCELIECE_PK_NROWS % 8;
 
 			for i in 0..MCELIECE_PK_NROWS {
-				for j in ((MCELIECE_PK_NROWS - 1) / 8)..(MCELIECE_SYS_N / 8 - 1) {
-					pk_ptr[0] = &(mat[i][j] >> tail) | (mat[i][j + 1] << (8 - tail)) as u8;
+				let mut j = (MCELIECE_PK_NROWS - 1) / 8;
+				while j < MCELIECE_SYS_N / 8 - 1 {
+					pk_ptr[0] = ((mat[i][j] >> tail) | (mat[i][j + 1] << (8 - tail))) as u8;
 					pk_ptr = &mut pk_ptr[1..];
+					j += 1;
 				}
 
-				pk_ptr[0] = mat[i][(MCELIECE_SYS_N / 8 - 1)-1] >> tail;
+				pk_ptr[0] = mat[i][j] >> tail;
 				pk_ptr = &mut pk_ptr[1..];
 			}
+
 		} else {
 			for i in 0..MCELIECE_PK_NROWS {
 				qrc_intutils_copy8(&mut pk[(i * MCELIECE_PK_ROW_BYTES)..], &mat[i][(MCELIECE_PK_NROWS / 8)..], MCELIECE_PK_ROW_BYTES);

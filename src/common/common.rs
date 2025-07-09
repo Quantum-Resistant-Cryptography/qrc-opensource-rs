@@ -1,23 +1,31 @@
 /* The AGPL version 3 License (AGPLv3)
-*
-* Copyright (c) 2024 DFD & QRC Eurosmart SA
-* This file is part of the QRC Cryptographic library
-*
+* 
+* Copyright (c) 2021 Digital Freedom Defence Inc.
+* This file is part of the QSC Cryptographic library
+* 
 * This program is free software : you can redistribute it and / or modify
 * it under the terms of the GNU Affero General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
-*
+* 
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Affero General Public License for more details.
-*
+* 
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
-*/
+*
+*
+*
+* Copyright (c) Original-2021 John G. Underhill <john.underhill@mailfence.com>
+* Copyright (c) 2022-Present QRC Eurosmart SA <opensource-support@qrcrypto.ch>
+*
+* The following code is a derivative work of the code from the QSC Cryptographic library in C, 
+* which is licensed AGPLv3. This code therefore is also licensed under the terms of 
+* the GNU Affero General Public License, version 3. The AGPL version 3 License (AGPLv3). */
 
-pub const QRC_MAX_MEMORY_CLEAR: bool = true;
+pub const QRC_MAX_MEMORY_CLEAR: bool = !cfg!(feature = "MIN_MEMORY_CLEAR");
 
 /*
 \def QRC_SYSTEM_OS_XXX
@@ -244,7 +252,21 @@ pub const QRC_SYSTEM_AESNI_ENABLED: bool = QRC_SYSTEM_AVX_INTRINSICS;
 * \brief Define to use the UNROLLED form of the Keccak permutation function
 * if undefined, functions use the compact form of the Keccak permutation
 */
-pub const QRC_KECCAK_UNROLLED_PERMUTATION: bool = false;
+//pub const QRC_KECCAK_UNROLLED_PERMUTATION: bool = cfg!(feature = "KECCAK_UNROLLED_PERMUTATION");
+
+
+
+#[macro_export]
+macro_rules! assert_unique_feature {
+    () => {};
+    ($first:tt $(,$rest:tt)*) => {
+        $(
+            #[cfg(all(feature = $first, feature = $rest))]
+            compile_error!(concat!("features \"", $first, "\" and \"", $rest, "\" cannot be used together"));
+        )*
+        assert_unique_feature!($($rest),*);
+    }
+}
 
 /*** Asymmetric Ciphers ***/
 
@@ -254,101 +276,76 @@ pub const QRC_KECCAK_UNROLLED_PERMUTATION: bool = false;
 \def QRC_ECDH_S1EC25519
 * Implement the ECDH S1EC25519 parameter set
 */
-pub const QRC_ECDH_S1EC25519: bool = true;
+pub const QRC_ECDH_S1EC25519: bool = cfg!(any(feature = "ECDH_S1EC25519", not(any())));
 
 /*** Kyber ***/
-
+assert_unique_feature!("KYBER_S3Q3329N256K3", "KYBER_S5Q3329N256K4", "KYBER_S6Q3329N256K5");
 /*
 \def QRC_KYBER_S3Q3329N256K3
 * Implement the Kyber S3Q3329N256K3 parameter set
 */
-pub const QRC_KYBER_S3Q3329N256K3: bool = false;
+pub const QRC_KYBER_S3Q3329N256K3: bool = cfg!(feature = "KYBER_S3Q3329N256K3");
 
 /*
 \def QRC_KYBER_S5Q3329N256K4
 * Implement the Kyber S5Q3329N256K4 parameter set
 */
-pub const QRC_KYBER_S5Q3329N256K4: bool = true;
+pub const QRC_KYBER_S5Q3329N256K4: bool = cfg!(any(feature = "KYBER_S5Q3329N256K4", not(any(feature = "KYBER_S3Q3329N256K3", feature = "KYBER_S6Q3329N256K5"))));
 
 /*
 \def QRC_KYBER_S6Q3329N256K5
 * Implement the Kyber S6Q3329N256K5 parameter set.
 * /warning Experimental, not an official parameter.
 */
-pub const QRC_KYBER_S6Q3329N256K5: bool = false;
+pub const QRC_KYBER_S6Q3329N256K5: bool = cfg!(feature = "KYBER_S6Q3329N256K5");
 
 /*** McEliece ***/
-
+assert_unique_feature!("MCELIECE_S3N4608T96", "MCELIECE_S5N6688T128", "MCELIECE_S5N6960T119", "MCELIECE_S5N8192T128");
 /*
 \def QRC_MCELIECE_S3N4608T96
 * Implement the McEliece S3-N4608T96 parameter set
 */
-pub const QRC_MCELIECE_S3N4608T96: bool = false;
+pub const QRC_MCELIECE_S3N4608T96: bool = cfg!(feature = "MCELIECE_S3N4608T96");
 
 /*
 \def QRC_MCELIECE_S5N6688T128
 * Implement the McEliece S5-N6688T128 parameter set
 */
-pub const QRC_MCELIECE_S5N6688T128: bool = true;
+pub const QRC_MCELIECE_S5N6688T128: bool = cfg!(any(feature = "MCELIECE_S5N6688T128", not(any(feature = "MCELIECE_S3N4608T96", feature = "MCELIECE_S5N6960T119", feature = "MCELIECE_S5N8192T128"))));
 
 /*
 \def QRC_MCELIECE_S5N6960T119
 * Implement the McEliece S5-N6960T119 parameter set
 */
-pub const QRC_MCELIECE_S5N6960T119: bool = false;
+pub const QRC_MCELIECE_S5N6960T119: bool = cfg!(feature = "MCELIECE_S5N6960T119");
 
 /*
 \def QRC_MCELIECE_S5N8192T128
 * Implement the McEliece S5-N8192T128 parameter set
 */
-pub const QRC_MCELIECE_S5N8192T128: bool = false;
-
-/*** NTRU ***/
-
-/*
-\def QRC_NTRU_S1HPS2048509
-* Implement the NTRU S1HPS2048509 parameter set
-*/
-pub const QRC_NTRU_S1HPS2048509: bool = false;
-/*
-\def QRC_NTRU_HPSS32048677
-* Implement the NTRU HPSS32048677 parameter set
-*/
-pub const QRC_NTRU_HPSS32048677: bool = false;
-
-/*
-\def QRC_NTRU_S5HPS4096821
-* Implement the NTRU S5HPS4096821 parameter set
-*/
-pub const QRC_NTRU_S5HPS4096821: bool = true;
-
-/*
-\def QRC_NTRU_S5HRSS701
-* Implement the NTRU S5HRSS701 parameter set
-*/
-pub const QRC_NTRU_S5HRSS701: bool = false;
+pub const QRC_MCELIECE_S5N8192T128: bool = cfg!(feature = "MCELIECE_S5N8192T128");
 
 /*** Signature Schemes ***/
 
 /*** Dilithium ***/
-
+assert_unique_feature!("DILITHIUM_S2N256Q8380417K4", "DILITHIUM_S3N256Q8380417K6", "DILITHIUM_S5N256Q8380417K8");
 /*
 \def QRC_DILITHIUM_S2N256Q8380417K4
 * Implement the Dilithium S2N256Q8380417 parameter set
 */
-pub const QRC_DILITHIUM_S2N256Q8380417K4: bool = false;
+pub const QRC_DILITHIUM_S2N256Q8380417K4: bool = cfg!(feature = "DILITHIUM_S2N256Q8380417K4");
 
 /*
 \def QRC_DILITHIUM_S3N256Q8380417K6
 * Implement the Dilithium S3N256Q83804 parameter set
 */
-pub const QRC_DILITHIUM_S3N256Q8380417K6: bool = true;
+pub const QRC_DILITHIUM_S3N256Q8380417K6: bool = cfg!(any(feature = "DILITHIUM_S3N256Q8380417K6", not(any(feature = "DILITHIUM_S2N256Q8380417K4", feature = "DILITHIUM_S5N256Q8380417K8"))));
 
 /*
 \def QRC_DILITHIUM_S5N256Q8380417K8
 * Implement the Dilithium S5N256Q8380417 parameter set
 */
-pub const QRC_DILITHIUM_S5N256Q8380417K8: bool = false;
+pub const QRC_DILITHIUM_S5N256Q8380417K8: bool = cfg!(feature = "DILITHIUM_S5N256Q8380417K8");
 
 /*** ECDSA ***/
 
@@ -356,44 +353,44 @@ pub const QRC_DILITHIUM_S5N256Q8380417K8: bool = false;
 \def QRC_ECDSA_S1EC25519
 * Implement the ECDSA S1EC25519 parameter set
 */
-pub const QRC_ECDSA_S1EC25519: bool = true;
+pub const QRC_ECDSA_S1EC25519: bool = cfg!(any(feature = "ECDSA_S1EC25519", not(any())));
 
 /*** Falcon ***/
-
+assert_unique_feature!("FALCON_S3SHAKE256F512", "FALCON_S5SHAKE256F1024");
 /*
 \def QRC_FALCON_S3SHAKE256F512
 * Implement the Falcon S3SHAKE256F512 parameter set
 */
-pub const QRC_FALCON_S3SHAKE256F512: bool = false;
+pub const QRC_FALCON_S3SHAKE256F512: bool = cfg!(feature = "FALCON_S3SHAKE256F512");
 
 /*
 \def QRC_FALCON_S5SHAKE256F1024
 * Implement the Falcon S5SHAKE256F1024 parameter set
 */
-pub const QRC_FALCON_S5SHAKE256F1024: bool = true;
+pub const QRC_FALCON_S5SHAKE256F1024: bool = cfg!(any(feature = "FALCON_S5SHAKE256F1024", not(any(feature = "FALCON_S3SHAKE256F512"))));
 
 /*** SphincsPlus ***/
-
+assert_unique_feature!("SPHINCSPLUS_S3S192SHAKERS", "SPHINCSPLUS_S3S192SHAKERF", "SPHINCSPLUS_S5S256SHAKERS", "SPHINCSPLUS_S5S256SHAKERF");
 /*
 \def QRC_SPHINCSPLUS_S3S192SHAKERS
 * Implement the SphincsPlus S3S192SHAKERS robust small parameter set
 */
-pub const QRC_SPHINCSPLUS_S3S192SHAKERS: bool = false;
+pub const QRC_SPHINCSPLUS_S3S192SHAKERS: bool = cfg!(feature = "SPHINCSPLUS_S3S192SHAKERS");
 
 /*
 \def QRC_SPHINCSPLUS_S3S192SHAKERF
 * Implement the SphincsPlus S3S192SHAKERF robust fast parameter set
 */
-pub const QRC_SPHINCSPLUS_S3S192SHAKERF: bool = false;
+pub const QRC_SPHINCSPLUS_S3S192SHAKERF: bool = cfg!(feature = "SPHINCSPLUS_S3S192SHAKERF");
 
 /*
 \def QRC_SPHINCSPLUS_S5S256SHAKERS
 * Implement the SphincsPlus S5S256SHAKERS robust small parameter set
 */
-pub const QRC_SPHINCSPLUS_S5S256SHAKERS: bool = false;
+pub const QRC_SPHINCSPLUS_S5S256SHAKERS: bool = cfg!(feature = "SPHINCSPLUS_S5S256SHAKERS");
 
 /*
 \def QRC_SPHINCSPLUS_S5S256SHAKERF
 * Implement the SphincsPlus S5S256SHAKERF robust fast parameter set
 */
-pub const QRC_SPHINCSPLUS_S5S256SHAKERF: bool = true;
+pub const QRC_SPHINCSPLUS_S5S256SHAKERF: bool = cfg!(any(feature = "SPHINCSPLUS_S5S256SHAKERF", not(any(feature = "SPHINCSPLUS_S3S192SHAKERS", feature = "SPHINCSPLUS_S3S192SHAKERF", feature = "SPHINCSPLUS_S5S256SHAKERS"))));

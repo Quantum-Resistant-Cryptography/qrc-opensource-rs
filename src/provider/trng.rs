@@ -1,7 +1,7 @@
 /* The AGPL version 3 License (AGPLv3)
 *
 * Copyright (c) 2024 DFD & QRC Eurosmart SA
-* This file is part of the QRC Cryptographic library
+* This file is part of the QSC Cryptographic library
 *
 * This program is free software : you can redistribute it and / or modify
 * it under the terms of the GNU Affero General public License as published by
@@ -15,6 +15,8 @@
 *
 * You should have received a copy of the GNU Affero General public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+Derived from John G. Underhill's AGPL QSC library in C
 */
 
 use crate::tools::intutils::qrc_intutils_min;

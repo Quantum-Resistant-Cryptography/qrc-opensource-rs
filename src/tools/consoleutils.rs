@@ -1,24 +1,33 @@
 #![allow(dead_code)]
-#![cfg(feature = "std")]
+#![cfg(any(feature = "consoleutils", feature = "no_std"))]
 /* The AGPL version 3 License (AGPLv3)
-*
-* Copyright (c) 2024 DFD & QRC Eurosmart SA
-* This file is part of the QRC Cryptographic library
-*
+* 
+* Copyright (c) 2021 Digital Freedom Defence Inc.
+* This file is part of the QSC Cryptographic library
+* 
 * This program is free software : you can redistribute it and / or modify
 * it under the terms of the GNU Affero General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
-*
+* 
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Affero General Public License for more details.
-*
+* 
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
-*/
+*
+*
+*
+* Copyright (c) Original-2021 John G. Underhill <john.underhill@mailfence.com>
+* Copyright (c) 2022-Present QRC Eurosmart SA <opensource-support@qrcrypto.ch>
+*
+* The following code is a derivative work of the code from the QSC Cryptographic library in C, 
+* which is licensed AGPLv3. This code therefore is also licensed under the terms of 
+* the GNU Affero General Public License, version 3. The AGPL version 3 License (AGPLv3). */
 
+#[cfg(feature = "std")]
 use crate::{
     common::common::QRC_SYSTEM_OS_WINDOWS,
     tools::{
@@ -27,14 +36,20 @@ use crate::{
     },
 };
 
+#[cfg(feature = "std")]
 use crossterm::{
     cursor::Show,
     execute,
     style::{Color, SetForegroundColor},
     terminal::{SetSize, SetTitle},
 };
+#[cfg(feature = "std")]
 use rpassword::read_password;
+#[cfg(feature = "std")]
 use std::io::{BufRead, Write, stdin, stdout};
+
+#[cfg(feature = "log-no_std")]
+use defmt::*;
 
 /*
 * \file consoleutils
@@ -47,6 +62,7 @@ use std::io::{BufRead, Write, stdin, stdout};
 * \param message: [const] The message string
 * \param color: The color of the text
 */
+#[cfg(feature = "std")]
 pub fn qrc_consoleutils_print_colour(input: &str, colour: usize) {
     let mut stdout = stdout();
     let mut col = Color::Reset;
@@ -71,12 +87,19 @@ pub fn qrc_consoleutils_print_colour(input: &str, colour: usize) {
     qrc_consoleutils_print_safe(input);
     execute!(stdout, SetForegroundColor(Color::Reset)).unwrap();
 }
+#[cfg(feature = "log-no_std")]
+pub fn qrc_consoleutils_print_colour(input: &str, _colour: usize) {
+    info!("{}", input);
+}
+#[cfg(all(feature = "no_std", not(feature = "log-no_std")))]
+pub fn qrc_consoleutils_print_colour(_input: &str, _colour: usize) {}
 
 /*
 * \brief A blocking wait that returns a single character from console input
 *
 * \return Returns the character detected
 */
+#[cfg(feature = "std")]
 pub fn qrc_consoleutils_get_char() -> char {
     stdout().flush().unwrap();
     let line = &mut String::with_capacity(1);
@@ -105,6 +128,7 @@ pub fn qrc_consoleutils_get_char() -> char {
 *
 * \return Returns the number of characters in the line
 */
+#[cfg(feature = "std")]
 pub fn qrc_consoleutils_get_line(line: &mut String, maxlen: usize) -> usize {
     stdout().flush().unwrap();
 
@@ -128,6 +152,7 @@ pub fn qrc_consoleutils_get_line(line: &mut String, maxlen: usize) -> usize {
 *
 * \return Returns the number of character
 */
+#[cfg(feature = "std")]
 pub fn qrc_consoleutils_get_wait() -> () {
     stdout().flush().unwrap();
     let line = &mut String::with_capacity(1);
@@ -141,6 +166,7 @@ pub fn qrc_consoleutils_get_wait() -> () {
 * \param output: The character output array
 * \param length: The number of characters to convert
 */
+#[cfg(feature = "std")]
 pub fn qrc_consoleutils_hex_to_bin(hexstr: &str, mut output: &mut [u8]) {
     const HASHMAP: [u8; 32] = [
         0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -166,6 +192,7 @@ pub fn qrc_consoleutils_hex_to_bin(hexstr: &str, mut output: &mut [u8]) {
 * \param line: [const] The string of text received
 * \param token: [const] The string to search for
 */
+#[cfg(feature = "std")]
 pub fn qrc_consoleutils_bin_to_hex(input: &[u8]) -> String {
     const HEX_TABLE: &[u8; 16] = b"0123456789ABCDEF";
 
@@ -186,6 +213,7 @@ pub fn qrc_consoleutils_bin_to_hex(input: &[u8]) -> String {
 * \param outlen: The maximum size of the output array
 * \return Returns the size of the password
 */
+#[cfg(feature = "std")]
 pub fn qrc_consoleutils_masked_password(output: &mut String, maxlen: usize) -> usize {
     stdout().flush().unwrap();
 
@@ -213,23 +241,43 @@ pub fn qrc_consoleutils_masked_password(output: &mut String, maxlen: usize) -> u
 *
 * \param input: [const] The character array to print
 */
+#[cfg(feature = "std")]
 pub fn qrc_consoleutils_print_safe(input: &str) {
     if !input.is_empty() && qrc_stringutils_string_size(input) > 0 {
         print!("{}", input);
     }
 }
+#[cfg(feature = "log-no_std")]
+pub fn qrc_consoleutils_print_safe(input: &str) {
+    if !input.is_empty() {
+        info!("{}", input);
+    }
+}
+#[cfg(all(feature = "no_std", not(feature = "log-no_std")))]
+pub fn qrc_consoleutils_print_safe(_input: &str) {}
 
 /*
 * \brief Print an array of characters to the console with a line break
 *
 * \param input: [const] The character array to print
 */
+#[cfg(feature = "std")]
 pub fn qrc_consoleutils_print_line(input: &str) {
     if !input.is_empty() {
         qrc_consoleutils_print_safe(input);
     }
     qrc_consoleutils_print_safe("\n");
 }
+#[cfg(feature = "log-no_std")]
+pub fn qrc_consoleutils_print_line(input: &str) {
+    if !input.is_empty() {
+        qrc_consoleutils_print_safe(input);
+    }
+    qrc_consoleutils_print_safe("\n");
+}
+#[cfg(all(feature = "no_std", not(feature = "log-no_std")))]
+pub fn qrc_consoleutils_print_line(_input: &str) {}
+
 
 /*
 * \brief Set the initial size of the console window
@@ -237,6 +285,7 @@ pub fn qrc_consoleutils_print_line(input: &str) {
 * \param width: The window width
 * \param height: The window height
 */
+#[cfg(feature = "std")]
 pub fn qrc_consoleutils_set_window_size(width: u16, height: u16) {
     execute!(stdout(), SetSize(width, height)).unwrap();
 }
@@ -246,6 +295,7 @@ pub fn qrc_consoleutils_set_window_size(width: u16, height: u16) {
 *
 * \param title: [const] The title string
 */
+#[cfg(feature = "std")]
 pub fn qrc_consoleutils_set_window_title(title: &str) {
     execute!(stdout(), SetTitle(title)).unwrap();
 }
@@ -253,6 +303,7 @@ pub fn qrc_consoleutils_set_window_title(title: &str) {
 /*
 * \brief Enable virtual terminal mode
 */
+#[cfg(feature = "std")]
 pub fn qrc_consoleutils_set_virtual_terminal() {
     let mut stdout = stdout();
     execute!(stdout, Show).unwrap();

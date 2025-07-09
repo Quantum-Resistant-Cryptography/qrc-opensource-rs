@@ -15,7 +15,15 @@
 * 
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
-*/
+*
+*
+*
+* Copyright (c) Original-2021 John G. Underhill <john.underhill@mailfence.com>
+* Copyright (c) 2022-Present QRC Eurosmart SA <opensource-support@qrcrypto.ch>
+*
+* The following code is a derivative work of the code from the QSC Cryptographic library in C, 
+* which is licensed AGPLv3. This code therefore is also licensed under the terms of 
+* the GNU Affero General Public License, version 3. The AGPL version 3 License (AGPLv3). */
 
 use crate::{common::common::QRC_SYSTEM_IS_LITTLE_ENDIAN, digest::sha3::{qrc_cshake_initialize, qrc_cshake_squeezeblocks, qrc_keccak_absorb_key_custom, qrc_keccak_dispose, qrc_keccak_finalize, qrc_keccak_initialize_state, qrc_keccak_update, qrc_kmac_finalize, qrc_kmac_initialize, qrc_kmac_update, QrcKeccakRate, QrcKeccakState, QRC_KECCAK_512_RATE, QRC_KECCAK_KMAC_DOMAIN_ID, QRC_KECCAK_PERMUTATION_MIN_ROUNDS, QRC_KECCAK_STATE_SIZE}, tools::intutils::{qrc_intutils_clear64, qrc_intutils_copy64, qrc_intutils_copy8, qrc_intutils_le32to8, qrc_intutils_le64to8, qrc_intutils_le8to64, qrc_intutils_min, qrc_intutils_rotl64, qrc_intutils_transform_8to64, qrc_intutils_verify, qrc_intutils_xor}};
 
@@ -356,7 +364,7 @@ pub fn qrc_csx_extended_transform(ctx: &mut QrcCsxState, output: &mut [u8], inpu
 			/* update the mac with the cipher-text */
 			csx_mac_update(ctx, output, length);
 
-			if finalize == true	{
+			if finalize	{
 				/* mac the cipher-text appending the code to the end of the array */
 				csx_finalize(ctx, &mut output[length..]);
 			}
@@ -368,7 +376,7 @@ pub fn qrc_csx_extended_transform(ctx: &mut QrcCsxState, output: &mut [u8], inpu
 			/* update the mac with the cipher-text */
 			csx_mac_update(ctx, input, length);
 
-			if finalize == true	{
+			if finalize	{
 				/* generate the internal mac code */
 				csx_finalize(ctx, code);
 

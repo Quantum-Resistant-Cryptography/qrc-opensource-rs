@@ -1,21 +1,29 @@
 /* The AGPL version 3 License (AGPLv3)
-*
-* Copyright (c) 2024 DFD & QRC Eurosmart SA
-* This file is part of the QRC Cryptographic library
-*
+* 
+* Copyright (c) 2021 Digital Freedom Defence Inc.
+* This file is part of the QSC Cryptographic library
+* 
 * This program is free software : you can redistribute it and / or modify
 * it under the terms of the GNU Affero General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
-*
+* 
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Affero General Public License for more details.
-*
+* 
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
-*/
+*
+*
+*
+* Copyright (c) Original-2021 John G. Underhill <john.underhill@mailfence.com>
+* Copyright (c) 2022-Present QRC Eurosmart SA <opensource-support@qrcrypto.ch>
+*
+* The following code is a derivative work of the code from the QSC Cryptographic library in C, 
+* which is licensed AGPLv3. This code therefore is also licensed under the terms of 
+* the GNU Affero General Public License, version 3. The AGPL version 3 License (AGPLv3). */
 
 use crate::{
     asymmetric::{
@@ -126,9 +134,9 @@ pub fn qrc_mceliece_decapsulate(
 * \brief Decrypts the shared secret for a given cipher-text using a private-key
 * Used in conjunction with the encrypt function.
 *
-* \param secret: Pointer to the output shared secret key, an array of QRC_KYBER_SHAREDSECRET_SIZE constant size
-* \param ciphertext: [const] Pointer to the cipher-text array of QRC_KYBER_CIPHERTEXT_SIZE constant size
-* \param privatekey: [const] Pointer to the secret-key array of QRC_KYBER_PRIVATEKEY_SIZE constant size
+* \param secret: Pointer to the output shared secret key, an array of QRC_MCELIECE_SHAREDSECRET_SIZE constant size
+* \param ciphertext: [const] Pointer to the cipher-text array of QRC_MCELIECE_CIPHERTEXT_SIZE constant size
+* \param privatekey: [const] Pointer to the secret-key array of QRC_MCELIECE_PRIVATEKEY_SIZE constant size
 * \return Returns true for success
 */
 pub fn qrc_mceliece_decrypt(
@@ -169,11 +177,11 @@ pub fn qrc_mceliece_encapsulate(
 * \brief Generates cipher-text and encapsulates a shared secret key using a public-key
 * Used in conjunction with the encrypt function.
 *
-* \warning Cipher-text array must be sized to the QRC_KYBER_CIPHERTEXT_SIZE.
+* \warning Cipher-text array must be sized to the QRC_MCELIECE_CIPHERTEXT_SIZE.
 *
-* \param secret: Pointer to the shared secret key, a uint8_t array of QRC_KYBER_SHAREDSECRET_SIZE constant size
-* \param ciphertext: Pointer to the cipher-text array of QRC_KYBER_CIPHERTEXT_SIZE constant size
-* \param publickey: [const] Pointer to the public-key array of QRC_KYBER_PUBLICKEY_SIZE constant size
+* \param secret: Pointer to the shared secret key, a uint8_t array of QRC_MCELIECE_SHAREDSECRET_SIZE constant size
+* \param ciphertext: Pointer to the cipher-text array of QRC_MCELIECE_CIPHERTEXT_SIZE constant size
+* \param publickey: [const] Pointer to the public-key array of QRC_MCELIECE_PUBLICKEY_SIZE constant size
 * \param seed: [const] A pointer to the random seed array
 */
 pub fn qrc_mceliece_encrypt(

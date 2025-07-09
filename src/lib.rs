@@ -87,7 +87,7 @@ pub mod tools {
     #[cfg(not(feature = "sysutils"))]
     pub(crate) mod sysutils;
 
-    #[cfg(feature = "consoleutils")]
+    #[cfg(any(feature = "consoleutils", feature = "no_std"))]
     pub mod consoleutils;
     #[cfg(feature = "fileutils")]
     pub mod fileutils;

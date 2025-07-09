@@ -1,24 +1,29 @@
 /* The AGPL version 3 License (AGPLv3)
-*
-* Copyright (c) 2022 Digital Freedom Defence Inc.
+* 
+* Copyright (c) 2021 Digital Freedom Defence Inc.
 * This file is part of the QSC Cryptographic library
-*
+* 
 * This program is free software : you can redistribute it and / or modify
 * it under the terms of the GNU Affero General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
-*
+* 
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Affero General Public License for more details.
-*
+* 
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
-*/
-
-
-/* \cond DOXYGEN_IGNORE */
+*
+*
+*
+* Copyright (c) Original-2021 John G. Underhill <john.underhill@mailfence.com>
+* Copyright (c) 2022-Present QRC Eurosmart SA <opensource-support@qrcrypto.ch>
+*
+* The following code is a derivative work of the code from the QSC Cryptographic library in C, 
+* which is licensed AGPLv3. This code therefore is also licensed under the terms of 
+* the GNU Affero General Public License, version 3. The AGPL version 3 License (AGPLv3). */
 
 use crate::{asymmetric::cipher::ecdhbody::ec25519base::{QRC_EC25519_SEED_SIZE, Fe25519, ed25519_small_order, fe25519_0, fe25519_1, fe25519_add, fe25519_copy, fe25519_cswap, fe25519_frombytes, fe25519_invert, fe25519_mul, fe25519_mul32, fe25519_sq, fe25519_sub, fe25519_tobytes, Ge25519P3, ge25519_scalarmult_base, sc25519_clamp, QRC_EC25519_CURVE_SIZE}, digest::sha2::{qrc_sha512_compute, QRC_SHA2_512_HASH_SIZE}, tools::intutils::qrc_intutils_copy8};
 
@@ -58,8 +63,6 @@ pub fn qrc_ed25519_generate_keypair(publickey: &mut [u8], privatekey: &mut [u8],
     qrc_intutils_copy8(privatekey, tseed, QRC_EC25519_SEED_SIZE);
     crypto_scalarmult_curve25519_ref10_base(publickey, privatekey);
 }
-
-/* \endcond DOXYGEN_IGNORE */
 
 
 

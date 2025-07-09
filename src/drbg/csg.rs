@@ -1,21 +1,29 @@
 /* The AGPL version 3 License (AGPLv3)
-*
-* Copyright (c) 2024 DFD & QRC Eurosmart SA
-* This file is part of the QRC Cryptographic library
-*
+* 
+* Copyright (c) 2021 Digital Freedom Defence Inc.
+* This file is part of the QSC Cryptographic library
+* 
 * This program is free software : you can redistribute it and / or modify
 * it under the terms of the GNU Affero General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
-*
+* 
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Affero General Public License for more details.
-*
+* 
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
-*/
+*
+*
+*
+* Copyright (c) Original-2021 John G. Underhill <john.underhill@mailfence.com>
+* Copyright (c) 2022-Present QRC Eurosmart SA <opensource-support@qrcrypto.ch>
+*
+* The following code is a derivative work of the code from the QSC Cryptographic library in C, 
+* which is licensed AGPLv3. This code therefore is also licensed under the terms of 
+* the GNU Affero General Public License, version 3. The AGPL version 3 License (AGPLv3). */
 
 use crate::{digest::sha3::{qrc_cshake_initialize, qrc_cshake_squeezeblocks, qrc_cshake_update, qrc_keccak_dispose, QrcKeccakRate, QrcKeccakState, QRC_KECCAK_256_RATE, QRC_KECCAK_512_RATE, QRC_KECCAK_STATE_SIZE}, provider::rcrng::qrc_rcrng_generate, tools::intutils::{qrc_intutils_clear64, qrc_intutils_clear8, qrc_intutils_copy8, qrc_intutils_min}};
 
@@ -130,9 +138,7 @@ pub fn qrc_csg_initialize(ctx: &mut QrcCsgState, seed: &[u8], seedlen: usize, in
 			let prand = &mut [0u8; QRC_CSG_256_SEED_SIZE];
 			qrc_rcrng_generate(prand, QRC_CSG_256_SEED_SIZE);
 			qrc_cshake_initialize(&mut ctx.kstate, rate, seed, seedlen, info, infolen, prand, QRC_CSG_256_SEED_SIZE);
-		}
-		else
-		{
+		} else {
 			qrc_cshake_initialize(&mut ctx.kstate, rate, seed, seedlen, info, infolen, &[], 0);
 		}
 	}

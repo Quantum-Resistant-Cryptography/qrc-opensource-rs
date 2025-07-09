@@ -1,28 +1,50 @@
 /* The AGPL version 3 License (AGPLv3)
-*
+* 
 * Copyright (c) 2021 Digital Freedom Defence Inc.
 * This file is part of the QSC Cryptographic library
-*
+* 
 * This program is free software : you can redistribute it and / or modify
 * it under the terms of the GNU Affero General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
-*
+* 
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Affero General Public License for more details.
-*
+* 
 * You should have received a copy of the GNU Affero General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
-*/
+*
+*
+*
+* Copyright (c) Original-2021 John G. Underhill <john.underhill@mailfence.com>
+* Copyright (c) 2022-Present QRC Eurosmart SA <opensource-support@qrcrypto.ch>
+*
+* The following code is a derivative work of the code from the QSC Cryptographic library in C, 
+* which is licensed AGPLv3. This code therefore is also licensed under the terms of 
+* the GNU Affero General Public License, version 3. The AGPL version 3 License (AGPLv3). */
 
-use crate::{asymmetric::asymmetric::AsymmetricRandState, common::common::{QRC_DILITHIUM_S2N256Q8380417K4, QRC_DILITHIUM_S3N256Q8380417K6, QRC_DILITHIUM_S5N256Q8380417K8}, digest::sha3::{qrc_keccak_incremental_block_absorb, qrc_keccak_incremental_finalize, qrc_keccak_incremental_squeeze, qrc_keccak_initialize_state, qrc_keccak_squeezeblocks, qrc_shake256_compute, QrcKeccakState, QRC_KECCAK_128_RATE, QRC_KECCAK_256_RATE, QRC_KECCAK_PERMUTATION_ROUNDS, QRC_KECCAK_SHAKE_DOMAIN_ID}, tools::intutils::{qrc_intutils_clear8, qrc_intutils_copy32i, qrc_intutils_copy8, qrc_intutils_verify}};
+use crate::{
+    asymmetric::asymmetric::AsymmetricRandState,
+    common::common::{
+        QRC_DILITHIUM_S2N256Q8380417K4, QRC_DILITHIUM_S3N256Q8380417K6,
+        QRC_DILITHIUM_S5N256Q8380417K8,
+    },
+    digest::sha3::{
+        QRC_KECCAK_128_RATE, QRC_KECCAK_256_RATE, QRC_KECCAK_PERMUTATION_ROUNDS,
+        QRC_KECCAK_SHAKE_DOMAIN_ID, QrcKeccakState, qrc_keccak_incremental_block_absorb,
+        qrc_keccak_incremental_finalize, qrc_keccak_incremental_squeeze,
+        qrc_keccak_initialize_state, qrc_keccak_squeezeblocks, qrc_shake256_compute,
+    },
+    tools::intutils::{
+        qrc_intutils_clear8, qrc_intutils_copy8, qrc_intutils_copy32i, qrc_intutils_verify,
+    },
+};
 
 #[cfg(feature = "no_std")]
 use alloc::borrow::ToOwned;
 
-/* \cond DOXYGEN_IGNORE */
 
 pub const QRC_DILITHIUM_RANDOMIZED_SIGNING: bool = false;
 
@@ -65,7 +87,7 @@ pub const QRC_DILITHIUM_L: usize = if QRC_DILITHIUM_S2N256Q8380417K4 {
 */
 #[derive(Clone, Copy, Debug)]
 pub struct QrcDilithiumPoly {
-    pub coeffs: [i32; QRC_DILITHIUM_N],            /*< The coefficients  */
+    pub coeffs: [i32; QRC_DILITHIUM_N], /*< The coefficients  */
 }
 impl Default for QrcDilithiumPoly {
     fn default() -> Self {
@@ -81,7 +103,7 @@ impl Default for QrcDilithiumPoly {
 */
 #[derive(Clone, Copy, Debug)]
 pub struct QrcDilithiumPolyvecl {
-    pub vec: [QrcDilithiumPoly; QRC_DILITHIUM_L],    /*< The poly vector of L  */
+    pub vec: [QrcDilithiumPoly; QRC_DILITHIUM_L], /*< The poly vector of L  */
 }
 impl Default for QrcDilithiumPolyvecl {
     fn default() -> Self {
@@ -91,14 +113,13 @@ impl Default for QrcDilithiumPolyvecl {
     }
 }
 
-
 /*
 * \struct qrc_dilithium_polyveck
 * \brief Vectors of polynomials of length K
 */
 #[derive(Clone, Copy)]
 pub struct QrcDilithiumPolyveck {
-    pub vec: [QrcDilithiumPoly; QRC_DILITHIUM_K],    /*< The poly vector of K  */
+    pub vec: [QrcDilithiumPoly; QRC_DILITHIUM_K], /*< The poly vector of K  */
 }
 impl Default for QrcDilithiumPolyveck {
     fn default() -> Self {
@@ -116,7 +137,12 @@ impl Default for QrcDilithiumPolyveck {
 * \param sk: The private signature key
 * \param rng_generate: The random generator
 */
-pub fn qrc_dilithium_ref_generate_keypair(asymmetric_state: &mut AsymmetricRandState, pk: &mut [u8], sk: &mut [u8], rng_generate: fn(&mut AsymmetricRandState, &mut [u8], usize) -> bool) {
+pub fn qrc_dilithium_ref_generate_keypair(
+    asymmetric_state: &mut AsymmetricRandState,
+    pk: &mut [u8],
+    sk: &mut [u8],
+    rng_generate: fn(&mut AsymmetricRandState, &mut [u8], usize) -> bool,
+) {
     let mat = &mut [QrcDilithiumPolyvecl::default(); QRC_DILITHIUM_K];
     let s1 = &mut QrcDilithiumPolyvecl::default();
     let s2 = &mut QrcDilithiumPolyveck::default();
@@ -153,7 +179,6 @@ pub fn qrc_dilithium_ref_generate_keypair(asymmetric_state: &mut AsymmetricRandS
     dilithium_polyveck_power2_round(t1, t0, t1.clone());
     dilithium_pack_pk(pk, rho, t1.clone());
 
-
     /* Compute CRH(rho, t1) and write secret key */
     qrc_shake256_compute(tr, DILITHIUM_CRHBYTES, pk, DILITHIUM_PUBLICKEY_SIZE);
 
@@ -170,7 +195,15 @@ pub fn qrc_dilithium_ref_generate_keypair(asymmetric_state: &mut AsymmetricRandS
 * \param sk: [const] The private signature key
 * \param rng_generate: The random generator
 */
-pub fn qrc_dilithium_ref_sign_signature(asymmetric_state: &mut AsymmetricRandState, sig: &mut [u8], siglen: &mut usize, m: &[u8], mlen: usize, sk: &[u8], rng_generate: fn(&mut AsymmetricRandState, &mut [u8], usize) -> bool) {
+pub fn qrc_dilithium_ref_sign_signature(
+    asymmetric_state: &mut AsymmetricRandState,
+    sig: &mut [u8],
+    siglen: &mut usize,
+    m: &[u8],
+    mlen: usize,
+    sk: &[u8],
+    rng_generate: fn(&mut AsymmetricRandState, &mut [u8], usize) -> bool,
+) {
     let mat = &mut [QrcDilithiumPolyvecl::default(); QRC_DILITHIUM_K];
     let s1 = &mut QrcDilithiumPolyvecl::default();
     let y = &mut QrcDilithiumPolyvecl::default();
@@ -182,7 +215,7 @@ pub fn qrc_dilithium_ref_sign_signature(asymmetric_state: &mut AsymmetricRandSta
     let w0 = &mut QrcDilithiumPolyveck::default();
     let cp = &mut QrcDilithiumPoly::default();
     let kctx = &mut QrcKeccakState::default();
-     
+
     let mut nonce = 0;
 
     let rho = &mut [0u8; DILITHIUM_SEEDBYTES];
@@ -191,9 +224,7 @@ pub fn qrc_dilithium_ref_sign_signature(asymmetric_state: &mut AsymmetricRandSta
     let mu = &mut [0u8; DILITHIUM_CRHBYTES];
     let rhoprime = &mut [0u8; DILITHIUM_CRHBYTES];
 
-
     dilithium_unpack_sk(rho, tr, key, t0, s1, s2, sk);
-
 
     /* Compute CRH(tr, msg) */
     qrc_keccak_initialize_state(kctx);
@@ -202,12 +233,16 @@ pub fn qrc_dilithium_ref_sign_signature(asymmetric_state: &mut AsymmetricRandSta
     qrc_keccak_incremental_finalize(kctx, QRC_KECCAK_256_RATE, QRC_KECCAK_SHAKE_DOMAIN_ID);
     qrc_keccak_incremental_squeeze(kctx, QRC_KECCAK_256_RATE, mu, DILITHIUM_CRHBYTES);
 
-
     qrc_intutils_copy8(&mut key[DILITHIUM_SEEDBYTES..], mu, DILITHIUM_CRHBYTES);
     if QRC_DILITHIUM_RANDOMIZED_SIGNING {
         rng_generate(asymmetric_state, rhoprime, DILITHIUM_CRHBYTES);
     } else {
-        qrc_shake256_compute(rhoprime, DILITHIUM_CRHBYTES, key, DILITHIUM_SEEDBYTES + DILITHIUM_CRHBYTES);
+        qrc_shake256_compute(
+            rhoprime,
+            DILITHIUM_CRHBYTES,
+            key,
+            DILITHIUM_SEEDBYTES + DILITHIUM_CRHBYTES,
+        );
     }
 
     /* Expand matrix and transform vectors */
@@ -215,7 +250,6 @@ pub fn qrc_dilithium_ref_sign_signature(asymmetric_state: &mut AsymmetricRandSta
     dilithium_polyvecl_ntt(s1);
     dilithium_polyveck_ntt(s2);
 
-    
     dilithium_polyveck_ntt(t0);
 
     loop {
@@ -237,17 +271,19 @@ pub fn qrc_dilithium_ref_sign_signature(asymmetric_state: &mut AsymmetricRandSta
         dilithium_polyveck_decompose(w1, w0, w1.clone());
         dilithium_polyveck_pack_w1(sig, w1.clone());
 
-
         qrc_keccak_initialize_state(kctx);
         qrc_keccak_incremental_block_absorb(kctx, QRC_KECCAK_256_RATE, mu, DILITHIUM_CRHBYTES);
-        qrc_keccak_incremental_block_absorb(kctx, QRC_KECCAK_256_RATE, sig, QRC_DILITHIUM_K * DILITHIUM_POLYW1_PACKEDBYTES);
+        qrc_keccak_incremental_block_absorb(
+            kctx,
+            QRC_KECCAK_256_RATE,
+            sig,
+            QRC_DILITHIUM_K * DILITHIUM_POLYW1_PACKEDBYTES,
+        );
         qrc_keccak_incremental_finalize(kctx, QRC_KECCAK_256_RATE, QRC_KECCAK_SHAKE_DOMAIN_ID);
         qrc_keccak_incremental_squeeze(kctx, QRC_KECCAK_256_RATE, sig, DILITHIUM_SEEDBYTES);
 
-
         dilithium_poly_challenge(cp, sig);
         dilithium_poly_ntt(cp);
-
 
         /* Compute z, reject if it reveals secret */
         dilithium_polyvecl_pointwise_poly_montgomery(z, cp.clone(), s1.clone());
@@ -255,17 +291,14 @@ pub fn qrc_dilithium_ref_sign_signature(asymmetric_state: &mut AsymmetricRandSta
         dilithium_polyvecl_add(z, z.clone(), y.clone());
         dilithium_polyvecl_reduce(z);
 
-        
-        
         //exit(0);
-        
-        
+
         if dilithium_polyvecl_chknorm(z.clone(), (DILITHIUM_GAMMA1 - DILITHIUM_BETA) as i32) != 0 {
             continue;
         }
 
         /* Check that subtracting cs2 does not change high bits of w and low bits
-           do not reveal secret information */
+        do not reveal secret information */
         dilithium_polyveck_pointwise_poly_montgomery(h, cp.clone(), s2.clone());
         dilithium_polyveck_invntt_to_mont(h);
         let w01 = w0.clone();
@@ -299,7 +332,12 @@ pub fn qrc_dilithium_ref_sign_signature(asymmetric_state: &mut AsymmetricRandSta
 
     /* Write signature */
     let sig1 = &sig.to_owned();
-    dilithium_pack_sig(&mut sig[..DILITHIUM_SIGNATURE_SIZE], sig1, z.clone(), h.clone());
+    dilithium_pack_sig(
+        &mut sig[..DILITHIUM_SIGNATURE_SIZE],
+        sig1,
+        z.clone(),
+        h.clone(),
+    );
     *siglen = DILITHIUM_SIGNATURE_SIZE;
 }
 
@@ -313,7 +351,15 @@ pub fn qrc_dilithium_ref_sign_signature(asymmetric_state: &mut AsymmetricRandSta
 * \param sk: [const] The private signature key
 * \param rng_generate: The random generator
 */
-pub fn qrc_dilithium_ref_sign(asymmetric_state: &mut AsymmetricRandState, sm: &mut [u8], smlen: &mut usize, m: &[u8], mlen: usize, sk: &[u8], rng_generate: fn(&mut AsymmetricRandState, &mut [u8], usize) -> bool) {
+pub fn qrc_dilithium_ref_sign(
+    asymmetric_state: &mut AsymmetricRandState,
+    sm: &mut [u8],
+    smlen: &mut usize,
+    m: &[u8],
+    mlen: usize,
+    sk: &[u8],
+    rng_generate: fn(&mut AsymmetricRandState, &mut [u8], usize) -> bool,
+) {
     for i in 0..mlen {
         sm[DILITHIUM_SIGNATURE_SIZE + mlen - 1 - i] = m[mlen - 1 - i];
     }
@@ -333,7 +379,13 @@ pub fn qrc_dilithium_ref_sign(asymmetric_state: &mut AsymmetricRandState, sm: &m
 * \param pk: [const] The public verification key
 * \return Returns true for success
 */
-pub fn qrc_dilithium_ref_verify(sig: &[u8], siglen: usize, m: &[u8], mlen: usize, pk: &[u8]) -> bool {
+pub fn qrc_dilithium_ref_verify(
+    sig: &[u8],
+    siglen: usize,
+    m: &[u8],
+    mlen: usize,
+    pk: &[u8],
+) -> bool {
     let buf = &mut [0u8; QRC_DILITHIUM_K * DILITHIUM_POLYW1_PACKEDBYTES];
     let rho = &mut [0u8; DILITHIUM_SEEDBYTES];
     let mu = &mut [0u8; DILITHIUM_CRHBYTES];
@@ -353,13 +405,24 @@ pub fn qrc_dilithium_ref_verify(sig: &[u8], siglen: usize, m: &[u8], mlen: usize
         dilithium_unpack_pk(rho, t1, &pk[..DILITHIUM_PUBLICKEY_SIZE]);
 
         if dilithium_unpack_sig(c, z, h, sig) == 0 {
-            if dilithium_polyvecl_chknorm(z.clone(), (DILITHIUM_GAMMA1 - DILITHIUM_BETA) as i32) == 0 {
+            if dilithium_polyvecl_chknorm(z.clone(), (DILITHIUM_GAMMA1 - DILITHIUM_BETA) as i32)
+                == 0
+            {
                 /* Compute CRH(CRH(rho, t1), msg) */
                 qrc_shake256_compute(mu, DILITHIUM_CRHBYTES, pk, DILITHIUM_PUBLICKEY_SIZE);
 
-                qrc_keccak_incremental_block_absorb(kctx, QRC_KECCAK_256_RATE, mu, DILITHIUM_CRHBYTES);
+                qrc_keccak_incremental_block_absorb(
+                    kctx,
+                    QRC_KECCAK_256_RATE,
+                    mu,
+                    DILITHIUM_CRHBYTES,
+                );
                 qrc_keccak_incremental_block_absorb(kctx, QRC_KECCAK_256_RATE, m, mlen);
-                qrc_keccak_incremental_finalize(kctx, QRC_KECCAK_256_RATE, QRC_KECCAK_SHAKE_DOMAIN_ID);
+                qrc_keccak_incremental_finalize(
+                    kctx,
+                    QRC_KECCAK_256_RATE,
+                    QRC_KECCAK_SHAKE_DOMAIN_ID,
+                );
                 qrc_keccak_incremental_squeeze(kctx, QRC_KECCAK_256_RATE, mu, DILITHIUM_CRHBYTES);
 
                 /* Matrix-vector multiplication; compute Az - c2^dt1 */
@@ -386,9 +449,23 @@ pub fn qrc_dilithium_ref_verify(sig: &[u8], siglen: usize, m: &[u8], mlen: usize
 
                 /* Call random oracle and verify challenge */
                 qrc_keccak_initialize_state(kctx);
-                qrc_keccak_incremental_block_absorb(kctx, QRC_KECCAK_256_RATE, mu, DILITHIUM_CRHBYTES);
-                qrc_keccak_incremental_block_absorb(kctx, QRC_KECCAK_256_RATE, buf, QRC_DILITHIUM_K * DILITHIUM_POLYW1_PACKEDBYTES);
-                qrc_keccak_incremental_finalize(kctx, QRC_KECCAK_256_RATE, QRC_KECCAK_SHAKE_DOMAIN_ID);
+                qrc_keccak_incremental_block_absorb(
+                    kctx,
+                    QRC_KECCAK_256_RATE,
+                    mu,
+                    DILITHIUM_CRHBYTES,
+                );
+                qrc_keccak_incremental_block_absorb(
+                    kctx,
+                    QRC_KECCAK_256_RATE,
+                    buf,
+                    QRC_DILITHIUM_K * DILITHIUM_POLYW1_PACKEDBYTES,
+                );
+                qrc_keccak_incremental_finalize(
+                    kctx,
+                    QRC_KECCAK_256_RATE,
+                    QRC_KECCAK_SHAKE_DOMAIN_ID,
+                );
                 qrc_keccak_incremental_squeeze(kctx, QRC_KECCAK_256_RATE, c2, DILITHIUM_SEEDBYTES);
 
                 res = qrc_intutils_verify(c, c2, DILITHIUM_SEEDBYTES) == 0;
@@ -396,7 +473,7 @@ pub fn qrc_dilithium_ref_verify(sig: &[u8], siglen: usize, m: &[u8], mlen: usize
         }
     }
 
-    return res
+    return res;
 }
 
 /*
@@ -409,13 +486,25 @@ pub fn qrc_dilithium_ref_verify(sig: &[u8], siglen: usize, m: &[u8], mlen: usize
 * \param pk: [const] The public verification key
 * \return Returns true for success
 */
-pub fn qrc_dilithium_ref_open(m: &mut [u8], mlen: &mut isize, sm: &[u8], smlen: usize, pk: &[u8]) -> bool {
+pub fn qrc_dilithium_ref_open(
+    m: &mut [u8],
+    mlen: &mut isize,
+    sm: &[u8],
+    smlen: usize,
+    pk: &[u8],
+) -> bool {
     *mlen = -1;
     let mut res = false;
 
     if smlen >= DILITHIUM_SIGNATURE_SIZE {
         *mlen = (smlen - DILITHIUM_SIGNATURE_SIZE) as isize;
-        res = qrc_dilithium_ref_verify(sm, DILITHIUM_SIGNATURE_SIZE, &sm[DILITHIUM_SIGNATURE_SIZE..], mlen.clone() as usize, pk);
+        res = qrc_dilithium_ref_verify(
+            sm,
+            DILITHIUM_SIGNATURE_SIZE,
+            &sm[DILITHIUM_SIGNATURE_SIZE..],
+            mlen.clone() as usize,
+            pk,
+        );
 
         if res {
             /* All good, copy msg, return 0 */
@@ -426,7 +515,6 @@ pub fn qrc_dilithium_ref_open(m: &mut [u8], mlen: &mut isize, sm: &[u8], smlen: 
     return res;
 }
 
-/* \endcond DOXYGEN_IGNORE */
 
 /* params.h */
 
@@ -480,11 +568,11 @@ const DILITHIUM_GAMMA1: usize = if QRC_DILITHIUM_MODE == 2 {
 };
 
 const DILITHIUM_GAMMA2: usize = if QRC_DILITHIUM_MODE == 2 {
-    (DILITHIUM_Q-1) / 88
+    (DILITHIUM_Q - 1) / 88
 } else if QRC_DILITHIUM_MODE == 3 {
-    (DILITHIUM_Q-1) / 32
+    (DILITHIUM_Q - 1) / 32
 } else if QRC_DILITHIUM_MODE == 5 {
-    (DILITHIUM_Q-1) / 32
+    (DILITHIUM_Q - 1) / 32
 } else {
     0
 };
@@ -499,8 +587,8 @@ const DILITHIUM_OMEGA: usize = if QRC_DILITHIUM_MODE == 2 {
     0
 };
 
-const DILITHIUM_POLYT1_PACKEDBYTES: usize =  320;
-const DILITHIUM_POLYT0_PACKEDBYTES: usize =  416;
+const DILITHIUM_POLYT1_PACKEDBYTES: usize = 320;
+const DILITHIUM_POLYT0_PACKEDBYTES: usize = 416;
 const DILITHIUM_POLYVECH_PACKEDBYTES: usize = DILITHIUM_OMEGA + QRC_DILITHIUM_K;
 
 const DILITHIUM_POLYZ_PACKEDBYTES: usize = if DILITHIUM_GAMMA1 == (1 << 17) {
@@ -511,9 +599,9 @@ const DILITHIUM_POLYZ_PACKEDBYTES: usize = if DILITHIUM_GAMMA1 == (1 << 17) {
     0
 };
 
-const DILITHIUM_POLYW1_PACKEDBYTES: usize = if DILITHIUM_GAMMA2 == (DILITHIUM_Q-1) / 88 {
+const DILITHIUM_POLYW1_PACKEDBYTES: usize = if DILITHIUM_GAMMA2 == (DILITHIUM_Q - 1) / 88 {
     192
-} else if DILITHIUM_GAMMA2 == (DILITHIUM_Q-1) / 32 {
+} else if DILITHIUM_GAMMA2 == (DILITHIUM_Q - 1) / 32 {
     128
 } else {
     0
@@ -527,9 +615,12 @@ const DILITHIUM_POLYETA_PACKEDBYTES: usize = if DILITHIUM_ETA == 2 {
     0
 };
 
-const DILITHIUM_PUBLICKEY_SIZE: usize = DILITHIUM_SEEDBYTES + QRC_DILITHIUM_K * DILITHIUM_POLYT1_PACKEDBYTES;
+const DILITHIUM_PUBLICKEY_SIZE: usize =
+    DILITHIUM_SEEDBYTES + QRC_DILITHIUM_K * DILITHIUM_POLYT1_PACKEDBYTES;
 //const DILITHIUM_PRIVATEKEY_SIZE: usize = 2 * DILITHIUM_SEEDBYTES + DILITHIUM_CRHBYTES + QRC_DILITHIUM_L * DILITHIUM_POLYETA_PACKEDBYTES + QRC_DILITHIUM_K * DILITHIUM_POLYETA_PACKEDBYTES + QRC_DILITHIUM_K * DILITHIUM_POLYT0_PACKEDBYTES;
-const DILITHIUM_SIGNATURE_SIZE: usize = DILITHIUM_SEEDBYTES + QRC_DILITHIUM_L * DILITHIUM_POLYZ_PACKEDBYTES + DILITHIUM_POLYVECH_PACKEDBYTES;
+const DILITHIUM_SIGNATURE_SIZE: usize = DILITHIUM_SEEDBYTES
+    + QRC_DILITHIUM_L * DILITHIUM_POLYZ_PACKEDBYTES
+    + DILITHIUM_POLYVECH_PACKEDBYTES;
 
 const DILITHIUM_POLY_UNIFORM_NBLOCKS: usize = (768 + QRC_KECCAK_128_RATE - 1) / QRC_KECCAK_128_RATE;
 
@@ -548,8 +639,6 @@ const DILITHIUM_POLY_UNIFORM_GAMMA1_NBLOCKS: usize = if DILITHIUM_GAMMA1 == (1 <
 } else {
     0
 };
-
-
 
 const DILITHIUM_ZETAS: [u32; QRC_DILITHIUM_N] = [
     0x00000000, 0x000064F7, 0xFFD83102, 0xFFF81503, 0x00039E44, 0xFFF42118, 0xFFF2A128, 0x00071E24,
@@ -583,7 +672,7 @@ const DILITHIUM_ZETAS: [u32; QRC_DILITHIUM_N] = [
     0xFFD1A13C, 0x0035C539, 0x003B0115, 0x00041DC0, 0x0021C4F7, 0xFFF11BF4, 0x001A35E7, 0x0007340E,
     0xFFF97D45, 0x001A4CD0, 0xFFE47CAE, 0x001D2668, 0xFFE68E98, 0xFFEF2633, 0xFFFC05DA, 0xFFC57FDB,
     0xFFD32764, 0xFFDDE1AF, 0xFFF993DD, 0xFFDD1D09, 0x0002CC93, 0xFFF11805, 0x00189C2A, 0xFFC9E5A9,
-    0xFFF78A50, 0x003BCF2C, 0xFFFF434E, 0xFFEB36DF, 0x003C15CA, 0x00155E68, 0xFFF316B6, 0x001E29CE
+    0xFFF78A50, 0x003BCF2C, 0xFFFF434E, 0xFFEB36DF, 0x003C15CA, 0x00155E68, 0xFFF316B6, 0x001E29CE,
 ];
 
 /* reduce.c */
@@ -603,7 +692,7 @@ fn dilithium_reduce32(a: i32) -> i32 {
 }
 
 fn dilithium_caddq(mut a: i32) -> i32 {
-    a += (a >> 31) & DILITHIUM_Q as i32; 
+    a += (a >> 31) & DILITHIUM_Q as i32;
 
     return a;
 }
@@ -636,7 +725,10 @@ fn dilithium_decompose(a0: &mut i32, a: i32) -> i32 {
 fn dilithium_make_hint(a0: i32, a1: i32) -> u32 {
     let mut res = 1;
 
-    if a0 <= DILITHIUM_GAMMA2 as i32 || a0 > DILITHIUM_Q as i32 - DILITHIUM_GAMMA2 as i32 || (a0 == DILITHIUM_Q as i32 - DILITHIUM_GAMMA2 as i32 && a1 == 0) {
+    if a0 <= DILITHIUM_GAMMA2 as i32
+        || a0 > DILITHIUM_Q as i32 - DILITHIUM_GAMMA2 as i32
+        || (a0 == DILITHIUM_Q as i32 - DILITHIUM_GAMMA2 as i32 && a1 == 0)
+    {
         res = 0;
     }
 
@@ -651,11 +743,11 @@ fn dilithium_use_hint(a: i32, hint: u32) -> i32 {
 
     if hint != 0 {
         if DILITHIUM_GAMMA2 == (DILITHIUM_Q - 1) / 32 {
-                if a0 > 0 {
-                    res = (a1 + 1) & 15;
-                } else {
-                    res = (a1 - 1) & 15;
-                }
+            if a0 > 0 {
+                res = (a1 + 1) & 15;
+            } else {
+                res = (a1 - 1) & 15;
+            }
         } else if DILITHIUM_GAMMA2 == (DILITHIUM_Q - 1) / 88 {
             if a0 > 0 {
                 res = if a1 == 43 { 0 } else { a1 + 1 };
@@ -785,25 +877,41 @@ fn dilithium_poly_invntt_to_mont(a: &mut QrcDilithiumPoly) {
     dilithium_invntt_to_mont(&mut a.coeffs);
 }
 
-fn dilithium_poly_pointwise_montgomery(c: &mut QrcDilithiumPoly, a: QrcDilithiumPoly, b: QrcDilithiumPoly) {
+fn dilithium_poly_pointwise_montgomery(
+    c: &mut QrcDilithiumPoly,
+    a: QrcDilithiumPoly,
+    b: QrcDilithiumPoly,
+) {
     for i in 0..QRC_DILITHIUM_N {
         c.coeffs[i] = dilithium_montgomery_reduce(a.coeffs[i] as i64 * b.coeffs[i] as i64);
     }
 }
 
-fn dilithium_poly_power2_round(a1: &mut QrcDilithiumPoly, a0: &mut QrcDilithiumPoly, a: QrcDilithiumPoly) {
+fn dilithium_poly_power2_round(
+    a1: &mut QrcDilithiumPoly,
+    a0: &mut QrcDilithiumPoly,
+    a: QrcDilithiumPoly,
+) {
     for i in 0..QRC_DILITHIUM_N {
         a1.coeffs[i] = dilithium_power2_round(&mut a0.coeffs[i], a.coeffs[i]);
     }
 }
 
-fn dilithium_poly_decompose(a1: &mut QrcDilithiumPoly, a0: &mut QrcDilithiumPoly, a: QrcDilithiumPoly) {
+fn dilithium_poly_decompose(
+    a1: &mut QrcDilithiumPoly,
+    a0: &mut QrcDilithiumPoly,
+    a: QrcDilithiumPoly,
+) {
     for i in 0..QRC_DILITHIUM_N {
         a1.coeffs[i] = dilithium_decompose(&mut a0.coeffs[i], a.coeffs[i]);
     }
 }
 
-fn dilithium_poly_make_hint(h: &mut QrcDilithiumPoly, a0: QrcDilithiumPoly, a1: QrcDilithiumPoly) -> u32 {
+fn dilithium_poly_make_hint(
+    h: &mut QrcDilithiumPoly,
+    a0: QrcDilithiumPoly,
+    a1: QrcDilithiumPoly,
+) -> u32 {
     let mut s = 0u32;
 
     for i in 0..QRC_DILITHIUM_N {
@@ -827,8 +935,8 @@ fn dilithium_poly_chknorm(a: QrcDilithiumPoly, b: i32) -> i32 {
         res = 1;
     } else {
         /* It is ok to leak which coefficient violates the bound since
-           the probability for each coefficient is independent of secret
-           data but we must not leak the sign of the centralized representative. */
+        the probability for each coefficient is independent of secret
+        data but we must not leak the sign of the centralized representative. */
         for i in 0..QRC_DILITHIUM_N {
             /* Absolute value */
             let mut t = a.coeffs[i] >> 31;
@@ -863,7 +971,6 @@ fn dilithium_rej_uniform(a: &mut [i32], len: usize, buf: &[u8], buflen: usize) -
         }
     }
 
-
     return ctr;
 }
 
@@ -873,7 +980,13 @@ fn dilithium_poly_uniform(a: &mut QrcDilithiumPoly, seed: &[u8], nonce: u16) {
 
     let mut buflen = DILITHIUM_POLY_UNIFORM_NBLOCKS * QRC_KECCAK_128_RATE;
     dilithium_shake128_stream_init(kctx, seed, nonce);
-    qrc_keccak_squeezeblocks(kctx, buf, DILITHIUM_POLY_UNIFORM_NBLOCKS, QRC_KECCAK_128_RATE, QRC_KECCAK_PERMUTATION_ROUNDS);
+    qrc_keccak_squeezeblocks(
+        kctx,
+        buf,
+        DILITHIUM_POLY_UNIFORM_NBLOCKS,
+        QRC_KECCAK_128_RATE,
+        QRC_KECCAK_PERMUTATION_ROUNDS,
+    );
 
     let mut ctr = dilithium_rej_uniform(&mut a.coeffs, QRC_DILITHIUM_N, buf, buflen);
 
@@ -884,7 +997,13 @@ fn dilithium_poly_uniform(a: &mut QrcDilithiumPoly, seed: &[u8], nonce: u16) {
             buf[i] = buf[buflen - off + i];
         }
 
-        qrc_keccak_squeezeblocks(kctx, &mut buf[off..], 1, QRC_KECCAK_128_RATE, QRC_KECCAK_PERMUTATION_ROUNDS);
+        qrc_keccak_squeezeblocks(
+            kctx,
+            &mut buf[off..],
+            1,
+            QRC_KECCAK_128_RATE,
+            QRC_KECCAK_PERMUTATION_ROUNDS,
+        );
         buflen = QRC_KECCAK_128_RATE + off;
         ctr += dilithium_rej_uniform(&mut a.coeffs[ctr..], QRC_DILITHIUM_N - ctr, buf, buflen);
     }
@@ -899,7 +1018,7 @@ fn dilithium_rej_eta(a: &mut [i32], len: usize, buf: &[u8], buflen: usize) -> us
         let mut t1 = buf[pos] as u32 >> 4;
         pos += 1;
 
-    if DILITHIUM_ETA == 2 {
+        if DILITHIUM_ETA == 2 {
             if t0 < 15 {
                 t0 = t0 - (205 * t0 >> 10) * 5;
                 a[ctr] = 2 - t0 as i32;
@@ -934,7 +1053,13 @@ fn dilithium_poly_challenge(c: &mut QrcDilithiumPoly, seed: &[u8]) {
     qrc_keccak_initialize_state(kctx);
     qrc_keccak_incremental_block_absorb(kctx, QRC_KECCAK_256_RATE, seed, DILITHIUM_SEEDBYTES);
     qrc_keccak_incremental_finalize(kctx, QRC_KECCAK_256_RATE, QRC_KECCAK_SHAKE_DOMAIN_ID);
-    qrc_keccak_squeezeblocks(kctx, buf, 1, QRC_KECCAK_256_RATE, QRC_KECCAK_PERMUTATION_ROUNDS);
+    qrc_keccak_squeezeblocks(
+        kctx,
+        buf,
+        1,
+        QRC_KECCAK_256_RATE,
+        QRC_KECCAK_PERMUTATION_ROUNDS,
+    );
 
     let mut signs = 0;
     let mut pos = 8;
@@ -951,7 +1076,13 @@ fn dilithium_poly_challenge(c: &mut QrcDilithiumPoly, seed: &[u8]) {
         let mut b: u8;
         loop {
             if pos >= QRC_KECCAK_256_RATE {
-                qrc_keccak_squeezeblocks(kctx, buf, 1, QRC_KECCAK_256_RATE, QRC_KECCAK_PERMUTATION_ROUNDS);
+                qrc_keccak_squeezeblocks(
+                    kctx,
+                    buf,
+                    1,
+                    QRC_KECCAK_256_RATE,
+                    QRC_KECCAK_PERMUTATION_ROUNDS,
+                );
                 pos = 0;
             }
 
@@ -1039,10 +1170,14 @@ fn dilithium_polyt1_pack(r: &mut [u8], a: QrcDilithiumPoly) {
 
 fn dilithium_polyt1_unpack(r: &mut QrcDilithiumPoly, a: &[u8]) {
     for i in 0..QRC_DILITHIUM_N / 4 {
-        r.coeffs[4 * i] = (((a[5 * i] as u32) >> 0)| (a[(5 * i) + 1] as u32) << 8) as i32 & 0x000003FF;
-        r.coeffs[(4 * i) + 1] = (((a[(5 * i) + 1] as u32) >> 2) | ((a[(5 * i) + 2] as u32) << 6)) as i32 & 0x000003FF;
-        r.coeffs[(4 * i) + 2] = (((a[(5 * i) + 2] as u32) >> 4) | ((a[(5 * i) + 3] as u32) << 4)) as i32 & 0x000003FF;
-        r.coeffs[(4 * i) + 3] = (((a[(5 * i) + 3] as u32) >> 6) | ((a[(5 * i) + 4] as u32) << 2)) as i32 & 0x000003FF;
+        r.coeffs[4 * i] =
+            (((a[5 * i] as u32) >> 0) | (a[(5 * i) + 1] as u32) << 8) as i32 & 0x000003FF;
+        r.coeffs[(4 * i) + 1] =
+            (((a[(5 * i) + 1] as u32) >> 2) | ((a[(5 * i) + 2] as u32) << 6)) as i32 & 0x000003FF;
+        r.coeffs[(4 * i) + 2] =
+            (((a[(5 * i) + 2] as u32) >> 4) | ((a[(5 * i) + 3] as u32) << 4)) as i32 & 0x000003FF;
+        r.coeffs[(4 * i) + 3] =
+            (((a[(5 * i) + 3] as u32) >> 6) | ((a[(5 * i) + 4] as u32) << 2)) as i32 & 0x000003FF;
     }
 }
 
@@ -1178,7 +1313,7 @@ fn dilithium_polyz_unpack(r: &mut QrcDilithiumPoly, a: &[u8]) {
             r.coeffs[4 * i] &= 0x0003FFFF;
 
             r.coeffs[(4 * i) + 1] = (a[(9 * i) + 2] as i32) >> 2;
-            r.coeffs[(4 * i) + 1] |= (a[(9 * i) + 3] as i32)<< 6;
+            r.coeffs[(4 * i) + 1] |= (a[(9 * i) + 3] as i32) << 6;
             r.coeffs[(4 * i) + 1] |= (a[(9 * i) + 4] as i32) << 14;
             r.coeffs[(4 * i) + 1] &= 0x0003FFFF;
 
@@ -1233,18 +1368,35 @@ fn dilithium_polyw1_pack(r: &mut [u8], a: QrcDilithiumPoly) {
 }
 
 fn dilithium_poly_uniform_eta(a: &mut QrcDilithiumPoly, seed: &[u8], nonce: u16) {
-    let buf= &mut [0u8; DILITHIUM_POLY_UNIFORM_ETA_NBLOCKS * QRC_KECCAK_128_RATE];
+    let buf = &mut [0u8; DILITHIUM_POLY_UNIFORM_ETA_NBLOCKS * QRC_KECCAK_128_RATE];
     let kctx = &mut QrcKeccakState::default();
 
     let buflen = DILITHIUM_POLY_UNIFORM_ETA_NBLOCKS * QRC_KECCAK_128_RATE;
     dilithium_shake128_stream_init(kctx, seed, nonce);
-    qrc_keccak_squeezeblocks(kctx, buf, DILITHIUM_POLY_UNIFORM_ETA_NBLOCKS, QRC_KECCAK_128_RATE, QRC_KECCAK_PERMUTATION_ROUNDS);
+    qrc_keccak_squeezeblocks(
+        kctx,
+        buf,
+        DILITHIUM_POLY_UNIFORM_ETA_NBLOCKS,
+        QRC_KECCAK_128_RATE,
+        QRC_KECCAK_PERMUTATION_ROUNDS,
+    );
 
     let mut ctr = dilithium_rej_eta(&mut a.coeffs, QRC_DILITHIUM_N, buf, buflen);
 
     while ctr < QRC_DILITHIUM_N {
-        qrc_keccak_squeezeblocks(kctx, buf, 1, QRC_KECCAK_128_RATE, QRC_KECCAK_PERMUTATION_ROUNDS);
-        ctr += dilithium_rej_eta(&mut a.coeffs[ctr..], QRC_DILITHIUM_N - ctr, buf, QRC_KECCAK_128_RATE);
+        qrc_keccak_squeezeblocks(
+            kctx,
+            buf,
+            1,
+            QRC_KECCAK_128_RATE,
+            QRC_KECCAK_PERMUTATION_ROUNDS,
+        );
+        ctr += dilithium_rej_eta(
+            &mut a.coeffs[ctr..],
+            QRC_DILITHIUM_N - ctr,
+            buf,
+            QRC_KECCAK_128_RATE,
+        );
     }
 }
 
@@ -1253,7 +1405,13 @@ fn dilithium_poly_uniform_gamma1(a: &mut QrcDilithiumPoly, seed: &[u8], nonce: u
     let kctx = &mut QrcKeccakState::default();
 
     dilithium_shake256_stream_init(kctx, seed, nonce);
-    qrc_keccak_squeezeblocks(kctx, buf, DILITHIUM_POLY_UNIFORM_GAMMA1_NBLOCKS, QRC_KECCAK_256_RATE, QRC_KECCAK_PERMUTATION_ROUNDS);
+    qrc_keccak_squeezeblocks(
+        kctx,
+        buf,
+        DILITHIUM_POLY_UNIFORM_GAMMA1_NBLOCKS,
+        QRC_KECCAK_256_RATE,
+        QRC_KECCAK_PERMUTATION_ROUNDS,
+    );
     dilithium_polyz_unpack(a, buf);
 }
 
@@ -1267,7 +1425,11 @@ fn dilithium_polyvec_matrix_expand(mat: &mut [QrcDilithiumPolyvecl; QRC_DILITHIU
     }
 }
 
-fn dilithium_polyvecl_pointwise_acc_montgomery(w: &mut QrcDilithiumPoly, u: QrcDilithiumPolyvecl, v: QrcDilithiumPolyvecl) {
+fn dilithium_polyvecl_pointwise_acc_montgomery(
+    w: &mut QrcDilithiumPoly,
+    u: QrcDilithiumPolyvecl,
+    v: QrcDilithiumPolyvecl,
+) {
     let t = &mut QrcDilithiumPoly::default();
 
     dilithium_poly_pointwise_montgomery(w, u.vec[0], v.vec[0]);
@@ -1279,7 +1441,11 @@ fn dilithium_polyvecl_pointwise_acc_montgomery(w: &mut QrcDilithiumPoly, u: QrcD
     }
 }
 
-fn dilithium_polyvec_matrix_pointwise_montgomery(t: &mut QrcDilithiumPolyveck, mat: &[QrcDilithiumPolyvecl; QRC_DILITHIUM_K], v: QrcDilithiumPolyvecl) {
+fn dilithium_polyvec_matrix_pointwise_montgomery(
+    t: &mut QrcDilithiumPolyveck,
+    mat: &[QrcDilithiumPolyvecl; QRC_DILITHIUM_K],
+    v: QrcDilithiumPolyvecl,
+) {
     for i in 0..QRC_DILITHIUM_K {
         dilithium_polyvecl_pointwise_acc_montgomery(&mut t.vec[i], mat[i], v);
     }
@@ -1294,7 +1460,11 @@ fn dilithium_polyvecl_uniform_eta(v: &mut QrcDilithiumPolyvecl, seed: &[u8], mut
 
 fn dilithium_polyvecl_uniform_gamma1(v: &mut QrcDilithiumPolyvecl, seed: &[u8], nonce: u16) {
     for i in 0..QRC_DILITHIUM_L {
-        dilithium_poly_uniform_gamma1(&mut v.vec[i], seed, ((QRC_DILITHIUM_L * nonce as usize) + i) as u16);
+        dilithium_poly_uniform_gamma1(
+            &mut v.vec[i],
+            seed,
+            ((QRC_DILITHIUM_L * nonce as usize) + i) as u16,
+        );
     }
 }
 
@@ -1304,7 +1474,11 @@ fn dilithium_polyvecl_reduce(v: &mut QrcDilithiumPolyvecl) {
     }
 }
 
-fn dilithium_polyvecl_add(w: &mut QrcDilithiumPolyvecl, u: QrcDilithiumPolyvecl, v: QrcDilithiumPolyvecl) {
+fn dilithium_polyvecl_add(
+    w: &mut QrcDilithiumPolyvecl,
+    u: QrcDilithiumPolyvecl,
+    v: QrcDilithiumPolyvecl,
+) {
     for i in 0..QRC_DILITHIUM_L {
         dilithium_poly_add(&mut w.vec[i], u.vec[i], v.vec[i]);
     }
@@ -1322,7 +1496,11 @@ fn dilithium_polyvecl_invntt_to_mont(v: &mut QrcDilithiumPolyvecl) {
     }
 }
 
-fn dilithium_polyvecl_pointwise_poly_montgomery(r: &mut QrcDilithiumPolyvecl, a: QrcDilithiumPoly, v: QrcDilithiumPolyvecl) {
+fn dilithium_polyvecl_pointwise_poly_montgomery(
+    r: &mut QrcDilithiumPolyvecl,
+    a: QrcDilithiumPoly,
+    v: QrcDilithiumPolyvecl,
+) {
     for i in 0..QRC_DILITHIUM_L {
         dilithium_poly_pointwise_montgomery(&mut r.vec[i], a, v.vec[i]);
     }
@@ -1360,13 +1538,21 @@ fn dilithium_polyveck_caddq(v: &mut QrcDilithiumPolyveck) {
     }
 }
 
-fn dilithium_polyveck_add(w: &mut QrcDilithiumPolyveck, u: QrcDilithiumPolyveck, v: QrcDilithiumPolyveck) {
+fn dilithium_polyveck_add(
+    w: &mut QrcDilithiumPolyveck,
+    u: QrcDilithiumPolyveck,
+    v: QrcDilithiumPolyveck,
+) {
     for i in 0..QRC_DILITHIUM_K {
         dilithium_poly_add(&mut w.vec[i], u.vec[i], v.vec[i]);
     }
 }
 
-fn dilithium_polyveck_sub(w: &mut QrcDilithiumPolyveck, u: QrcDilithiumPolyveck, v: QrcDilithiumPolyveck) {
+fn dilithium_polyveck_sub(
+    w: &mut QrcDilithiumPolyveck,
+    u: QrcDilithiumPolyveck,
+    v: QrcDilithiumPolyveck,
+) {
     for i in 0..QRC_DILITHIUM_K {
         dilithium_poly_sub(&mut w.vec[i], u.vec[i], v.vec[i]);
     }
@@ -1390,7 +1576,11 @@ fn dilithium_polyveck_invntt_to_mont(v: &mut QrcDilithiumPolyveck) {
     }
 }
 
-fn dilithium_polyveck_pointwise_poly_montgomery(r: &mut QrcDilithiumPolyveck, a: QrcDilithiumPoly, v: QrcDilithiumPolyveck) {
+fn dilithium_polyveck_pointwise_poly_montgomery(
+    r: &mut QrcDilithiumPolyveck,
+    a: QrcDilithiumPoly,
+    v: QrcDilithiumPolyveck,
+) {
     for i in 0..QRC_DILITHIUM_K {
         dilithium_poly_pointwise_montgomery(&mut r.vec[i], a, v.vec[i]);
     }
@@ -1409,19 +1599,31 @@ fn dilithium_polyveck_chknorm(v: QrcDilithiumPolyveck, bound: i32) -> i32 {
     return res;
 }
 
-fn dilithium_polyveck_power2_round(v1: &mut QrcDilithiumPolyveck, v0: &mut QrcDilithiumPolyveck, v: QrcDilithiumPolyveck) {
+fn dilithium_polyveck_power2_round(
+    v1: &mut QrcDilithiumPolyveck,
+    v0: &mut QrcDilithiumPolyveck,
+    v: QrcDilithiumPolyveck,
+) {
     for i in 0..QRC_DILITHIUM_K {
         dilithium_poly_power2_round(&mut v1.vec[i], &mut v0.vec[i], v.vec[i]);
     }
 }
 
-fn dilithium_polyveck_decompose(v1: &mut QrcDilithiumPolyveck, v0: &mut QrcDilithiumPolyveck, v: QrcDilithiumPolyveck) {
+fn dilithium_polyveck_decompose(
+    v1: &mut QrcDilithiumPolyveck,
+    v0: &mut QrcDilithiumPolyveck,
+    v: QrcDilithiumPolyveck,
+) {
     for i in 0..QRC_DILITHIUM_K {
         dilithium_poly_decompose(&mut v1.vec[i], &mut v0.vec[i], v.vec[i]);
     }
 }
 
-fn dilithium_polyveck_make_hint(h: &mut QrcDilithiumPolyveck, v0: QrcDilithiumPolyveck, v1: QrcDilithiumPolyveck) -> u32 {
+fn dilithium_polyveck_make_hint(
+    h: &mut QrcDilithiumPolyveck,
+    v0: QrcDilithiumPolyveck,
+    v1: QrcDilithiumPolyveck,
+) -> u32 {
     let mut s = 0;
 
     for i in 0..QRC_DILITHIUM_K {
@@ -1431,7 +1633,11 @@ fn dilithium_polyveck_make_hint(h: &mut QrcDilithiumPolyveck, v0: QrcDilithiumPo
     return s;
 }
 
-fn dilithium_polyveck_use_hint(w: &mut QrcDilithiumPolyveck, u: QrcDilithiumPolyveck, h: QrcDilithiumPolyveck) {
+fn dilithium_polyveck_use_hint(
+    w: &mut QrcDilithiumPolyveck,
+    u: QrcDilithiumPolyveck,
+    h: QrcDilithiumPolyveck,
+) {
     for i in 0..QRC_DILITHIUM_K {
         dilithium_poly_use_hint(&mut w.vec[i], u.vec[i], h.vec[i]);
     }
@@ -1469,7 +1675,15 @@ fn dilithium_unpack_pk(rho: &mut [u8], t1: &mut QrcDilithiumPolyveck, mut pk: &[
     }
 }
 
-fn dilithium_pack_sk(mut sk: &mut [u8], rho: &[u8], tr: &[u8], key: &[u8], t0: QrcDilithiumPolyveck, s1: QrcDilithiumPolyvecl, s2: QrcDilithiumPolyveck) {
+fn dilithium_pack_sk(
+    mut sk: &mut [u8],
+    rho: &[u8],
+    tr: &[u8],
+    key: &[u8],
+    t0: QrcDilithiumPolyveck,
+    s1: QrcDilithiumPolyvecl,
+    s2: QrcDilithiumPolyveck,
+) {
     qrc_intutils_copy8(sk, rho, DILITHIUM_SEEDBYTES);
     sk = &mut sk[DILITHIUM_SEEDBYTES..];
 
@@ -1478,7 +1692,6 @@ fn dilithium_pack_sk(mut sk: &mut [u8], rho: &[u8], tr: &[u8], key: &[u8], t0: Q
 
     qrc_intutils_copy8(sk, tr, DILITHIUM_CRHBYTES);
     sk = &mut sk[DILITHIUM_CRHBYTES..];
-
 
     for i in 0..QRC_DILITHIUM_L {
         dilithium_polyeta_pack(&mut sk[i * DILITHIUM_POLYETA_PACKEDBYTES..], s1.vec[i]);
@@ -1495,7 +1708,15 @@ fn dilithium_pack_sk(mut sk: &mut [u8], rho: &[u8], tr: &[u8], key: &[u8], t0: Q
     }
 }
 
-fn dilithium_unpack_sk(rho: &mut [u8], tr: &mut [u8], key: &mut [u8], t0: &mut QrcDilithiumPolyveck, s1: &mut QrcDilithiumPolyvecl, s2: &mut QrcDilithiumPolyveck, mut sk: &[u8]) {
+fn dilithium_unpack_sk(
+    rho: &mut [u8],
+    tr: &mut [u8],
+    key: &mut [u8],
+    t0: &mut QrcDilithiumPolyveck,
+    s1: &mut QrcDilithiumPolyvecl,
+    s2: &mut QrcDilithiumPolyveck,
+    mut sk: &[u8],
+) {
     qrc_intutils_copy8(rho, sk, DILITHIUM_SEEDBYTES);
     sk = &sk[DILITHIUM_SEEDBYTES..];
 
@@ -1504,7 +1725,6 @@ fn dilithium_unpack_sk(rho: &mut [u8], tr: &mut [u8], key: &mut [u8], t0: &mut Q
 
     qrc_intutils_copy8(tr, sk, DILITHIUM_CRHBYTES);
     sk = &sk[DILITHIUM_CRHBYTES..];
-
 
     for i in 0..QRC_DILITHIUM_L {
         dilithium_polyeta_unpack(&mut s1.vec[i], &sk[i * DILITHIUM_POLYETA_PACKEDBYTES..]);
@@ -1521,7 +1741,12 @@ fn dilithium_unpack_sk(rho: &mut [u8], tr: &mut [u8], key: &mut [u8], t0: &mut Q
     }
 }
 
-fn dilithium_pack_sig(mut sig: &mut [u8], c: &[u8], z: QrcDilithiumPolyvecl, h: QrcDilithiumPolyveck) {
+fn dilithium_pack_sig(
+    mut sig: &mut [u8],
+    c: &[u8],
+    z: QrcDilithiumPolyvecl,
+    h: QrcDilithiumPolyveck,
+) {
     for i in 0..DILITHIUM_SEEDBYTES {
         sig[i] = c[i];
     }
@@ -1550,7 +1775,12 @@ fn dilithium_pack_sig(mut sig: &mut [u8], c: &[u8], z: QrcDilithiumPolyvecl, h: 
     }
 }
 
-fn dilithium_unpack_sig(c: &mut [u8], z: &mut QrcDilithiumPolyvecl, h: &mut QrcDilithiumPolyveck, mut sig: &[u8]) -> i32 {
+fn dilithium_unpack_sig(
+    c: &mut [u8],
+    z: &mut QrcDilithiumPolyvecl,
+    h: &mut QrcDilithiumPolyveck,
+    mut sig: &[u8],
+) -> i32 {
     let mut res = 0;
 
     qrc_intutils_copy8(c, sig, DILITHIUM_SEEDBYTES);
