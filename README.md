@@ -1,7 +1,7 @@
 <br />
 <p>
   <a href="https://www.qrcrypto.ch/">
-    <img src="https://www.qrcrypto.ch/images/logo-quantum-resistant.svg" alt="Logo" width="350">
+    <img src="logo-quantum-resistant.svg" alt="Logo" width="350">
   </a>
 
 <h3>qrc-opensource-rs</h3>
@@ -1708,6 +1708,11 @@ Todo:
 <ul>
   <li>Asymmetric/Signature/Falcon</li>
 </ul>
+
+## Sponsers
+We are grateful for the support received by the following organizations:<br>
+
+[Tutanota](https://tuta.com/)<br>
 
 ## License
 
