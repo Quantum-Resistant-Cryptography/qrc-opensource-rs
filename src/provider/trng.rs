@@ -22,7 +22,7 @@ Derived from John G. Underhill's AGPL QSC library in C
 use crate::tools::intutils::qrc_intutils_min;
 
 #[cfg(feature = "std")]
-use rand::{Rng, thread_rng};
+use rand::{Rng, rng};
 
 #[cfg(feature = "no_std")]
 use alloc::vec;
@@ -44,10 +44,10 @@ const QRC_TRNG_SEED_MAX: usize = 1024000;
 pub fn qrc_trng_generate(output: &mut [u8], length: usize) -> bool {
     let mut res = true;
 
-    let mut rng = thread_rng();
+    let mut rng = rng();
 
     for i in 0..qrc_intutils_min(length, QRC_TRNG_SEED_MAX) {
-        output[i] = rng.r#gen();
+        output[i] = rng.random();
     }
 
     if output.is_empty() {
