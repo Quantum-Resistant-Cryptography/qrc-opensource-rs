@@ -22,7 +22,7 @@ Derived from John G. Underhill's AGPL QSC library in C
 use crate::tools::intutils::qrc_intutils_min;
 
 #[cfg(feature = "std")]
-use rand::{RngCore, rngs::OsRng};
+use rand::{TryRngCore, rng};
 
 #[cfg(feature = "no_std")]
 use alloc::vec;
@@ -44,7 +44,7 @@ const QRC_OSRNG_SEED_MAX: usize = 1024000;
 pub fn qrc_osrng_generate(output: &mut [u8], length: usize) -> bool {
     let key = &mut vec![0u8; qrc_intutils_min(length, QRC_OSRNG_SEED_MAX)];
 
-    if OsRng.try_fill_bytes(key).is_err() {
+    if rng().try_fill_bytes(key).is_err() {
         return false;
     };
 
