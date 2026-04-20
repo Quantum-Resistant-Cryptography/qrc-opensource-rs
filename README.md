@@ -1712,7 +1712,7 @@ Todo:
 ## Sponsers
 We are grateful for the support received by the following organizations:<br>
 
-[Tutanota](https://tuta.com/)<br>
+[Tuta Mail](https://tuta.com/)<br>
 
 ## License
 
