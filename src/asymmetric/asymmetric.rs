@@ -18,7 +18,7 @@
 *
 *
 *
-* Copyright (c) 2025-Present QRC Eurosmart SA <opensource-support@qrcrypto.ch> */
+* Copyright (c) 2025-Present QRC Eurosmart SA <opensource-support@qrcrypto.co.uk> */
 
 
 use crate::{

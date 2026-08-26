@@ -1,12 +1,12 @@
 [package]
 name = "qrc-opensource-rs"
-version = "0.3.7"
-authors = ["Quantum Resistant Cryptography (QRC)", "opensource-support@qrcrypto.ch"]
+version = "0.3.8"
+authors = ["Quantum Resistant Cryptography (QRC)", "opensource-support@qrcrypto.co.uk"]
 edition = "2024"
 description = "The free opensource version of the Quantum Secure Cryptographic library in Rust (QRC)"
 documentation = "https://docs.rs/qrc-opensource-rs"
 readme = "README.md"
-homepage = "https://www.qrcrypto.ch/"
+homepage = "https://www.qrcrypto.co.uk/"
 repository = "https://github.com/Quantum-Resistant-Cryptography/qrc-opensource-rs"
 license-file = "LICENSE"
 keywords = ["cryptography", "quantum", "post-quantum", "rust"]

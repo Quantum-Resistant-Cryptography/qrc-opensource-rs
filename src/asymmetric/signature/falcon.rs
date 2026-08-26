@@ -26,7 +26,7 @@
 *
 *
 * Copyright (c) Original-2021 John G. Underhill <john.underhill@mailfence.com>
-* Copyright (c) 2022-Present QRC Eurosmart SA <opensource-support@qrcrypto.ch>
+* Copyright (c) 2022-Present QRC Eurosmart SA <opensource-support@qrcrypto.co.uk>
 *
 * The following code is a derivative work of the code from the QSC Cryptographic library in C, 
 * which is licensed AGPLv3. This code therefore is also licensed under the terms of 

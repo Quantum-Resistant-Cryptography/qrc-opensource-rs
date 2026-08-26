@@ -1,6 +1,6 @@
 <br />
 <p>
-  <a href="https://www.qrcrypto.ch/">
+  <a href="https://www.qrcrypto.co.uk/">
     <img src="logo-quantum-resistant.svg" alt="Logo" width="350">
   </a>
 
@@ -13,7 +13,7 @@ The free opensource version of the Quantum Secure Cryptographic library in Rust 
 |
 <a href="https://crates.io/crates/qrc-opensource-rs">Crates.io</a>
 |
-<a href="https://www.qrcrypto.ch/">QRCrypto.ch</a>
+<a href="https://www.qrcrypto.co.uk/">QRCrypto.co.uk</a>
 |
 <a href="https://www.linkedin.com/company/qrcryptography">LinkedIn</a>
 </p>
